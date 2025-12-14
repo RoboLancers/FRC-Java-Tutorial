@@ -13,7 +13,7 @@ These named versions makes it easy to revert changes that break previously worki
 Git also lets us have different, parallel versions, called branches, of code.
 This means that while one person works on code for the autonomous, another could work on vision, for example, without overriding each other.
 
-### Resources
+## Resources
 
 Read one of the following:
 
@@ -27,7 +27,7 @@ Install the following:
 - [Linux/Mac Git install](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [Github Desktop](https://desktop.github.com/download/)
 
-### Basic Git Commands
+## Basic Git Commands
 
 To use Git, developers use specific commands to copy, create, change, and combine code. These commands can be executed directly from the command line or by using an application like GitHub Desktop. Here are some common commands for using Git:
 
@@ -55,14 +55,14 @@ For more information, see the [full reference guide to git commands](https://git
 >Git log is a tool to view your history in Git. By default Git Log shows all of the commits in the repository, ordered from newest to oldest. in VSCode, the graph panels shows the Git log/History in a visual way. 
 ![Graph view in VS code](../assets/git_graph_vscode.png)
 
-### Github Setup
+## Github Setup
 
 Github is a website that hosts Git repositories. The Robolancers store all of their codes on Github.
 
 1. Sign up for a Github Account here: [Sign up for Github](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home)
 2. Enable 2 factor Authentitaction (Required to add code): [2fa setup](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication)
 
-### Examples
+## Examples
 
 ![A simple demonstration of committing and pushing some changes in git](../assets/GitExample.png)
 
@@ -77,21 +77,21 @@ Github is a website that hosts Git repositories. The Robolancers store all of th
   Recommended to do this whenever someone else has been working on the same branch, otherwise you might make conflicting changes
 - [A simple demo video of committing some changes](../assets/GitDemoVideo.mp4)
 
-### Managing Git in Vscode
+## Managing Git in Vscode
 
-#### Git Commands in Vscode GUI
+### Git Commands in Vscode GUI
 
 ![Git commands in vscode GUI](../assets/git_vscode.png)
 
-#### Git branches menu (Accessed by clicking on the branch name at the bottom left)
+### Git branches menu (Accessed by clicking on the branch name at the bottom left)
 
 ![Github branch menu in Vscode GUI](../assets/github_branch_vscode.png)
 
-#### Merge in another branch in vscode
+### Merge in another branch in vscode
 
 ![Github Merge menu](../assets/github_GUI_Merge.png)
 
-### Notes
+## Notes
 
 - We use GitHub's pull request (PR) feature to manage branches and merges.
 Always make sure to merge to main using a PR.
