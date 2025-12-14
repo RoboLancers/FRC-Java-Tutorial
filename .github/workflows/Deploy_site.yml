@@ -1,4 +1,4 @@
-name: Build MkDocs
+name: Deploy Site
 on:
   #pull_request: 
   #  branches:
@@ -24,10 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Deploy to GitHub Pages
+      - id: deployment
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: actions/deploy-pages@v4
-        with:
-          python-version: 3.x
-      - run: pip install -r requirements.txt
+      
       #- run: mkdocs gh-deploy --force
