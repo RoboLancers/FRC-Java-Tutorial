@@ -23,24 +23,26 @@ Before we begin we must create the class file for the drivetrain subsystem. See 
 
 In the Drivetrain class we will tell the subsystem what type of components it will be using.
 
-- A Drivetrain needs motor controllers. In our case we will use 4 Talon SRs (a brand of controller for motors).
-    - You could use other motor controllers such as Victor SPs or Talon SRXs but we will be using Talon SRs
-      - If you are using other motor controllers, replace Talon with TalonSRX, Victor, or VictorSP in the code you write depending on the type you use.
-    - You can use 2 motors (left and right), but for this tutorial we will use 4.
+- A Drivetrain needs motor controllers. In our case we will use 4 SparkMax Neos (a brand of controller for motors made by Rev Robotics).
+    - You could use other motor controllers such as Victor SPs or Talon SRXs but we will be using SparkMax Neos.
+      - If you are using other motor controllers, replace SparkMax with TalonSRX, Victor, or VictorSP in the code you write depending on the type you use.
+    - You can use 2 motors (left and right), but for this tutorial we will use 4 since that is what the base Kitbot uses.
 
 !!! Tip
 		Be sure to read [Visual Studio Code Tips](../basics/vscode_tips.md){target=_blank} before getting started! It will make your life a lot easier.
 
-### Creating the Talon Variables
+### Creating the Motor Variables
 
 !!! summary ""
-    **1)** Create 4 global variables of data type **Talon** and name them: `leftFrontTalon`, `rightFrontTalon`, `leftBackTalon`, `rightBackTalon`
+    **1)**  At the top of the DriveTrainSubSystem class, create 4 global variables of data type **SparkMax** and name them: `leftLeader`, `rightLeader`, `leftFollower`, `rightFollower`
    
-    - To get started type the word Talon followed by the name i.e. `#!java Talon leftFrontTalon;`
-    - These will eventually hold the object values for Talons and their port numbers.
+    - To get started type private final SparkMax followed by the name i.e. `#!java private final SparkMax leftLeader;`
+      - These are declared at private and final because they will not be used outside of the drivetrain class, and will not be changing once assigned.
+    - These will eventually hold the object values for Neos and their port numbers.
 
 !!! summary ""
-    **2)** Next assign their values to `#!java null` ([more info on `null`](../basics/java_basics.md#overview){target=_blank}).
+    <!--**2)** Next assign their values to `#!java null` ([more info on `null`](../basics/java_basics.md#overview){target=_blank}).-->
+        **2)** These will not be Assigned values here.
    
     - We do this to make sure it is empty at this point. 
     - When we assign these variables a value, we will be getting the motor controller's port numbers out of Constants
@@ -51,10 +53,10 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 	The code you typed should be this:
 
     ```java
-    Talon leftFrontTalon = null;
-    Talon leftBackTalon = null;
-    Talon rightFrontTalon = null;
-    Talon rightBackTalon = null;
+    private final SparkMax leftLeader;
+    private final SparkMax leftFollower;
+    private final SparkMax rightLeader;
+    private final SparkMax rightFollower;
     ```
 
 	Your full **Drivetrain.java** should look like this:
@@ -68,14 +70,17 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
     /**
      * Add your docs here.
      */
-    public class Drivetrain extends Subsystem {
-      // Put methods for controlling this subsystem
-      // here. Call these from Commands.
+    public class CANDriveSubsystem extends SubsystemBase {
+      private final SparkMax leftLeader;
+      private final SparkMax leftLeader;
+      private final SparkMax leftFollower;
+      private final SparkMax rightLeader;
+      private final SparkMax rightFollower;
 
-      Talon leftFrontTalon = null;
-      Talon leftBackTalon = null;
-      Talon rightFrontTalon = null;
-      Talon rightBackTalon = null;
+
+      public CANDriveSubsystem() {
+        
+      }
 
       @Override
       public void periodic() {
@@ -86,11 +91,11 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 <!-- TODO: Generalize this more -->
 
 ??? fail "If an error occurs (red squiggles)"
-	1. Click the word Talon
+	1. Click the word SparkMax
 	![](../assets/images/driving_robot/e1.png)
 	2. 💡 Click the light bulb  
 	![](../assets/images/driving_robot/e2.png)
-	3. Select "Import 'Talon' (edu.wpi.first.wpilibj)"
+	3. Select "Import 'SparkMax' (edu.wpi.first.wpilibj)"
 	![](../assets/images/driving_robot/e3.png)
 	4. Your error should be gone!
 
