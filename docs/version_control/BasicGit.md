@@ -83,8 +83,9 @@ Github is a website that hosts Git repositories. The Robolancers store all of th
 
 ![Git commands in vscode GUI](../assets/git_vscode.png)
 
-### Git branches menu (Accessed by clicking on the branch name at the bottom left)
+### Git branches menu 
 
+Accessed by clicking on the branch name at the bottom left)
 ![Github branch menu in Vscode GUI](../assets/github_branch_vscode.png)
 
 ### Merge in another branch in vscode
