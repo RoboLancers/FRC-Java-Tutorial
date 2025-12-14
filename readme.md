@@ -1,7 +1,7 @@
 # FRC Java Tutorial
 
-A tutorial on how to program a robot for use in the FIRST Robotics Competition.
+A tutorial on how to program a robot for use in the FIRST Robotics Competition. This is forked from another team, and is a work in progress.
 
-Updated for 2021
+Will be updated for 2026.
 
-Viewable at [https://frcteam3255.github.io/FRC-Java-Tutorial/](https://frcteam3255.github.io/FRC-Java-Tutorial/)
+Original Viewable at [https://frcteam3255.github.io/FRC-Java-Tutorial/](https://frcteam3255.github.io/FRC-Java-Tutorial/)
