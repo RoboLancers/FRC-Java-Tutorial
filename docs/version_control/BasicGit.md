@@ -54,7 +54,7 @@ For more information, see the [full reference guide to git commands](https://git
 ## Git Log
 
 >Git log is a tool to view your history in Git. By default Git Log shows all of the commits in the repository, ordered from newest to oldest. in VSCode, the graph panels shows the Git log/History in a visual way. 
-![Graph view in VS code](../assets/git_graph_vscode.png)
+![Graph view in VS code](../assets/images/vscode_tips/git_graph_vscode.png)
 
 ## Github Setup
 
@@ -65,7 +65,7 @@ Github is a website that hosts Git repositories. The Robolancers store all of th
 
 ## Examples
 
-![A simple demonstration of committing and pushing some changes in git](../assets/GitExample.png)
+![A simple demonstration of committing and pushing some changes in git](../assets/images/vscode_tips/GitExample.png)
 
 - Typing `git add .` then `git commit -m "commit name"` then `git push` is the bread and butter of using Git.
   This sequence tells Git to collect all of your uncommitted changes, commit them, then push them to Github.
@@ -76,22 +76,22 @@ Github is a website that hosts Git repositories. The Robolancers store all of th
 - `git status` displays the current branch and what changes you have uncommitted and staged
 - `git pull` updates the code on your device with the latest code from Github.
   Recommended to do this whenever someone else has been working on the same branch, otherwise you might make conflicting changes
-- [A simple demo video of committing some changes](../assets/GitDemoVideo.mp4)
+- [A simple demo video of committing some changes](../assets/images/vscode_tips/GitDemoVideo.mp4)
 
 ## Managing Git in Vscode
 
 ### Git Commands in Vscode GUI
 
-![Git commands in vscode GUI](../assets/git_vscode.png)
+![Git commands in vscode GUI](../assets/images/vscode_tips/git_vscode.png)
 
 ### Git branches menu 
 
 Accessed by clicking on the branch name at the bottom left
-![Github branch menu in Vscode GUI](../assets/github_branch_vscode.png)
+![Github branch menu in Vscode GUI](../assets/images/vscode_tips/github_branch_vscode.png)
 
 ### Merge in another branch in vscode
 
-![Github Merge menu](../assets/github_GUI_Merge.png)
+![Github Merge menu](../assets/images/vscode_tips/github_GUI_Merge.png)
 
 ## Notes
 

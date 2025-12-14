@@ -59,14 +59,16 @@ Newly created projects have many files within them. We only care about the conte
     - An example Command
 - **ExampleSubsystem.java**
     - An example SubSystem
-- **Constants.java** (new in 2020, replaces RobotMap.java)
+- **Constants.java** 
     - Used to map physical ports (digital if using the CAN bus) of sensors or devices connected to the robot and assign them a variable name to be used in other parts of the code.
         - This provides flexibility for changing wiring, makes checking the wiring easier, and significantly reduces the number of magic numbers floating around.
     - Can also be used to store generic constant values as variables in the code
+        - This gives a unified place to store and modify values that might be used many places in the code, so they only have to be changes once. 
+
 - **Main.java**
     - Used for advanced programming 
     - Will be ignored/left as is for this tutorial
-- **RobotContainer.java** (new in 2020, replaces OI.java)
+- **RobotContainer.java** 
     - Used to declare our subsystem
     - Used to create a connection between commands and Operator Interfaces (OI) such as Joysticks or buttons
 - **Robot.java**
