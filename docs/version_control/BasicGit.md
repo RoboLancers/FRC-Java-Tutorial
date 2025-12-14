@@ -51,7 +51,8 @@ To use Git, developers use specific commands to copy, create, change, and combin
 
 For more information, see the [full reference guide to git commands](https://git-scm.com/docs).
 
-**Git Log**
+## Git Log
+
 >Git log is a tool to view your history in Git. By default Git Log shows all of the commits in the repository, ordered from newest to oldest. in VSCode, the graph panels shows the Git log/History in a visual way. 
 ![Graph view in VS code](../assets/git_graph_vscode.png)
 
@@ -85,7 +86,7 @@ Github is a website that hosts Git repositories. The Robolancers store all of th
 
 ### Git branches menu 
 
-Accessed by clicking on the branch name at the bottom left)
+Accessed by clicking on the branch name at the bottom left
 ![Github branch menu in Vscode GUI](../assets/github_branch_vscode.png)
 
 ### Merge in another branch in vscode
