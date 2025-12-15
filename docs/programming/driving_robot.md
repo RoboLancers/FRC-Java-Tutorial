@@ -31,30 +31,30 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 !!! Tip
 		Be sure to read [Visual Studio Code Tips](../basics/vscode_tips.md){target=_blank} before getting started! It will make your life a lot easier.
 
-### Creating the Talon Variables
+### Creating the SparkMax Variables
 
 !!! summary ""
-    **1)** Create 4 global variables of data type **Talon** and name them: `leftFrontTalon`, `rightFrontTalon`, `leftBackTalon`, `rightBackTalon`
+    **1)** Create 4 global variables of data type **SparkMax** and name them: `leftLeader`, `rightLeader`, `leftFollower`, `rightFollower`
    
-    - To get started type the word Talon followed by the name i.e. `#!java Talon leftFrontTalon;`
-    - These will eventually hold the object values for Talons and their port numbers.
+    - To get started type the word SparkMax followed by the name i.e. `#!java private Final SparkMax leftLeader;`
+    - These will eventually hold the object values for SparkMaxes, their port numbers, and their motor type (brushed or brushless).
 
 !!! summary ""
-    **2)** Next assign their values to `#!java null` ([more info on `null`](../basics/java_basics.md#overview){target=_blank}).
+    **2)** These are declared without values right now.
    
     - We do this to make sure it is empty at this point. 
     - When we assign these variables a value, we will be getting the motor controller's port numbers out of Constants
         - This means we cannot assign them at the global level
 
-??? Example
+<details><summary> Example</summary>
 
 	The code you typed should be this:
 
     ```java
-    Talon leftFrontTalon = null;
-    Talon leftBackTalon = null;
-    Talon rightFrontTalon = null;
-    Talon rightBackTalon = null;
+      private final SparkMax leftLeader;
+      private final SparkMax leftFollower;
+      private final SparkMax rightLeader;
+      private final SparkMax rightFollower; 
     ```
 
 	Your full **Drivetrain.java** should look like this:
@@ -62,7 +62,8 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
     ```java
     package frc.robot.subsystems;
 
-    import edu.wpi.first.wpilibj.Talon;
+    import com.revrobotics.spark.SparkLowLevel.MotorType;
+    import com.revrobotics.spark.SparkMax;
     import edu.wpi.first.wpilibj.command.Subsystem;
 
     /**
@@ -71,28 +72,29 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
     public class Drivetrain extends Subsystem {
       // Put methods for controlling this subsystem
       // here. Call these from Commands.
-
-      Talon leftFrontTalon = null;
-      Talon leftBackTalon = null;
-      Talon rightFrontTalon = null;
-      Talon rightBackTalon = null;
-
+      private final SparkMax leftLeader;
+      private final SparkMax leftFollower;
+      private final SparkMax rightLeader;
+      private final SparkMax rightFollower;
+      
       @Override
       public void periodic() {
         // This method will be called once per scheduler run
       }
     }
 	```
+</details>
 <!-- TODO: Generalize this more -->
 
-??? fail "If an error occurs (red squiggles)"
-	1. Mouse Over the word SparkMax: The following menu should appear.
-	![](../assets/images/driving_robot/fix_error_1.png)
-	2. 💡 Click "quick fix" 
-	![](../assets/images/driving_robot/Quick_fix_click.png)
-	3. Select "Import 'SparkMax' (com.revrobotics.spark)"
-	![](../assets/images/driving_robot/quick_fix_import.PNG)
-	4. Your error should be gone!
+<details><summary>If an error occurs (red squiggles)"</summary> 
+  1. Mouse Over the word SparkMax: The following menu should appear.
+  ![](../assets/images/driving_robot/fix_error_1.png)
+  2. 💡 Click "quick fix" 
+  ![](../assets/images/driving_robot/Quick_fix_click.png)
+  3. Select "Import 'SparkMax' (com.revrobotics.spark)"
+  ![](../assets/images/driving_robot/quick_fix_import.PNG)
+  4. Your error should be gone!
+</details>
 
 ### Creating and filling the constructor
 
@@ -108,13 +110,13 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 		??? Info "roboRIO port diagram"
     		  ![](../assets/images/driving_robot/roboRIO_port.png)
 
-??? Example
+<deatils> <summary>Example</summary>
 
 	The code you typed should be this:
 
     ```java
     public Drivetrain() {
-      // Talons
+      // Motors
       leftLeader = new SparkMax(DriveConstants.LEFT_LEADER_ID, MotorType.kBrushed);
     }
     ```
@@ -124,8 +126,8 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
     ```java
     package frc.robot.subsystems;
 
-    import edu.wpi.first.wpilibj.Talon;
-    import edu.wpi.first.wpilibj.command.Subsystem;
+    import com.revrobotics.spark.SparkLowLevel.MotorType;
+    import com.revrobotics.spark.SparkMax;
 
     /**
      * Add your docs here.
@@ -152,6 +154,7 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
         // This method will be called once per scheduler run
       }
 	```
+</details>
 
 ### Using Constants
 
@@ -170,14 +173,14 @@ Since each subsystem has its own components with their own ports, it is easy to 
       - Inside `DriveConstants` class, create for constants called `LEFT_LEADER_ID`, `LEFT_FOLLOWER_ID`, `RIGHT_LEADER_ID`, and `RIGHT_FOLLOWER_ID`.
       - Back in your `DriveTrain` class in `drivetrain.java`, import the `DriveConstants` class as follows: `Import frc.robot.Constants.DriveConstants;`.
 
-    !!! Tip 
-      Make sure to declare constants with `public static final` so they cannot be changed at runtime. 
-    
-    !!! Danger
-      ***If you set this to the wrong value, you could damage your robot when it tries to move!***
+  !!! Tip 
+    Make sure to declare constants with `public static final` so they cannot be changed at runtime. 
+  
+  !!! Danger
+    ***If you set this to the wrong value, you could damage your robot when it tries to move!***
 !!! summary ""
     **1)** To use Constants, instead of putting `0` for the port in the SparkMax type: 
-	```java
+	```Java
 	DriveConstants.LEFT_LEADER_ID
 	```
    
@@ -187,7 +190,7 @@ Since each subsystem has its own components with their own ports, it is easy to 
 	!!! Tip
     	Remember to save both **Drivetrain.java** and **Constants.java**
 
-??? Example
+<details><summary>Example</summary>
 
 	The code you type should be this:
 
@@ -253,10 +256,23 @@ Since each subsystem has its own components with their own ports, it is easy to 
 
 	!!! Warning
       	Remember to use the values for **YOUR** specific robot or you could risk damaging it!
+</details>
 
-### Cofiguring the SparkMaxes
-
-
+### Confguring the SparkMaxes
+Each SparkMax motor must be configured with a CANTimeout. (How long to wait for a response from the motor controller) This is done as follows: 
+```Java
+// Set can timeout. Because this project only sets parameters once on construction, the timeout can be long without blocking robot operation. Code which sets or gets parameters during operation may need a shorter timeout.
+    leftLeader.setCANTimeout(250);
+    rightLeader.setCANTimeout(250);
+    leftFollower.setCANTimeout(250);
+    rightFollower.setCANTimeout(250);
+```
+Create the configuration to apply to motors. Voltage compensation helps the robot perform more similarly on different battery voltages (at the cost of a little bit of top speed on a fully charged battery). The current limit helps prevent tripping breakers.
+```Java
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.voltageCompensation(12);
+    config.smartCurrentLimit(DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT);
+```
 
 ### Creating the arcade drive
 
@@ -274,16 +290,21 @@ Since each subsystem has its own components with their own ports, it is easy to 
 <!-- TODO: Add instructions for TalonSRX -->
 
 !!! summary ""
-    **1)** In the same place we created our talons (outside of the constructor) we will create a **DifferentialDrive** and **SpeedControllerGroups** for our left and right motor controllers.
+    **1)** Create the DifferentialDrive object.
 
     Outside of the constructor type:
   
-    ```java
-    SpeedControllerGroup leftMotors = null;
-    SpeedControllerGroup rightMotors = null;
-    
-    DifferentialDrive differentialDrive = null;
+    ```java 
+     private final DifferentialDrive drive;
     ```
+    This defines the drive object that we will use to drive the robot.
+    In the constructor type:
+  
+    ```java
+
+    drive = new DifferentialDrive(leftMotors, rightMotors);
+    ```
+    This defines the drive object.
 
     - Since DifferentialDrive only takes 2 parameters we need to create speed controller groups to combine like motor controllers together.
         - In this case we will combine the left motors together and the right motors together.
@@ -292,47 +313,42 @@ Since each subsystem has its own components with their own ports, it is easy to 
         You should only group motors that are spinning the same direction physically when positive power is being applied otherwise you could damage your robot.
 
 !!! summary ""
-    **2)** Now we must initialize the **SpeedControllerGroups** and **DifferentialDrive** like we did our talons. ...
+    **2)** In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower. 
+    In the constructor we are goint to set the followe motors and link them to the leader motors. To do this we will need to include a couple more classes from the REV Library:
+    ```Java
+    import com.revrobotics.spark.SparkBase.PersistMode;
+    import com.revrobotics.spark.SparkBase.ResetMode;
+    ```
+    Then in the constructor, create the follower/leader config:
+    - Set configuration to follow leader and then apply it to correspondingfollower. Resetting in case a new controller is swapped in and persisting in case of a controller reset due to breaker trip.
 
-    In the constructor type:
-  
-    ```java
-    leftMotors = new SpeedControllerGroup(leftFrontTalon, leftBackTalon);
-    rightMotors = new SpeedControllerGroup(rightFrontTalon, rightBackTalon);
-
-    differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
+    ```Java
+    config.follow(leftLeader);
+    leftFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.follow(rightLeader);
+    rightFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     ```
 
-??? Example
-
-	The code you type outside the constructor should be this:
-
-    ```java
-    SpeedControllerGroup leftMotors = null;
-    SpeedControllerGroup rightMotors = null;
-    
-    DifferentialDrive differentialDrive = null;
+    Remove following, then apply config to right leader
+    ```Java
+    config.disableFollowerMode();
+    rightLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    ```
+    Set conifg to inverted and then apply to left leader. Set Left side inverted so that postive values drive both sides forward
+    ```Java
+    config.inverted(true);
+    leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     ```
 
-	The code you type inside the constructor should be this:
+<details><summary>Example</summary
 
-    ```java
-    leftMotors = new SpeedControllerGroup(leftFrontTalon, leftBackTalon);
-    rightMotors = new SpeedControllerGroup(rightFrontTalon, rightBackTalon);
-
-    differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
-    ```
-
-	Your full **Drivetrain.java** should look like this:
-
-    ```java
+    ```Java
     package frc.robot.subsystems;
 
-    import edu.wpi.first.wpilibj.SpeedControllerGroup;
-    import edu.wpi.first.wpilibj.Talon;
+    import com.revrobotics.spark.SparkLowLevel.MotorType;
+    import com.revrobotics.spark.SparkMax;
     import edu.wpi.first.wpilibj.command.Subsystem;
-    import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-    import frc.robot.Constants;
+    import frc.robot.Constants.DriveConstants;
 
     /**
      * Add your docs here.
@@ -341,35 +357,47 @@ Since each subsystem has its own components with their own ports, it is easy to 
       // Put methods for controlling this subsystem
       // here. Call these from Commands.
 
-      Talon leftFrontTalon = null;
-      Talon leftBackTalon = null;
-      Talon rightFrontTalon = null;
-      Talon rightBackTalon = null;
-
-      SpeedControllerGroup leftMotors = null;
-      SpeedControllerGroup rightMotors = null;
-
-      DifferentialDrive differentialDrive = null;
+      private final SparkMax leftLeader;
+      private final SparkMax leftFollower;
+      private final SparkMax rightLeader;
+      private final SparkMax rightFollower;
 
       public Drivetrain() {
         // Talons
-        leftFrontTalon = new Talon(Constants.DRIVETRAIN_LEFT_FRONT_TALON);
-        leftBackTalon = new Talon(Constants.DRIVETRAIN_LEFT_BACK_TALON);
-        rightFrontTalon = new Talon(Constants.DRIVETRAIN_RIGHT_FRONT_TALON);
-        rightBackTalon = new Talon(Constants.DRIVETRAIN_RIGHT_BACK_TALON);
+        leftLeader = new SparkMax(DriveConstants.LEFT_LEADER_ID, MotorType.kBrushed);
+        leftFollower = new SparkMax(DriveConstants.LEFT_FOLLOWER_ID, MotorType.kBrushed);
+        rightLeader = new SparkMax(DriveConstants.RIGHT_LEADER_ID, MotorType.kBrushed);
+        rightFollower = new SparkMax(DriveConstants.RIGHT_FOLLOWER_ID, MotorType.kBrushed);
 
-        leftMotors = new SpeedControllerGroup(leftFrontTalon, leftBackTalon);
-        rightMotors = new SpeedControllerGroup(rightFrontTalon, rightBackTalon);
+       SparkMaxConfig config = new SparkMaxConfig();
+        config.voltageCompensation(12);
+        config.smartCurrentLimit(DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT);
 
-        differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
-      }
+        leftLeader.setCANTimeout(250);
+        rightLeader.setCANTimeout(250);
+        leftFollower.setCANTimeout(250);
+        rightFollower.setCANTimeout(250);
 
+        config.follow(leftLeader);
+        leftFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        config.follow(rightLeader);
+        rightFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        // Remove following, then apply config to right leader
+        config.disableFollowerMode();
+        rightLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // Set conifg to inverted and then apply to left leader. Set Left side inverted
+        // so that postive values drive both sides forward
+        config.inverted(true);
+        leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       @Override
       public void periodic() {
         // This method will be called once per scheduler run
       }
     }
+}
 	```
+</details>
 
 #### Creating the arcadeDrive method
 
@@ -378,7 +406,7 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 !!! summary ""
     **1)** Let’s create a public void method called “arcadeDrive” with type “double” parameters moveSpeed and rotateSpeed.
 
-    Below the constructor type:
+    Below the `periodic` method create a new method called `arcadeDrive`. This method will be called from our Drive command to actually move the robot.
 
     ```java
     public void arcadeDrive(double moveSpeed, double rotateSpeed) {
@@ -394,8 +422,8 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 
     Inside our method type:
 
-    ```java
-    differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);
+    ```Java
+    drive.arcadeDrive(moveSpeed, rotateSpeed);
     ```
 
     DifferentialDrive's arcadeDrive method takes parameters moveValue and rotateValue.
@@ -409,26 +437,25 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 
         You may want to do this for initial testing to make sure everything is going the right direction.
 
-??? Example
+<details><summary>Example</summary>
 
 	The code you type should be this:
 
-    ```java
+    ```Java
     public void arcadeDrive(double moveSpeed, double rotateSpeed) {
-      differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);
+      drive.arcadeDrive(moveSpeed, rotateSpeed);
     }
     ```
   
 	Your full **Drivetrain.java** should look like this:
 
-    ```java
-    package frc.robot.subsystems;
+    ```Java
+   package frc.robot.subsystems;
 
-    import edu.wpi.first.wpilibj.SpeedControllerGroup;
-    import edu.wpi.first.wpilibj.Talon;
+    import com.revrobotics.spark.SparkLowLevel.MotorType;
+    import com.revrobotics.spark.SparkMax;
     import edu.wpi.first.wpilibj.command.Subsystem;
-    import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-    import frc.robot.Constants;
+    import frc.robot.Constants.DriveConstants;
 
     /**
      * Add your docs here.
@@ -437,111 +464,66 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
       // Put methods for controlling this subsystem
       // here. Call these from Commands.
 
-      Talon leftFrontTalon = null;
-      Talon leftBackTalon = null;
-      Talon rightFrontTalon = null;
-      Talon rightBackTalon = null;
-
-      SpeedControllerGroup leftMotors = null;
-      SpeedControllerGroup rightMotors = null;
-
-      DifferentialDrive differentialDrive = null;
+      private final SparkMax leftLeader;
+      private final SparkMax leftFollower;
+      private final SparkMax rightLeader;
+      private final SparkMax rightFollower;
 
       public Drivetrain() {
         // Talons
-        leftFrontTalon = new Talon(Constants.DRIVETRAIN_LEFT_FRONT_TALON);
-        leftBackTalon = new Talon(Constants.DRIVETRAIN_LEFT_BACK_TALON);
-        rightFrontTalon = new Talon(Constants.DRIVETRAIN_RIGHT_FRONT_TALON);
-        rightBackTalon = new Talon(Constants.DRIVETRAIN_RIGHT_BACK_TALON);
+        leftLeader = new SparkMax(DriveConstants.LEFT_LEADER_ID, MotorType.kBrushed);
+        leftFollower = new SparkMax(DriveConstants.LEFT_FOLLOWER_ID, MotorType.kBrushed);
+        rightLeader = new SparkMax(DriveConstants.RIGHT_LEADER_ID, MotorType.kBrushed);
+        rightFollower = new SparkMax(DriveConstants.RIGHT_FOLLOWER_ID, MotorType.kBrushed);
 
-        leftMotors = new SpeedControllerGroup(leftFrontTalon, leftBackTalon);
-        rightMotors = new SpeedControllerGroup(rightFrontTalon, rightBackTalon);
+       SparkMaxConfig config = new SparkMaxConfig();
+        config.voltageCompensation(12);
+        config.smartCurrentLimit(DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT);
 
-        differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
-      }
+        leftLeader.setCANTimeout(250);
+        rightLeader.setCANTimeout(250);
+        leftFollower.setCANTimeout(250);
+        rightFollower.setCANTimeout(250);
 
-      public void arcadeDrive(double moveSpeed, double rotateSpeed) {
-        differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);
-      }
+        config.follow(leftLeader);
+        leftFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        config.follow(rightLeader);
+        rightFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+        // Remove following, then apply config to right leader
+        config.disableFollowerMode();
+        rightLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // Set conifg to inverted and then apply to left leader. Set Left side inverted
+        // so that postive values drive both sides forward
+        config.inverted(true);
+        leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       @Override
       public void periodic() {
         // This method will be called once per scheduler run
       }
     }
+    public void arcadeDrive(double moveSpeed, double rotateSpeed) {
+      drive.arcadeDrive(moveSpeed, rotateSpeed);
+    }
 	```
-
+</details>
 ***
 
 ## Making our robot controllable
 
 ### Creating the Joystick
 
-In order to drive our robot, it needs to know what will be controlling it. To do so, we will create a new joystick in RobotContainer.java
+In order to drive our robot, it needs to know what will be controlling it. To do so, we will create a new joystick in RobotContainer.java, and an operator constant for the joystick port.
 
 !!! summary ""
-    **1)** Open RobotContainer.java
-
-    **2)** Type: 
-	```java 
-	public Joystick driverController = new Joystick(Constants.DRIVER_CONTROLLER);
-	```
-
-	<!-- TODO: Change this to a general fix imports -->
-
-	- Import any classes if necessary such as: `#!java import edu.wpi.first.wpilibj.Joystick;` 
-    - A variable `driverController` of type Joystick pointing to a joystick on port `DRIVER_CONTROLLER` from **Constants**
-
-	**3)** Click the 💡 light bulb to create a new **CONSTANT** and set the value to the port number the joystick uses on the laptop (this can be found in the Driverstation software).
+    **1)** Open Constants.java
+      Check and make sure the `kDriverControllerPort` constant is present.
+    **2)** Open RobotContainer.java
+    - Change all `ExampleSubsystem` references to `DriveSubsystem`
 
 <!-- TODO: add details on how to find joystick port in driverstation tips -->
 
-??? Example
-
-	The code you type should be this:
-
-    ```java
-    public Joystick driverController = new Joystick(Constants.DRIVER_CONTROLLER);
-    ```
-
-	Your full **RobotContainer.java** should look like this:
-
-    ```java
-    package frc.robot;
-
-    import edu.wpi.first.wpilibj.Joystick;
-
-    /**
-     * This class is where the bulk of the robot should be declared. Since
-     * Command-based is a "declarative" paradigm, very little robot logic should
-     * actually be handled in the {@link Robot} periodic methods (other than the
-     * scheduler calls). Instead, the structure of the robot (including subsystems,
-     * commands, and button mappings) should be declared here.
-     */
-    public class RobotContainer {
-      // The robot's subsystems and commands are defined here...
-      public Joystick driverController = new Joystick(Constants.DRIVER_CONTROLLER);
-    }
-	```
-
-	Your full **Constants.java** should look similar to this:	
-
-    ```java
-    package frc.robot;
-
-    public class Constants {
-	  // Talons
-      public static final int DRIVETRAIN_LEFT_FRONT_TALON = 0;
-      public static final int DRIVETRAIN_LEFT_BACK_TALON = 1;
-      public static final int DRIVETRAIN_RIGHT_FRONT_TALON = 2;
-      public static final int DRIVETRAIN_RIGHT_BACK_TALON = 3;
-
-	  // Joysticks
-      public static final int DRIVER_CONTROLLER = 0;
-    }
-	```
-
-### Creating the DriveArcade Command
+### Creating the Drivearcade Command
 
 - Remember that **methods** tell the robot what it can do but in order to make it do these things we must give it a **command**. See [Command Based Robot](../basics/wpilib.md#command-based-robot){target=_blank}
 - Now that we have created the method, we need to create a command to call and use that method.
@@ -549,16 +531,52 @@ In order to drive our robot, it needs to know what will be controlling it. To do
 
 Before we begin we must create the class file for the DriveArcade command. See [Creating a New Command](new_project.md#creating-a-new-command){target=_blank} for info on how to do this and info on what each pre-created method does.
 
+#### Define variables
+
+!!! summary ""
+    **1)** Create `xspeed` and `zrotation` variables. (to be passed to drive subsystem). These will be declared as `DoubleSuppliers`, which is a function that return a type. This is important for later.
+    **2)** Create an emtpy `driveSubsystem` instance of `DriveSubsystem`
+
+    !!! Warning
+        `DoubleSupplier` and `DriveSubsystem` will have to be imported as follows:
+        ```Java
+        import frc.robot.subsystems.DriveSubsystem;
+        import java.util.function.DoubleSupplier; 
+        ```
+
+    ```Java
+    private final DoubleSupplier xSpeed;
+    private final DoubleSupplier zRotation;
+    private final DriveSubsystem driveSubsystem;
+    ```
+
 #### In the constructor
 
 !!! summary ""
-    **1)** In the constructor `#!java DriveArcade()` type:
+    **1)** Inside the parenthesis of the  the constructor `#!java DriveArcade()` add 3 variables:
+    ```Java
+      public DriveCommand(
+      DoubleSupplier xSpeed, DoubleSupplier zRotation, DriveSubsystem driveSubsystem)
+    ```
+    These are values that will be passed into the command in `RobotContainer.java`
+
+
+!!! summary ""
+    **2)** Inside constructor `#!java DriveArcade()` type:
 
     ```java
-    addRequirements(RobotContainer.m_drivetrain);
+    this.xSpeed = xSpeed;
+    this.zRotation = zRotation;
+    this.driveSubsystem = driveSubsystem;
+    addRequirements(this.drivetrain);
     ```
    
-    - This means, this command will end all other commands currently using drivetrain and will run instead when executed.
+    - The 3 lines starting with `this` set the global variables we defined at the top of our class file to the values being passed into the consturctor.
+!!! Tip
+   `this` is how the class instance `object` refers to itself in code.
+
+!!! summary ""
+    - `addRequirements` means this command will end all other commands currently using drivetrain and will run instead when executed.
     - It also means, other commands that require drivetrain will stop this command and run instead when executed.
 
     !!! Warning
@@ -567,31 +585,15 @@ Before we begin we must create the class file for the DriveArcade command. See [
 #### In the execute method
 
 !!! summary ""
-    **1)** In the execute method we will create 2 variables of type double called moveSpeed and rotateSpeed.
-
-    - We want these variables to be the value of the axis of the controller we are using to drive the robot. So we will set them equal to that by using the joystick getRawAxis method.
-    - Controllers return an axis value between 1 and -1 to indicate how far the joystick is pushed up or down. Our personal controller returns up as -1 so we want to invert it.
-        - In Java you can put a negative “ - “in front of a numeric value to invert it (value * -1)
-        - The joystick’s getRawAxis method will get the position value of the axis as you move it. The method takes parameter “axis number.” (This can be found in the Driverstation software and we will store it in Constants).
-
-    In the execute() method type:
-
-    ```java
-    double moveSpeed = -RobotContainer.driverController.getRawAxis(Constants.DRIVER_CONTROLLER_MOVE_AXIS);
-    double rotateSpeed = RobotContainer.driverController.getRawAxis(Constants.DRIVER_CONTROLLER_ROTATE_AXIS);
-    ```
-
-    !!! Tip
-        Remember to use the light bulb for importing and creating constants if needed!
-
-!!! summary ""
-    **2)** Also in the execute method we will we want to call the **arcadeDrive** method we created in **Drivetrain** and give it the variables **moveSpeed** and **rotateSpeed** we created as parameters.
+    !!! summary ""
+    **1)** In the execute method we will we want to call the **arcadeDrive** method we created in **Drivetrain** and give it the variables **moveSpeed** `xspeed` and **rotateSpeed** `zrotation` we created as parameters.
 
     In the execute() method below rotateSpeed type:
 
-    ```java
-    RobotContainer.m_drivetrain.arcadeDrive(moveSpeed, rotateSpeed);
+    ```Java
+    driveSubsystem.driveArcade(xSpeed.getAsDouble(), zRotation.getAsDouble());
     ```
+
 
 #### In the isFinished method
 
@@ -623,7 +625,7 @@ Since we will be using this command to control the robot we want it to run indef
 
 #### Completed Example
 
-??? Example
+<details><summary>Example</summary>
 
 	Your full **Constants.java** should look similar to this:	
 
@@ -631,32 +633,45 @@ Since we will be using this command to control the robot we want it to run indef
     package frc.robot;
 
     public class Constants {
-  	  // Talons
-      public static final int DRIVETRAIN_LEFT_FRONT_TALON = 0;
-      public static final int DRIVETRAIN_LEFT_BACK_TALON = 1;
-      public static final int DRIVETRAIN_RIGHT_FRONT_TALON = 2;
-      public static final int DRIVETRAIN_RIGHT_BACK_TALON = 3;
+  	  public static final class DriveConstants {
+      public static final int LEFT_LEADER_ID = 1;
+      public static final int LEFT_FOLLOWER_ID = 2;
+      public static final int RIGHT_LEADER_ID = 3;
+      public static final int RIGHT_FOLLOWER_ID = 4;
+      public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
+    }
 
-  	  // Joysticks
-      public static final int DRIVER_CONTROLLER = 0;
-      public static final int DRIVER_CONTROLLER_MOVE_AXIS = 1; // Change for your controller
-      public static final int DRIVER_CONTROLLER_ROTATE_AXIS = 2; // Change for your controller
+      public static final class OperatorConstants {
+      public static final int DRIVER_CONTROLLER_PORT = 0;
+      public static final int OPERATOR_CONTROLLER_PORT = 1;
+    }
     }
 	```
 
 	Your full **DriveArcade.java** should look like this:
 
-    ```java
-    package frc.robot.commands;
+    ```Java
+    import edu.wpi.first.wpilibj2.command.Command;
+    import frc.robot.subsystems.DriveSubsystem;
+    import java.util.function.DoubleSupplier;
 
-    import edu.wpi.first.wpilibj.command.Command;
-    import frc.robot.RobotContainer;
-    import frc.robot.Constants;
+    // Command to drive the robot
+    public class DriveCommand extends Command {
+      private final DoubleSupplier xSpeed;
+      private final DoubleSupplier zRotation;
+      private final DriveSubsystem driveSubsystem;
 
-    public class DriveArcade extends Command {
-      public DriveArcade() {
-        // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(RobotContainer.m_drivetrain);
+      // Constructor. Runs only once when the command is first created.
+      public DriveCommand(
+          DoubleSupplier xSpeed, DoubleSupplier zRotation, DriveSubsystem driveSubsystem) {
+        // Save parameters to local variables for use later
+        this.xSpeed = xSpeed;
+        this.zRotation = zRotation;
+        this.driveSubsystem = driveSubsystem;
+
+        // Declare subsystems required by this command. This should include any
+        // subsystem this command sets and output of
+        addRequirements(this.driveSubsystem);
       }
 
       // Called just before this Command runs the first time
@@ -667,16 +682,13 @@ Since we will be using this command to control the robot we want it to run indef
       // Called repeatedly when this Command is scheduled to run
       @Override
       protected void execute() {
-        double moveSpeed = -RobotContainer.driverController.getRawAxis(Constants.DRIVER_CONTROLLER_MOVE_AXIS);
-        double rotateSpeed = RobotContainer.driverController.getRawAxis(Constants.DRIVER_CONTROLLER_ROTATE_AXIS);
-
-        RobotContainer.m_drivetrain.arcadeDrive(moveSpeed, rotateSpeed);
+        driveSubsystem.driveArcade(xSpeed.getAsDouble(), zRotation.getAsDouble());
       }
 
       // Called once the command ends or is interrupted.
       @Override
       protected void end(boolean interrupted) {
-        Robot.m_drivetrain.arcadeDrive(0, 0);
+        driveSubSystem.arcadeDrive(0, 0);
       }
 
       // Make this return true when this Command no longer needs to run execute()
@@ -686,6 +698,26 @@ Since we will be using this command to control the robot we want it to run indef
       }
     }
 	```
+  </details>
+
+### Connecting the Joystick
+- In RobotContainer We will now add the code to take the joystick inputs and use them to move the robot.
+
+!!! summary ""
+    The joystick code goes inside the `configureBindings()` method.
+    - We will the default command for the drive subsystem to an instance of the DriveCommand with the values provided by the joystick axes on the driver controller. 
+    - The Y axis of the controller is inverted so that pushing the stick away from you (a negative value) drives the robot forwards (a positive value). 
+    - Similarly for the X axis where we need to flip the value so the joystick matches the WPILib convention of counter-clockwise positive
+
+    
+
+    ```Java
+    driveSubsystem.setDefaultCommand(new DriveCommand(
+        () -> -driverController.getLeftY() *
+            (driverController.getHID().getRightBumperButton() ? 1 : 0.5),
+        () -> -driverController.getRightX(),
+        driveSubsystem));
+    ```
 
 ### Using setDefaultCommand
 
