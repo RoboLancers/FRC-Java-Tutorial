@@ -511,18 +511,6 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 
 ## Making our robot controllable
 
-### Creating the Joystick
-
-In order to drive our robot, it needs to know what will be controlling it. To do so, we will create a new joystick in RobotContainer.java, and an operator constant for the joystick port.
-
-!!! summary ""
-    **1)** Open Constants.java
-      Check and make sure the `kDriverControllerPort` constant is present.
-    **2)** Open RobotContainer.java
-    - Change all `ExampleSubsystem` references to `DriveSubsystem`
-
-<!-- TODO: add details on how to find joystick port in driverstation tips -->
-
 ### Creating the Drivearcade Command
 
 - Remember that **methods** tell the robot what it can do but in order to make it do these things we must give it a **command**. See [Command Based Robot](../basics/wpilib.md#command-based-robot){target=_blank}
@@ -553,7 +541,7 @@ Before we begin we must create the class file for the DriveArcade command. See [
 #### In the constructor
 
 !!! summary ""
-    **1)** Inside the parenthesis of the  the constructor `#!java DriveArcade()` add 3 variables:
+    **1)** Inside the parenthesis of the  the constructor `driveArcade()` add 3 variables:
     ```Java
       public DriveCommand(
       DoubleSupplier xSpeed, DoubleSupplier zRotation, DriveSubsystem driveSubsystem)
@@ -585,7 +573,6 @@ Before we begin we must create the class file for the DriveArcade command. See [
 #### In the execute method
 
 !!! summary ""
-    !!! summary ""
     **1)** In the execute method we will we want to call the **arcadeDrive** method we created in **Drivetrain** and give it the variables **moveSpeed** `xspeed` and **rotateSpeed** `zrotation` we created as parameters.
 
     In the execute() method below rotateSpeed type:
@@ -700,54 +687,58 @@ Since we will be using this command to control the robot we want it to run indef
 	```
   </details>
 
-### Connecting the Joystick
-- In RobotContainer We will now add the code to take the joystick inputs and use them to move the robot.
+### Creating the Joystick
+
+In order to drive our robot, it needs to know what will be controlling it. To do so, we will use the joystick in `RobotContainer.java`, as `m_drivecontroller`.
 
 !!! summary ""
-    The joystick code goes inside the `configureBindings()` method.
-    - We will the default command for the drive subsystem to an instance of the DriveCommand with the values provided by the joystick axes on the driver controller. 
-    - The Y axis of the controller is inverted so that pushing the stick away from you (a negative value) drives the robot forwards (a positive value). 
-    - Similarly for the X axis where we need to flip the value so the joystick matches the WPILib convention of counter-clockwise positive
+    **1)** Open Constants.java
+      Check and make sure the `kDriverControllerPort` constant is present.
+    **2)** Open RobotContainer.java
+    - Change all `ExampleSubsystem` references to `DriveSubsystem`
 
-    
-
-    ```Java
-    driveSubsystem.setDefaultCommand(new DriveCommand(
-        () -> -driverController.getLeftY() *
-            (driverController.getHID().getRightBumperButton() ? 1 : 0.5),
-        () -> -driverController.getRightX(),
-        driveSubsystem));
-    ```
+<!-- TODO: add details on how to find joystick port in driverstation tips -->
 
 ### Using setDefaultCommand
 
-- Commands passed to this method will run when the robot is enabled.
-- They also run if no other commands using the subsystem are running.
-    - This is why we write **addRequirements(Robot.m_subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
   
 !!! summary ""
-    **1)** Back in **RobotContainer.java** in the constructor we will call the `setDefaultCommand` of `m_drivetrain` and pass it the `DriveArcade` command
+    **1)** Back in **RobotContainer.java** We will need to remove everything inside the `configureBindings` method.
+    **2)** in the `configureBindings`we will call the `setDefaultCommand` of `m_drivetrain` and create a new `DriveArcade` command with parameters. 
 
-    In the **RobotContainer.java** constructor type:
-
-    ```java
-    m_drivetrain.setDefaultCommand(new DriveArcade());
+    - Commands in this method will run when the robot is enabled.
+      - They also run if no other commands using the subsystem are running.
+      - This is why we write **addRequirements(Robot.m_subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
+    - We will the default command for the drive subsystem to an instance of the `DriveArcade` with the values provided by the joystick axes on the driver controller. 
+      - The Y axis of the controller is inverted so that pushing the stick away from you (a negative value) drives the robot forwards (a positive value). 
+      - Similarly for the X axis where we need to flip the value so the joystick matches the WPILib convention of counter-clockwise positive
+  
+    ```Java
+    driveSubsystem.setDefaultCommand(new DriveArcade(
+        () -> -m_driverController.getLeftY() *
+            (m_driverController.getHID().getRightBumperButton() ? 1 : 0.5),
+        () -> -m_driverController.getRightX(),
+        driveSubsystem));
     ```
 
     !!! Tip
         Remember to use the light bulb for importing if needed!
+    !!! Tip
+        The `New` keyword creates a new instance of a class (object)
 
-??? Example
+<details><summary>Example</summary>
 
 	Your full **RobotContainer.java** should look like this:
 
     ```java
     package frc.robot;
 
-    import edu.wpi.first.wpilibj.Joystick;
-    import frc.robot.commands.*;
-    import frc.robot.subsystems.*;
-    import edu.wpi.first.wpilibj2.command.Command;
+    import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+    import edu.wpi.first.wpilibj2.command.button.Trigger;
+    import frc.robot.Constants.OperatorConstants;
+    import frc.robot.commands.Autos;
+    import frc.robot.commands.ExampleCommand;
+    import frc.robot.subsystems.ExampleSubsystem;
 
     /**
      * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -757,12 +748,12 @@ Since we will be using this command to control the robot we want it to run indef
      */
     public class RobotContainer {
       // The robot's subsystems and commands are defined here...
-      public static final Drivetrain m_drivetrain = new Drivetrain();
+      public static final DriveSubsystem drivetrain = new DriveSubsystem();
       private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
       private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-      public Joystick driverController = new Joystick(Constants.DRIVER_CONTROLLER);
+      private final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
       /**
        * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -771,8 +762,7 @@ Since we will be using this command to control the robot we want it to run indef
         // Configure the button bindings
         configureButtonBindings();
 
-        // Set default commands on subsystems
-        m_drivetrain.setDefaultCommand(new DriveArcade());
+        
       }
 
       /**
@@ -782,6 +772,11 @@ Since we will be using this command to control the robot we want it to run indef
        * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
        */
       private void configureButtonBindings() {
+        driveSubsystem.setDefaultCommand(new DriveSubSystem(
+        () -> -driverController.getLeftY() *
+            (driverController.getHID().getRightBumperButton() ? 1 : 0.5),
+        () -> -driverController.getRightX(),
+        driveSubsystem));
       }
 
 
@@ -796,3 +791,4 @@ Since we will be using this command to control the robot we want it to run indef
       }
     }
 	```
+</details>
