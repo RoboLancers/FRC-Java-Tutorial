@@ -23,9 +23,9 @@ Before we begin we must create the class file for the drivetrain subsystem. See 
 
 In the Drivetrain class we will tell the subsystem what type of components it will be using.
 
-- A Drivetrain needs motor controllers. In our case we will use 4 Talon SRs (a brand of controller for motors).
-    - You could use other motor controllers such as Victor SPs or Talon SRXs but we will be using Talon SRs
-      - If you are using other motor controllers, replace Talon with TalonSRX, Victor, or VictorSP in the code you write depending on the type you use.
+- A Drivetrain needs motor controllers. In our case we will use Neo SparkMaxes (a brand of controller for motors made by Rev Robotics).
+    - You could use other motor controllers such as Victor SPs or Talon SRs but we will be using NEO SparkMaxes
+      - If you are using other motor controllers, replace SparkMax with Talon, TalonSRX, Victor, or VictorSP in the code you write depending on the type you use.
     - You can use 2 motors (left and right), but for this tutorial we will use 4.
 
 !!! Tip
