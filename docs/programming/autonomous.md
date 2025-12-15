@@ -28,10 +28,24 @@ In this section we will be going over
 
 - Since we can't control our robot during an autonomous command we will want to create commands that allow the robot to move independently of a driver
 
-## Creating the DriveDistance Command 
+## Creating a basic Autonomous Command 
 
 !!! summary ""
-    **1)** Create a new command called **DriveDistance**
+    **1)** Create a new command called **Autonomous**
+
+
+	<details><summary>example</summary>
+		package frc.robot.commands;
+
+		import edu.wpi.first.wpilibj.Timer;
+		import edu.wpi.first.wpilibj2.command.Command;
+		import frc.robot.subsystems.CANDriveSubsystem;
+
+		// Command to run the robot at 1/2 power for 1 second in autonomous
+		public class AutoCommand extends Command {
+
+		}
+	<deatils>
     
 !!! summary ""
     **2)** Before the constructor create a **double** called **distance**
