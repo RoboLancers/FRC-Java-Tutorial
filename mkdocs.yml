@@ -8,6 +8,7 @@ nav:
   - 'basics/sensors.md'
   - 'basics/wpilib.md'
   - 'basics/java_basics.md'
+  - 'basics/ElectronicsCrashCourse.md'
   - 'basics/vscode_tips.md'
   # - 'basics/driverstation_tips.md'
 - FRC Development Environment Setup:
