@@ -23,26 +23,24 @@ Before we begin we must create the class file for the drivetrain subsystem. See 
 
 In the Drivetrain class we will tell the subsystem what type of components it will be using.
 
-- A Drivetrain needs motor controllers. In our case we will use 4 SparkMax Neos (a brand of controller for motors made by Rev Robotics).
-    - You could use other motor controllers such as Victor SPs or Talon SRXs but we will be using SparkMax Neos.
-      - If you are using other motor controllers, replace SparkMax with TalonSRX, Victor, or VictorSP in the code you write depending on the type you use.
-    - You can use 2 motors (left and right), but for this tutorial we will use 4 since that is what the base Kitbot uses.
+- A Drivetrain needs motor controllers. In our case we will use 4 Talon SRs (a brand of controller for motors).
+    - You could use other motor controllers such as Victor SPs or Talon SRXs but we will be using Talon SRs
+      - If you are using other motor controllers, replace Talon with TalonSRX, Victor, or VictorSP in the code you write depending on the type you use.
+    - You can use 2 motors (left and right), but for this tutorial we will use 4.
 
 !!! Tip
 		Be sure to read [Visual Studio Code Tips](../basics/vscode_tips.md){target=_blank} before getting started! It will make your life a lot easier.
 
-### Creating the Motor Variables
+### Creating the Talon Variables
 
 !!! summary ""
-    **1)**  At the top of the DriveTrainSubSystem class, create 4 global variables of data type **SparkMax** and name them: `leftLeader`, `rightLeader`, `leftFollower`, `rightFollower`
+    **1)** Create 4 global variables of data type **Talon** and name them: `leftFrontTalon`, `rightFrontTalon`, `leftBackTalon`, `rightBackTalon`
    
-    - To get started type private final SparkMax followed by the name i.e. `#!java private final SparkMax leftLeader;`
-      - These are declared at private and final because they will not be used outside of the drivetrain class, and will not be changing once assigned.
-    - These will eventually hold the object values for Neos and their port numbers.
+    - To get started type the word Talon followed by the name i.e. `#!java Talon leftFrontTalon;`
+    - These will eventually hold the object values for Talons and their port numbers.
 
 !!! summary ""
-    <!--**2)** Next assign their values to `#!java null` ([more info on `null`](../basics/java_basics.md#overview){target=_blank}).-->
-        **2)** These will not be Assigned values here.
+    **2)** Next assign their values to `#!java null` ([more info on `null`](../basics/java_basics.md#overview){target=_blank}).
    
     - We do this to make sure it is empty at this point. 
     - When we assign these variables a value, we will be getting the motor controller's port numbers out of Constants
@@ -53,10 +51,10 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 	The code you typed should be this:
 
     ```java
-    private final SparkMax leftLeader;
-    private final SparkMax leftFollower;
-    private final SparkMax rightLeader;
-    private final SparkMax rightFollower;
+    Talon leftFrontTalon = null;
+    Talon leftBackTalon = null;
+    Talon rightFrontTalon = null;
+    Talon rightBackTalon = null;
     ```
 
 	Your full **Drivetrain.java** should look like this:
@@ -70,17 +68,14 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
     /**
      * Add your docs here.
      */
-    public class CANDriveSubsystem extends SubsystemBase {
-      private final SparkMax leftLeader;
-      private final SparkMax leftLeader;
-      private final SparkMax leftFollower;
-      private final SparkMax rightLeader;
-      private final SparkMax rightFollower;
+    public class Drivetrain extends Subsystem {
+      // Put methods for controlling this subsystem
+      // here. Call these from Commands.
 
-
-      public CANDriveSubsystem() {
-        
-      }
+      Talon leftFrontTalon = null;
+      Talon leftBackTalon = null;
+      Talon rightFrontTalon = null;
+      Talon rightBackTalon = null;
 
       @Override
       public void periodic() {
@@ -91,27 +86,21 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 <!-- TODO: Generalize this more -->
 
 ??? fail "If an error occurs (red squiggles)"
-	1. Click the word SparkMax
-	![](../assets/images/driving_robot/e1.png)
-	2. 💡 Click the light bulb  
-	![](../assets/images/driving_robot/e2.png)
-	3. Select "Import 'SparkMax' (edu.wpi.first.wpilibj)"
-	![](../assets/images/driving_robot/e3.png)
+	1. Mouse Over the word SparkMax: The following menu should appear.
+	![](../assets/images/driving_robot/fix_error_1.png)
+	2. 💡 Click "quick fix" 
+	![](../assets/images/driving_robot/Quick_fix_click.png)
+	3. Select "Import 'SparkMax' (com.revrobotics.spark)"
+	![](../assets/images/driving_robot/quick_fix_import.PNG)
 	4. Your error should be gone!
 
 ### Creating and filling the constructor
 
 !!! summary ""
-    **1)** Create the constructor for Drivetrain.java ([more info on constructors](../basics/java_basics.md#constructors){target=_blank})
-   
-    - The constructor is where we will assign values to our talon variables.
+	Now that we have created the SparkMaxes  and the Drive Constants we must initialize them and tell them what port on the roboRIO they are on.
 
-!!! summary ""
-	Now that we have created the Talons we must initialize them and tell them what port on the roboRIO they are on.
-
-    **2)** Initialize (set value of) `leftFrontTalon` to `#!java new Talon(0)`. 
-      
-	- This initializes a new talon, `leftFrontTalon`, in a new piece of memory and states it is on port 0 of the roboRIO. 
+    **1)** Initialize (set value of) `leftLeader` to `#!java new SparkMax(LEFT_LEADER_ID, MotorType.KBrushed)`. 
+	- This initializes a new SparkMax, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`. 
 	- This should be done within the constructor `#!java Drivetrain()`
 	- This calls the constructor `#!java Talon(int)` in the Talon class. 
     	- The constructor `#!java Talon(int)` takes a variable of type `#!java int`. In this case the `#!java int` (integer) refers to the port number on the roboRIO. 
@@ -126,7 +115,7 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
     ```java
     public Drivetrain() {
       // Talons
-      leftFrontTalon = new Talon(0);
+      leftLeader = new SparkMax(DriveConstants.LEFT_LEADER_ID, MotorType.kBrushed);
     }
     ```
 
@@ -145,14 +134,17 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
       // Put methods for controlling this subsystem
       // here. Call these from Commands.
 
-      Talon leftFrontTalon = null;
-      Talon leftBackTalon = null;
-      Talon rightFrontTalon = null;
-      Talon rightBackTalon = null;
+      private final SparkMax leftLeader;
+      private final SparkMax leftFollower;
+      private final SparkMax rightLeader;
+      private final SparkMax rightFollower;
 
 	  public Drivetrain() {
         // Talons
-        leftFrontTalon = new Talon(0);
+        leftLeader = new SparkMax(0, MotorType.kBrushed);
+        leftFollower = new SparkMax(1 , MotorType.kBrushed);
+        rightLeader = new SparkMax(2, MotorType.kBrushed);
+        rightFollower = new SparkMax(3, MotorType.kBrushed);
       }
 
       @Override
@@ -167,36 +159,30 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 
 Since each subsystem has its own components with their own ports, it is easy to lose track of which ports are being used and for what. To counter this you can use a class called **Constants** to hold all these values in a single location.
 
-!!! summary ""
-    **1)** To use Constants, instead of putting `0` for the port on the Talon type: 
-	```java
-	Constants.DRIVETRAIN_LEFT_FRONT_TALON
-	```
-   
+
     - Names should follow the pattern SUBSYSTEM_NAME_OF_COMPONENT
     - The name is all caps since it is a **constant** ([more info on constants](../basics/java_basics.md#constants){target=_blank}).
 
 !!! summary ""
-    **2)** Click on the underlined text 
-	![](../assets/images/driving_robot/constants/step_1.png)
+      **1)**
+      Before we initalize the SparkMax objects we are going to create constants to hold the CAN ID's of the motors. This will happen in constants.java
+      - Inside the constants class, create a new class called `public static DriveConstants`.
+      - Inside `DriveConstants` class, create for constants called `LEFT_LEADER_ID`, `LEFT_FOLLOWER_ID`, `RIGHT_LEADER_ID`, and `RIGHT_FOLLOWER_ID`.
+      - Back in your `DriveTrain` class in `drivetrain.java`, import the `DriveConstants` class as follows: `Import frc.robot.Constants.DriveConstants;`.
 
+    !!! Tip 
+      Make sure to declare constants with `public static final` so they cannot be changed at runtime. 
+    
+    !!! Danger
+      ***If you set this to the wrong value, you could damage your robot when it tries to move!***
 !!! summary ""
-	**3)** Click on the 💡light bulb and select “create constant…”
-	![](../assets/images/driving_robot/constants/step_2.png)
-	
-!!! summary ""
-	**4)** Click on Constants.java tab that just popped up
-	![](../assets/images/driving_robot/constants/step_3.png)  
-	
-!!! summary ""
-	**5)** Change the `0` to the correct port for that motor controller on your robot/roboRIO
-	![](../assets/images/driving_robot/constants/step_4.png)
-	
-	!!! Danger
-		***If you set this to the wrong value, you could damage your robot when it tries to move!***
+    **1)** To use Constants, instead of putting `0` for the port in the SparkMax type: 
+	```java
+	DriveConstants.LEFT_LEADER_ID
+	```
    
 !!! summary ""
-	**6)** Repeat these steps for the remaining Talons.
+	  **2)** Replace the remaining numbers with constants.
 
 	!!! Tip
     	Remember to save both **Drivetrain.java** and **Constants.java**
@@ -205,18 +191,24 @@ Since each subsystem has its own components with their own ports, it is easy to 
 
 	The code you type should be this:
 
-    ```java
-    leftFrontTalon = new Talon(Constants.DRIVETRAIN_LEFT_FRONT_TALON);
-    ```
+      ```Java
+        public static final class DriveConstants {
+        public static final int LEFT_LEADER_ID = 1;
+        public static final int LEFT_FOLLOWER_ID = 2;
+        public static final int RIGHT_LEADER_ID = 3;
+        public static final int RIGHT_FOLLOWER_ID = 4;
+      }
+      ```
 
 	Your full **Drivetrain.java** should look like this:
 
     ```java
     package frc.robot.subsystems;
 
-    import edu.wpi.first.wpilibj.Talon;
+    import com.revrobotics.spark.SparkLowLevel.MotorType;
+    import com.revrobotics.spark.SparkMax;
     import edu.wpi.first.wpilibj.command.Subsystem;
-    import frc.robot.Constants;
+    import frc.robot.Constants.DriveConstants;
 
     /**
      * Add your docs here.
@@ -225,18 +217,17 @@ Since each subsystem has its own components with their own ports, it is easy to 
       // Put methods for controlling this subsystem
       // here. Call these from Commands.
 
-      Talon leftFrontTalon = null;
-      Talon leftBackTalon = null;
-      Talon rightFrontTalon = null;
-      Talon rightBackTalon = null;
+      private final SparkMax leftLeader;
+      private final SparkMax leftFollower;
+      private final SparkMax rightLeader;
+      private final SparkMax rightFollower;
 
       public Drivetrain() {
         // Talons
-        leftFrontTalon = new Talon(Constants.DRIVETRAIN_LEFT_FRONT_TALON);
-        leftBackTalon = new Talon(Constants.DRIVETRAIN_LEFT_BACK_TALON);
-        rightFrontTalon = new Talon(Constants.DRIVETRAIN_RIGHT_FRONT_TALON);
-        rightBackTalon = new Talon(Constants.DRIVETRAIN_RIGHT_BACK_TALON);
-      }
+        leftLeader = new SparkMax(DriveConstants.LEFT_LEADER_ID, MotorType.kBrushed);
+        leftFollower = new SparkMax(DriveConstants.LEFT_FOLLOWER_ID, MotorType.kBrushed);
+        rightLeader = new SparkMax(DriveConstants.RIGHT_LEADER_ID, MotorType.kBrushed);
+        rightFollower = new SparkMax(DriveConstants.RIGHT_FOLLOWER_ID, MotorType.kBrushed);
 
       @Override
       public void periodic() {
@@ -251,16 +242,21 @@ Since each subsystem has its own components with their own ports, it is easy to 
     package frc.robot;
 
     public class Constants {
-	  // Talons
-      public static final int DRIVETRAIN_LEFT_FRONT_TALON = 0;
-      public static final int DRIVETRAIN_LEFT_BACK_TALON = 1;
-      public static final int DRIVETRAIN_RIGHT_FRONT_TALON = 2;
-      public static final int DRIVETRAIN_RIGHT_BACK_TALON = 3;
+      public static final class DriveConstants {
+	      public static final int LEFT_LEADER_ID = 1;
+        public static final int LEFT_FOLLOWER_ID = 2;
+        public static final int RIGHT_LEADER_ID = 3;
+        public static final int RIGHT_FOLLOWER_ID = 4;
+      }
     }
 	```
 
 	!!! Warning
       	Remember to use the values for **YOUR** specific robot or you could risk damaging it!
+
+### Cofiguring the SparkMaxes
+
+
 
 ### Creating the arcade drive
 
