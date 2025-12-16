@@ -509,7 +509,7 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 </details>
 ***
 
-## Making our robot controllable
+### Making our robot controllable
 
 ### Creating the Drivearcade Command
 
