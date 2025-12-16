@@ -340,7 +340,7 @@ Create the configuration to apply to motors. Voltage compensation helps the robo
     leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     ```
 
-<details><summary>Example</summary
+<details><summary>Example</summary>
 
     ```Java
     package frc.robot.subsystems;
@@ -437,7 +437,7 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 
         You may want to do this for initial testing to make sure everything is going the right direction.
 
-<details><summary>Example</summary>
+<details><summary>Drive Example</summary>
 
 	The code you type should be this:
 
@@ -507,7 +507,6 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
     }
 	```
 </details>
-***
 
 ### Making our robot controllable
 
@@ -548,7 +547,6 @@ Before we begin we must create the class file for the DriveArcade command. See [
     ```
     These are values that will be passed into the command in `RobotContainer.java`
 
-
 !!! summary ""
     **2)** Inside constructor `#!java DriveArcade()` type:
 
@@ -580,7 +578,6 @@ Before we begin we must create the class file for the DriveArcade command. See [
     ```Java
     driveSubsystem.driveArcade(xSpeed.getAsDouble(), zRotation.getAsDouble());
     ```
-
 
 #### In the isFinished method
 
