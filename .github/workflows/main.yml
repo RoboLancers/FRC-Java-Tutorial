@@ -2,7 +2,7 @@ name: Publish docs via GitHub Pages
 on:
   push:
     branches:
-      - rololancer_updates
+      - robolancer_updates
 jobs:
   deploy:
     runs-on: ubuntu-latest
