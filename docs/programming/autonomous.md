@@ -4,7 +4,7 @@
 
 ## Overview
 
-In this section we will be going over
+In this section we will be going over:
 
 1. Creating an autonomous command group
 2. Using RobotPreferences to quickly change our autonomous values
@@ -20,9 +20,8 @@ In this section we will be going over
 
 - An autonomous command is a command that is ran during "autonomous mode" under the **autonomousInit** method in **Robot.java** 
 - It could be a single **command** or a **command group**
-- It's especially helpful to have if you don't have any cameras to drive the robot during a 
-"sandstorm" period (2019 game mechanic where the drivers couldn't see during the pre tele-op phase)
-- For this tutorial we will create an autonomous **command group** that makes the robot drive forward 5 feet, wait 5 seconds, and then pitch the shooter up during autonomous 
+- It's especially helpful to have if you don't have any cameras to drive the robot during autonomous (rare, but does happen)
+- For this tutorial we will create a simple autonomous **command ** that makes the robot drive forward slightly.
 	
 ## Creating Commands For Autonomous
 

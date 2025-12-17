@@ -600,7 +600,7 @@ Since we will be using this command to control the robot we want it to run indef
 #### In the end method
 
 !!! summary ""
-    **1)** We will call the arcadeDrive method and give it 0 and 0 as the parameters. 
+    **1)** We will call the arcadeDrive method and give it 0 and 0 as the parameters. this will stop the robot when the command completes. 
 
     In the end() method type:
 
@@ -695,7 +695,7 @@ In order to drive our robot, it needs to know what will be controlling it. To do
     **1)** Open Constants.java
       Check and make sure the `kDriverControllerPort` constant is present.
     **2)** Open RobotContainer.java
-    - Change all `ExampleSubsystem` references to `DriveSubsystem`
+    - Change all `ExampleSubsystem` references to `DriveSubsystem` (or whatever the name of your drive subsystem is.)
 
 <!-- TODO: add details on how to find joystick port in driverstation tips -->
 
@@ -704,11 +704,11 @@ In order to drive our robot, it needs to know what will be controlling it. To do
   
 !!! summary ""
     **1)** Back in **RobotContainer.java** We will need to remove everything inside the `configureBindings` method.
-    **2)** in the `configureBindings`we will call the `setDefaultCommand` of `m_drivetrain` and create a new `DriveArcade` command with parameters. 
+    **2)** in the `configureBindings`we will call the `setDefaultCommand` of `drivetrain` and create a new `DriveArcade` command with parameters. 
 
     - Commands in this method will run when the robot is enabled.
       - They also run if no other commands using the subsystem are running.
-      - This is why we write **addRequirements(Robot.m_subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
+      - This is why we write **addRequirements(Robot.subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
     - We will the default command for the drive subsystem to an instance of the `DriveArcade` with the values provided by the joystick axes on the driver controller. 
       - The Y axis of the controller is inverted so that pushing the stick away from you (a negative value) drives the robot forwards (a positive value). 
       - Similarly for the X axis where we need to flip the value so the joystick matches the WPILib convention of counter-clockwise positive
