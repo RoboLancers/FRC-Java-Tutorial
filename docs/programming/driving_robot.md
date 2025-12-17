@@ -692,7 +692,8 @@ In order to drive our robot, it needs to know what will be controlling it. To do
     **1)** Open Constants.java
       Check and make sure the `kDriverControllerPort` constant is present.
     **2)** Open RobotContainer.java
-    - Change all `ExampleSubsystem` references to `DriveSubsystem` (or whatever the name of your drive subsystem is.)
+    - in the imports section, change `ExampleCommand` to `DriveCommand`.
+    - inside the class, find the line ` private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();` and change `ExampleSubsystem` to `DriveSubsystem` and `m_exampleSubsystem` to `drivetrain`.
 
 <!-- TODO: add details on how to find joystick port in driverstation tips -->
 
@@ -703,27 +704,32 @@ In order to drive our robot, it needs to know what will be controlling it. To do
     **1)** Back in **RobotContainer.java** We will need to remove everything inside the `configureBindings` method.
     **2)** in the `configureBindings`we will call the `setDefaultCommand` of `drivetrain` and create a new `DriveArcade` command with parameters. 
 
-    - Commands in this method will run when the robot is enabled.
-      - They also run if no other commands using the subsystem are running.
-      - This is why we write **addRequirements(Robot.subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
+    !!! Tip
+        - Commands in this method will run when the robot is enabled.
+          - They also run if no other commands using the subsystem are running.
+          - This is why we write **addRequirements(Robot.subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
     - We will the default command for the drive subsystem to an instance of the `DriveArcade` with the values provided by the joystick axes on the driver controller. 
       - The Y axis of the controller is inverted so that pushing the stick away from you (a negative value) drives the robot forwards (a positive value). 
       - Similarly for the X axis where we need to flip the value so the joystick matches the WPILib convention of counter-clockwise positive
   
     ```Java
     driveSubsystem.setDefaultCommand(new DriveArcade(
-        () -> -m_driverController.getLeftY() *
-            (m_driverController.getHID().getRightBumperButton() ? 1 : 0.5),
+        () -> -m_driverController.getLeftY()
         () -> -m_driverController.getRightX(),
         driveSubsystem));
     ```
+    !!! Tip
+        - Notice the `()->` notation above. This notation creates lamdas or anonymous methods. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=blank}
+        - The lambas are required because we set the parameter types of `xpeed` and 'zrotation' in our `DriveCommand` to be `DoubleSuppliers`, which are methods that return doubles. (Which is what the lambdas above return.)
+        - These are declared as such so that they get and send the updated values from `m_driverController.getLeftY()` and `m_driverController.getRightX()` to the drive motors continuously.
+    
 
     !!! Tip
         Remember to use the light bulb for importing if needed!
     !!! Tip
         The `New` keyword creates a new instance of a class (object)
 
-<details><summary>Example</summary>
+<details><summary>Full RobotContainer Example</summary>
 
 	Your full **RobotContainer.java** should look like this:
 
@@ -734,8 +740,8 @@ In order to drive our robot, it needs to know what will be controlling it. To do
     import edu.wpi.first.wpilibj2.command.button.Trigger;
     import frc.robot.Constants.OperatorConstants;
     import frc.robot.commands.Autos;
-    import frc.robot.commands.ExampleCommand;
-    import frc.robot.subsystems.ExampleSubsystem;
+    import frc.robot.commands.DriveCommand;
+    import frc.robot.subsystems.DriveSubsystem;
 
     /**
      * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -745,10 +751,9 @@ In order to drive our robot, it needs to know what will be controlling it. To do
      */
     public class RobotContainer {
       // The robot's subsystems and commands are defined here...
-      public static final DriveSubsystem drivetrain = new DriveSubsystem();
-      private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+      public final DriveSubsystem drivetrain = new DriveSubsystem();
 
-      private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+      private final DriveCommand m_autoCommand = new DriveCommand(drivetrain);
       private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
@@ -770,8 +775,7 @@ In order to drive our robot, it needs to know what will be controlling it. To do
        */
       private void configureButtonBindings() {
         driveSubsystem.setDefaultCommand(new DriveSubSystem(
-        () -> -driverController.getLeftY() *
-            (driverController.getHID().getRightBumperButton() ? 1 : 0.5),
+        () -> -driverController.getLeftY()
         () -> -driverController.getRightX(),
         driveSubsystem));
       }
