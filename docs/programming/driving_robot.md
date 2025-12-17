@@ -699,7 +699,6 @@ In order to drive our robot, it needs to know what will be controlling it. To do
 
 ### Using setDefaultCommand
 
-  
 !!! summary ""
     **1)** Back in **RobotContainer.java** We will need to remove everything inside the `configureBindings` method.
     **2)** in the `configureBindings`we will call the `setDefaultCommand` of `drivetrain` and create a new `DriveArcade` command with parameters. 
