@@ -1,0 +1,14 @@
+{
+	"servers": {
+		"frc-docs": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"first-agentic-csa==0.3.12",
+				"--stdio"
+			],
+			"env": {}
+		}
+	},
+	"inputs": []
+}
