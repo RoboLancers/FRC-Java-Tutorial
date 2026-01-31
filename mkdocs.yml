@@ -3,6 +3,10 @@ nav:
 - Home:
   - 'index.md'
   - 'why_software.md'
+- Version Control:
+  - 'version_control/BasicGit.md'
+  - 'version_control/GitWorkflow.md'
+  - 'version_control/github.md'
 - Programming Basics:
   - 'basics/roboRIO.md'
   - 'basics/sensors.md'
@@ -25,15 +29,15 @@ nav:
   - 'programming/robotpreferences.md'
   - 'programming/autonomous.md'
   - 'programming/pid.md'
+  - 'programming/AdvantageKit.md'
+  - 'programming/AKitStructureReference.md'
   # - 'programming/super_core.md'
 - Example Subsystems:
   - 'examples/basic_elevator.md'
   - 'examples/basic_shooter.md'
   - 'examples/pid_elevator.md'
   - 'examples/pid_shooter.md'
-- Version Control:
-  - 'version_control/github.md'
-  - 'version_control/BasicGit.md'
+
 - Improve the Documentation:
   - 'contributing.md'
 

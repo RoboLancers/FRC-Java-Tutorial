@@ -55,3 +55,7 @@ In order to enable wireless connectivity to the robot outside of FRC events or t
 For **Windows ONLY:**
 
 [Official FRC Radio Configuration Utility and Use guide (Windows only)](https://docs.wpilib.org/en/stable/docs/getting-started/getting-started-frc-control-system/radio-programming.html){target=_blank}
+
+## customizing WPILIB Vscode
+
+

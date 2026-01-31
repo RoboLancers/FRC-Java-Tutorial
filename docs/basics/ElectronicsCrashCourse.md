@@ -82,7 +82,7 @@ If you see that, something might be broken on the CAN network.
 
 We have to set the IDs of the devices on the CAN network to make sure they are all uniquely and correctly identified.
 It would be very awkward to try to drive the robot and accidentally run the elevator instead of the drivetrain!
-To set the IDs of devices on the CAN network we use the [Tuner X](https://pro.docs.ctr-electronics.com/en/stable/docs/tuner/index.html) app built by CTRE.
+To set the IDs of devices on the CAN network we use the [Tuner X](https://pro.docs.ctr-electronics.com/en/stable/docs/tuner/index.html) app built by CTRE or the [Rev Hardware Client](https://docs.revrobotics.com/rev-hardware-client), depending on the motor type being used.
 This app also has features to test and configure devices on the CAN network.
 
 ### CANivore
@@ -240,7 +240,7 @@ We have additional LEDs on the robot that indicate the state of the robot, but t
 ### Encoders
 
 <img alt="CANcoder" src="../assets/images/Electronics/CANcoder.jpg" width="400">
-<img alt="Rev Through Bore ENcoder" src="../assets/images/Electronics/RevThroughBore.webp" width="400">
+<img alt="Rev Through Bore Encoder" src="../assets/images/Electronics/RevThroughBore.webp" width="400">
 
 Encoders are devices that measure rotation.
 We use them to measure the angles of our swerve modules, the speed of our wheels, the position of our elevator, and much more.
@@ -310,7 +310,6 @@ Vision in FRC can be used to detect visual markers called AprilTags on the field
 The pictured camera is a Limelight camera, a purchaseable vision solution that connects to the robot over ethernet and we used from 2021-2023.
 
 However, we've moved towards custom hardware, such as [Arducam cameras](https://www.arducam.com/product/arducam-100fps-global-shutter-usb-camera-board-1mp-720p-ov9281-uvc-webcam-module-with-low-distortion-m12-lens-without-microphones-for-computer-laptop-android-device-and-raspberry-pi/) and [Orange Pi processors](http://www.orangepi.org/).
-See the [Vision](..\3_Specifics\3.5_Vision.md) article for more details.
 The cameras plug into the USB ports on the Orange Pi.
 The Orange Pi connects to the radio over Ethernet,
 It's powered off the PDH with a buck/step down converter (which decreases voltage and increases current, since the Orange Pi only takes 5V and not 12).
