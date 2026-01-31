@@ -49,6 +49,8 @@ mcp_wpilib_fetch_frc_doc_page(url="https://docs.revrobotics.com/...")
 ```
 **For Markdown or readthedocs:**
 https://docs.readthedocs.com/platform/stable/index.html
+https://squidfunk.github.io/mkdocs-material/reference/code-blocks/
+https://squidfunk.github.io/mkdocs-material/reference/
 
 **For YAGSL:**
 https://docs.yagsl.com/

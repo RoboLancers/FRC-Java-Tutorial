@@ -90,7 +90,7 @@ Git Flow is like having different workbenches in your robotics shop, each with a
 
 #### Examples
 
-- [A video demonstrating the exercise](../assets/PRDemoVideo.mkv)
+- [A video demonstrating the exercise](../assets/images/git/PRDemoVideo.mkv)
 
 
 ### Exercises
@@ -114,7 +114,7 @@ Git Flow is like having different workbenches in your robotics shop, each with a
 - Select the gear next to assignees on the right side
 - Add Carl Stanton ```@snvgglebear``` as a reviewer.
 - Select "create pull request" again
-![Create a pull request in Github](../assets/github_pull_requests.png)
+![Create a pull request in Github](../assets/images/git/github_pull_requests.png)
 
 
 

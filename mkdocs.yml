@@ -3,6 +3,8 @@ nav:
 - Home:
   - 'index.md'
   - 'why_software.md'
+- Setup:
+  - 3rd_party_libs.md
 - Version Control:
   - 'version_control/BasicGit.md'
   - 'version_control/GitWorkflow.md'
@@ -46,38 +48,44 @@ site_name: FRC Java Programming
 repo_name: Tutorial Bot
 repo_url: https://github.com/RoboLancers/FRC-Java-Tutorial/tree/main
 edit_uri: https://github.com/RoboLancers/FRC-Java-Tutorial/edit/main/Docs_Source/docs/
-site_author: Tayler Uva
+site_author: Tayler Uva, Carl Stanton
 
 # Theme
 theme:
-  name: 'readthedocs'
+  name: 'material'
   favicon: assets/favicon.png
-  icon:
-    logo: assets/favicon.png
+  #icon:
+  #  logo: assets/favicon.png
+  features:
+    - content.tabs.link
+  color_mode: auto
 use_directory_urls: false
 
 # Extensions
 markdown_extensions:
-  - admonition
-  - pymdownx.superfences
+  - pymdownx.blocks.admonition
   - pymdownx.critic
-  - pymdownx.details
+  - pymdownx.blocks.details
+  - pymdownx.blocks.tab
   - pymdownx.betterem
   - pymdownx.tasklist
   - pymdownx.extra
   - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["docs/code_examples"]
+  - pymdownx.superfences
+      
   - pymdownx.highlight:
-      css_class: 'codehilite'
+      #css_class: 'codehilite'
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - toc:
         permalink: "#"
 
 # Plugins
 plugins:
   - search
-  - minify:
-      minify_html: true
-      minify_js: true
-
-google_analytics:
-  - UA-47256977-4
-  - auto
+  # - minify:
+  #     minify_html: true
+  #     minify_js: true
