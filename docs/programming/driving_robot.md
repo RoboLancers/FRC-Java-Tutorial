@@ -28,8 +28,11 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
       - If you are using other motor controllers, replace SparkMax with Talon, TalonSRX, Victor, or VictorSP in the code you write depending on the type you use.
     - You can use 2 motors (left and right), but for this tutorial we will use 4.
 
-!!! Tip
-		Be sure to read [Visual Studio Code Tips](../basics/vscode_tips.md){target=_blank} before getting started! It will make your life a lot easier.
+/// note | More Info
+
+    Be sure to read [Visual Studio Code Tips](../basics/vscode_tips.md){target=_blank} before getting started! It will make your life a lot easier.
+
+///
 
 ### Creating the SparkMax Variables
 
@@ -48,50 +51,56 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 
 
 /// details | Example code
+
 **SparkMax Motor Member Variables:**
 
 ```java title="DriveSubsystem.java"
---8<-- "2026KitBotInline/subsystems/CANDriveSubsystem.java:22:25"
+--8<-- "2026KitBotInline/subsystems/CANDriveSubsystem.java:motors"
 ```
+
 ///
 
 <!-- TODO: Generalize this more -->
 
-/// admonition |Error
-    type: note
-    **If an error occurs (red squiggles)**
-    1. Mouse Over the word SparkMax: The following menu should appear.
-    ![](../assets/images/driving_robot/fix_error_1.png)
-    2. 💡 Click "quick fix" 
-    ![](../assets/images/driving_robot/Quick_fix_click.png)
-    3. Select "Import 'SparkMax' (com.revrobotics.spark)"
-    ![](../assets/images/driving_robot/quick_fix_import.PNG)
-    4. Your error should be gone!
-///
+**If an error occurs (red squiggles)**
+
+1. Mouse Over the word SparkMax: The following menu should appear.
+![](../assets/images/driving_robot/fix_error_1.PNG)
+
+2. 💡 Click "quick fix" 
+![](../assets/images/driving_robot/quick_fix_click.png)
+
+3. Select "Import 'SparkMax' (com.revrobotics.spark)"
+![](../assets/images/driving_robot/Quick_fix_import.png)
+
+4. Your error should be gone!
 
 ### Creating and filling the constructor
-
 
 Now that we have created the SparkMaxes  and the Drive Constants we must initialize them and tell them what port on the roboRIO they are on.
 
 **1)** Initialize (set value of) `leftLeader` to `#!java new SparkMax(LEFT_LEADER_ID, MotorType.kBrushless)`. 
+
 - This initializes a new SparkMax, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`. 
 - This should be done within the constructor `#!java Drivetrain()`
 - This calls the constructor `#!java SparkMax(int, MotorType)` in the SparkMax class. 
     - The constructor `#!java SparkMax(int, MotorType)` takes a variable of type `#!java int` for the CAN ID and `MotorType` for brushless or brushed. In this case the `#!java int` (integer) refers to the CAN ID on the roboRIO. 
     
-    !!! info "roboRIO port diagram"
-            ![](../assets/images/driving_robot/roboRIO_port.png)
+ **roboRIO port diagram**
 
-/// details | "Constructor Initialization Example"
+![](../assets/images/driving_robot/roboRIO_port.png)
 
 
-```java title="Constructor"
---8<-- "2026KitBotInline/subsystems/CANDriveSubsystem.java:28:30,72:72"
+/// details | Constructor Initialization Example
+
+```java title="Constructor declaration"
+public CANDriveSubSystem () {}
 ```
 
-```java title ="Full Constructor."
---8<-- "2026KitBotInline/subsystems/CANDriveSubsystem.java:28:36,72:72"
+**Full Constructor: **
+
+```java title="FUll Constructor"
+--8<-- "2026KitBotInline/subsystems/CANDriveSubsystem.java:constructor"
 ```
 
 See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete constructor implementation.
@@ -108,50 +117,56 @@ Since each subsystem has its own components with their own ports, it is easy to 
     - Names should follow the pattern SUBSYSTEM_NAME_OF_COMPONENT
     - The name is all caps since it is a **constant** ([more info on constants](../basics/java_basics.md#constants){target=_blank}).
 
-!!! summary ""
-      **1)**
-      Before we initalize the SparkMax objects we are going to create constants to hold the CAN ID's of the motors. This will happen in constants.java
-      - Inside the constants class, create a new class called `public static DriveConstants`.
-      - Inside `DriveConstants` class, create for constants called `LEFT_LEADER_ID`, `LEFT_FOLLOWER_ID`, `RIGHT_LEADER_ID`, and `RIGHT_FOLLOWER_ID`.
-      - Back in your `DriveTrain` class in `drivetrain.java`, import the `DriveConstants` class as follows: `Import frc.robot.Constants.DriveConstants;`.
 
-  !!! Tip 
-    Make sure to declare constants with `public static final` so they cannot be changed at runtime. 
-  
-  !!! Danger
-    ***If you set this to the wrong value, you could damage your robot when it tries to move!***
-!!! summary ""
-    **1)** To use Constants, instead of putting `0` for the port in the SparkMax type: 
-	```Java
-	DriveConstants.LEFT_LEADER_ID
-	```
-   
-!!! summary ""
-	  **2)** Replace the remaining numbers with constants.
 
-	!!! Tip
-    	Remember to save both **Drivetrain.java** and **Constants.java**
+Before we initalize the SparkMax objects we are going to create constants to hold the CAN ID's of the motors. This will happen in constants.java
 
-<details><summary>DriveConstants Example</summary>
+- Inside the constants class, create a new class called `public static DriveConstants`.
+- Inside `DriveConstants` class, create for constants called `LEFT_LEADER_ID`, `LEFT_FOLLOWER_ID`, `RIGHT_LEADER_ID`, and `RIGHT_FOLLOWER_ID`.
+- Back in your `DriveTrain` class in `drivetrain.java`, import the `DriveConstants` class as follows: `Import frc.robot.Constants.DriveConstants;`.
+
+/// tip | Declaring Constants
+Make sure to declare constants with `public static final` so they cannot be changed at runtime. 
+///
+
+/// danger
+***If you set this to the wrong value, you could damage your robot when it tries to move!***
+///
+/// note
+To use Constants, instead of putting `0` for the port in the SparkMax type: 
+
+```java title="constants.java"
+public static final int LEFT_LEADER_ID = 1;
+```
+///
+
+/// note
+Replace the remaining numbers with constants.
+    
+///
+
+///Tip
+
+Remember to save both **Drivetrain.java** and **Constants.java**
+
+///
+
+/// details | DriveConstants Example
 
 **Drive Constants Definition:**
 
-```Java
-public static final class DriveConstants {
-  public static final int LEFT_LEADER_ID = 1;
-  public static final int LEFT_FOLLOWER_ID = 2;
-  public static final int RIGHT_LEADER_ID = 3;
-  public static final int RIGHT_FOLLOWER_ID = 4;
-}
+```java
+--8<-- "2026KitBotInline/Contants.java:constants"
 ```
+
+///
 
 **Full Constants.java with all Robot Constants:**
 
 See [Constants.java](../code_examples/2026KitBotInline/Constants.java) for the complete constants file including OperatorConstants and other subsystem constants.
 
-	!!! Warning
-      	Remember to use the values for **YOUR** specific robot or you could risk damaging it!
-</details>
+!!! Warning
+    Remember to use the values for **YOUR** specific robot or you could risk damaging it!
 
 ### Configuring the SparkMaxes
 
@@ -216,7 +231,7 @@ See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDri
     !!! Warning
         You should only group motors that are spinning the same direction physically when positive power is being applied otherwise you could damage your robot.
 
-!!! summary ""
+/// note 
     **2)** In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower. 
     In the constructor we are going to set the follower motors and link them to the leader motors. To do this we will need to include a couple more classes from the REV Library:
     ```Java
@@ -245,15 +260,19 @@ See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDri
     leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     ```
 
-<details><summary>Full Drive Subsystem Example</summary>
+///
 
-See [CANDriveSubsystem.java](../../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.</details>
+/// details | Full Drive Subsystem Example</summary>
+
+See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.
+
+///
 
 ### Creating the arcadeDrive method
 
 Now it’s time to make an arcadeDrive from our differentialDrive!
 
-!!! summary ""
+!!! abstract
     **1)** Let’s create a public void method called “arcadeDrive” with type “double” parameters moveSpeed and rotateSpeed.
 
     Below the `periodic` method create a new method called `arcadeDrive`. This method will be called from our Drive command to actually move the robot.
@@ -267,7 +286,7 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
     !!! Tip
         By putting something in the parentheses it makes the method require a parameter when it is used. When the method gets used and parameters are passed, they will be store in moveSpeed and rotateSpeed (in that order). See [parameters](../basics/java_basics.md#parameters){target=_blank} for more info.
 
-!!! summary ""
+!!! abstract ""
     **2)** Now lets make our method call the differentialDrive's arcadeDrive method.
 
     Inside our method type:
@@ -287,7 +306,7 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 
         You may want to do this for initial testing to make sure everything is going the right direction.
 
-<details><summary>Drive Arcade Method Example</summary>
+// details | Drive Arcade Method Example
 
 **Simple Arcade Drive Method:**
 
@@ -308,9 +327,9 @@ public Command driveArcade(DoubleSupplier xSpeed, DoubleSupplier zRotation) {
 }
 ```
 
-See [CANDriveSubsystem.java](../../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete implementation using the command factory pattern.
+See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete implementation using the command factory pattern.
 
-</details>
+///
 
 ### Making our robot controllable
 
@@ -362,8 +381,8 @@ Before we begin we must create the class file for the DriveArcade command. See [
     ```
    
     - The 3 lines starting with `this` set the global variables we defined at the top of our class file to the values being passed into the consturctor.
-!!! Tip
-   `this` is how the class instance `object` refers to itself in code.
+    !!! Tip
+        `this` is how the class instance `object` refers to itself in code.
 
 !!! summary ""
     - `addRequirements` means this command will end all other commands currently using drivetrain and will run instead when executed.
@@ -417,17 +436,16 @@ Since we will be using this command to control the robot we want it to run indef
 
 **Full Constants.java:**
 
-See [Constants.java](../../code_examples/2026KitBotInline/src/main/java/frc/robot/Constants.java) for the complete constants file with all required constant definitions.
+See [Constants.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/Constants.java) for the complete constants file with all required constant definitions.
 
 **Full RobotContainer.java:**
 
-See [RobotContainer.java](../../code_examples/2026KitBotInline/src/main/java/frc/robot/RobotContainer.java) for the complete RobotContainer implementation including all command bindings.
+See [RobotContainer.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/RobotContainer.java) for the complete RobotContainer implementation including all command bindings.
 
 **Full Drive Subsystem:**
 
-See [CANDriveSubsystem.java](../../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete drive subsystem with all motor initialization and configuration.
+See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete drive subsystem with all motor initialization and configuration.
 
-</details>
 
 ## Finishing Up in RobotContainer
 
@@ -475,9 +493,9 @@ In order to drive our robot, it needs to know what will be controlling it. To do
     !!! Tip
         The `New` keyword creates a new instance of a class (object)
 
-<details><summary>Full RobotContainer Example</summary>
+// details | Full RobotContainer Example
 
-See [RobotContainer.java](../../code_examples/2026KitBotInline/src/main/java/frc/robot/RobotContainer.java) for the complete RobotContainer implementation.
+See [RobotContainer.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/RobotContainer.java) for the complete RobotContainer implementation.
 
 The key part for drive configuration is in `configureBindings()`:
 
@@ -490,8 +508,8 @@ driveSubsystem.setDefaultCommand(
 ```
 
 This sets arcade drive as the default command, using:
+
 - The negative Y-axis of the left joystick (inverted so pushing away drives forward)
 - The negative X-axis of the right joystick (inverted for WPILib counter-clockwise positive convention)
 - Both axes scaled for controllability
 
-</details>

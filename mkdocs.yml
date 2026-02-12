@@ -69,12 +69,11 @@ markdown_extensions:
   - pymdownx.blocks.tab
   - pymdownx.betterem
   - pymdownx.tasklist
-  - pymdownx.extra
+  #- pymdownx.extra
   - pymdownx.inlinehilite
+  - pymdownx.superfences
   - pymdownx.snippets:
       base_path: ["docs/code_examples"]
-  - pymdownx.superfences
-      
   - pymdownx.highlight:
       #css_class: 'codehilite'
       anchor_linenums: true

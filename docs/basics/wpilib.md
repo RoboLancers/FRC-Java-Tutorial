@@ -10,7 +10,8 @@ Making FRC Programming Easy
     - There are classes to handle sensors, motor speed controllers, the driver station, and a number of other utility functions.
 - Documentation is available at <http://first.wpi.edu/FRC/roborio/release/docs/java>
 - WPILib adds those sensors and controllers as additional data types (like `#!java int` or `#!java double`) and classes.
-    - !!!example "Examples" 
+
+/// details | Examples  
   		`Talon`, `Solenoid`, `Encoder`...
 
 ***
@@ -40,7 +41,7 @@ Making FRC Programming Easy
     - Some variables (parts) would be: **leftEye**, **rightEye**, **nose**, **leftEar**, **rightEar**.
     - Some example methods would be **closeEyes** or **openEyes** since these are things the dog are capable of.
         - These methods would use both the **leftEye** and **rightEye** and close them.
-    - ??? example
+    - /// details | example
     	```java
     	//This method closes the dog eyes
         public void closeEyes(){

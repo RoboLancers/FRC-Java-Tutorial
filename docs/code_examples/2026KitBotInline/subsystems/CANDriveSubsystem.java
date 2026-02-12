@@ -20,13 +20,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.DriveConstants.*;
 
 public class CANDriveSubsystem extends SubsystemBase {
+  // --8<-- [start: motors]
   private final SparkMax leftLeader;
   private final SparkMax leftFollower;
   private final SparkMax rightLeader;
   private final SparkMax rightFollower;
 
+  // --8<-- [end: motors]
   private final DifferentialDrive drive;
 
+  // --8<-- [start: constructor]
+  
   public CANDriveSubsystem() {
     // create brushed motors for drive
     leftLeader = new SparkMax(LEFT_LEADER_ID, MotorType.kBrushed);
@@ -70,6 +74,8 @@ public class CANDriveSubsystem extends SubsystemBase {
     config.inverted(true);
     leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
+
+  // --8<-- [end: constructor]
 
   @Override
   public void periodic() {

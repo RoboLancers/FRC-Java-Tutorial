@@ -12,6 +12,15 @@
 		"pip3 install --user -r requirements.txt",
 		"pip3 install --user first-agentic-csa"
 	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"main-branch.mkdocs-snippet-lens",
+				"aikebang.mkdocs-syntax-highlight",
+				"ytianle.mkdocs-material-linter"
+			]
+		}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
