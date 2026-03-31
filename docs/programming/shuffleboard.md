@@ -24,37 +24,37 @@ In this section we will be going over
 
 ## Creating the Telemetry Subsystem
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a new **Subsystem** called **Telemetry**
     
-!!! summary ""
+!!! abstract ""
     **2)** Create a constructor for the **Telemetry** class
     
     - The constructor is where we will create buttons for shuffleboard
     
-!!! summary ""
+!!! abstract ""
     **3)** Inside type: 
     
     ```java
     SmartDashboard.putData(“Reset Drive Encoder”, new DriveResetEncoder());
     ```
        
-!!! summary ""
+!!! abstract ""
     **4)** Create a public method called update
     
     - This method will run periodically in Robot.java to update sensor data on shuffleboard
     
-!!! summary "" 
+!!! abstract "" 
     **5)** Inside type: 
     
     ```java 
     SmartDashboard.putNumber(“Drivetrain Encoder Count”, Robot.m_drivetrain.getDriveEncoderCount());
     ```
        
-!!! summary ""
+!!! abstract ""
     **6)** Do the same for the **getDriveEncoderDistance** method
     
-!!! summary ""
+!!! abstract ""
     **7)** Try adding the **Shooter** Subsystem commands and sensor methods where they should be
     
 ??? Example 
@@ -104,7 +104,7 @@ In this section we will be going over
 	   
 ## Adding The Telemetry Subsystem to Robot.java
 
-!!! summary ""
+!!! abstract ""
     **1)** When adding **Telemetry** to **Robot.java**, in **robotInit** we must add **Telemetry** after the other subsystems
   
     - This is because the **Telemetry** subsystem relies on methods that are created in other subsystems before it
@@ -112,7 +112,7 @@ In this section we will be going over
 
     <!-- TODO: Explain why we don't put it in robotPeriodic -->
 
-!!! summary ""
+!!! abstract ""
 
     **2)** It is **important** that we add the **update** method to **disabledPeriodic, autonomousPeriodic**, and **teleopPeriodic** so that the **Shuffleboard** is always being updated with information on our sensors.
 

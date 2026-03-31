@@ -19,13 +19,13 @@ In this section we will be going over
 
 ## Creating RobotPreferences
 
-!!! summary "" 
+!!! abstract "" 
     **1)** Create a new **empty class** called **RobotPreferences**
     
     - This is where we store all of our **RobotPreferences** to access anywhere
     - If we want to use a **RobotPreference** we call RobotPreferences.preferenceName()
 
-!!! summary "" 
+!!! abstract "" 
     **2)** Inside the constructor type:
     
 	```java 
@@ -69,10 +69,10 @@ In this section we will be going over
 
 - We will use this **RobotPreference** to help us create a method that can keep track of the distance our robot has driven in inches
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a method called **getDriveEncoderDistance** inside of **Drivetrain**
     
-!!! summary ""
+!!! abstract ""
     **2)** Inside type:
     
     ```java
@@ -94,7 +94,7 @@ In this section we will be going over
   	}
 	```
 	  
-!!! summary ""
+!!! abstract ""
     **3)** Add the method to the **update** method in **Telemetry**
     
 ## Using RobotPreferences
@@ -114,27 +114,27 @@ In this section we will be going over
 - Right now the encoders tell us distance in terms of encoder counts
 - We will use our **driveEncoderCountsPerFoot** preference to save how many counts there are when the robot drives 1 foot
 
-!!! summary ""
+!!! abstract ""
     **1)** Move the wheel on your robot with the **Drivetrain** encoder attached 1 foot or drive your robot 1 foot
     
-!!! summary ""
+!!! abstract ""
     **2)** Read how many counts your encoder has in the **Drive Encoder Count** window
     
     - If you want to measure again press the **Reset Drive Encoder** command button to reset the **Drivetrain** encoder count
     
-!!! summary ""
+!!! abstract ""
     **3)** Change the value of **driveEncoderCountsPerFoot** in the widget to this number
     
-!!! summary ""
+!!! abstract ""
     **4)** Reset the **Drivetrain** encoder and move the wheel 1 foot or drive the robot 1 foot again
  
-!!! summary ""
+!!! abstract ""
     **5)** Make sure your **Drive Encoder Distance** window reads approximately 12 (this is in inches)
     
     - If not repeat these steps again
     
-!!! summary ""
+!!! abstract ""
     **6)** Save your **RobotPreferences** widget with this value
    
-!!! summary ""
+!!! abstract ""
     **7)** Hardcode this value in **RobotPreferences.java** in the **driveEncoderCountsPerFoot** method incase you cannot recover your **RobotPreferences** save

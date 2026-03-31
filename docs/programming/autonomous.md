@@ -29,11 +29,11 @@ In this section we will be going over:
 
 ## Creating a basic Autonomous Command 
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a new command called **AutoCommand** using the `create new class/command` feature in Vscode.
 	
     
-!!! summary ""
+!!! abstract ""
     **2)** Before the constructor create a **double** called **distance**
 	```java
 		private Double distance;
@@ -49,33 +49,33 @@ In this section we will be going over:
 	
 	- This will be used to control how long the robot will move for. 
     
-!!! summary ""
+!!! abstract ""
     **3)** In the **AutoCommand** constructor add a **DriveSubsystem** parameter called **driveSubsystem**
     
-!!! summary ""
+!!! abstract ""
     **4)** Inside type:
     
 	```java
 	distance = inches;
 	```
         
-!!! summary ""
+!!! abstract ""
     **5)** In **initialize** add our **resetDriveEncoder** method
     
     - We want to reset the encoder before we drive so that it counts the distance from zero
     
-!!! summary ""
+!!! abstract ""
     **6)** In **execute** add our **arcadeDrive** method and change the **moveSpeed** parameter to a **RobotPreference** named **driveDistanceSpeed** and **rotateSpeed** to 0.0
     
     - We only want to drive the robot forward; a **RobotPreference** will help us tune the drive speed
     
-!!! summary ""
+!!! abstract ""
     **7)** In **isFinished** type:
     
 	```java
 	return Robot.m_drivetrain.getDriveEncoderDistance() == distance;
 	```
-!!! summary ""
+!!! abstract ""
     **8)** In **end** stop the **Drivetrain** and call **end** in **interrupted**
     
 ??? Example
@@ -137,10 +137,10 @@ In this section we will be going over:
 
 - We will create an **Autonomous command group** with the **DriveDistance** command and the **ShooterPitchUp** command
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a new **Command Group** named **Autonomous**
 	
-!!! summary ""
+!!! abstract ""
  	**2)** In the constructor type
 	
 	```java
@@ -155,30 +155,30 @@ In this section we will be going over:
 - In order to add timing in between our **commands** in our **command groups** we will need to create a **DoDelay** command
 - Unlike regular **delays** the **DoDelay** command will not stall our robot, but wait a certain amount of time before running a command
 
-!!! summary ""
+!!! abstract ""
 	**1)** Create a new command called **DoDelay**
 	
-!!! summary ""
+!!! abstract ""
 	**2)** Before the constructor add two private **doubles** called **expireTime** and **timeout**
 		   
-!!! summary ""
+!!! abstract ""
 	**3)** In the constructor add a **double** called **seconds** in the parameter
 	
-!!! summary ""
+!!! abstract ""
 	**4)** Inside the constructor set **timeout** equal to **seconds**
 
-!!! summary ""
+!!! abstract ""
 	**5)** Create a protected **void** method called **startTimer**
 
-!!! summary ""
+!!! abstract ""
 	**6)** Inside set **expireTime** equal to **timeSinceInitialized** + **timeout**
 	
 	- This will let the robot know how much time will have passed since the command was initialized when it finishes
 	
-!!! summary ""
+!!! abstract ""
 	**7)** In **initialized** add our **startTimer** method
 	
-!!! summary ""
+!!! abstract ""
 	**8)** In **isFinished** return **timeSinceInitialized** is greater or equal to **expireTime**
 	
 ??? Example
@@ -237,7 +237,7 @@ In this section we will be going over:
     
 ## Adding the DoDelay Command to Autonomous.java
 
-!!! summary ""
+!!! abstract ""
 	- Add our **DoDelay** command in between **DriveDistance** and **ShooterPitchUp** with a **RobotPreference** called **autoDelay**
 	
 ??? Example 

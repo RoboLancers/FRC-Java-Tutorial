@@ -97,7 +97,7 @@ deploy/
 
 This file defines the overall swerve drive configuration, including the IMU (gyroscope) settings and references to the individual module configuration files.
 
-!!! summary "Key Properties"
+!!! abstract "Key Properties"
     - `imu`: Configures the gyroscope/IMU used for heading tracking
       - `type`: The type of IMU ("pigeon2", "navx", "adxrs450", etc.)
       - `id`: CAN ID of the IMU device
@@ -163,7 +163,7 @@ This file defines the overall swerve drive configuration, including the IMU (gyr
 
 Each swerve module (wheel) has its own configuration file defining the drive motor, angle motor, encoder, and physical location.
 
-!!! summary "Key Properties"
+!!! abstract "Key Properties"
     - `drive`: Configuration for the drive (translation) motor
       - `type`: Motor controller type ("sparkmax", "talonfx", "talonsrx", etc.)
       - `id`: CAN ID of the motor controller
@@ -277,7 +277,7 @@ Each swerve module (wheel) has its own configuration file defining the drive mot
 
 This file defines the physical characteristics of your robot and swerve modules that affect calculations.
 
-!!! summary "Key Properties"
+!!! abstract "Key Properties"
     - `optimalVoltage`: Battery voltage for calculations (usually 12.0V)
     - `wheelDiameter`: Diameter of drive wheels in inches
     - `driveGearRatio`: Gear ratio from motor to wheel (motor rotations per wheel rotation)
@@ -317,7 +317,7 @@ This file defines the physical characteristics of your robot and swerve modules 
 
 This file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning values for both drive and angle motors.
 
-!!! summary "Key Properties"
+!!! abstract "Key Properties"
     - `drive`: PIDF values for drive motors (translation)
       - `p`: Proportional gain
       - `i`: Integral gain
@@ -390,7 +390,7 @@ This file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning
 
 This file configures advanced control parameters for heading correction and velocity control (usually left at defaults).
 
-!!! summary "Key Properties"
+!!! abstract "Key Properties"
     - `heading`: PID values for heading correction
       - `p`: Proportional gain for heading control
       - `i`: Integral gain

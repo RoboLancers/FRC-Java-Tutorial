@@ -39,7 +39,7 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
 
 ### What will be added to the Shooter subsystem
 
-!!! summary ""
+!!! abstract ""
     **1)** 
 
     - Create a new Shooter subsystem.
@@ -50,7 +50,7 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
 	   - Port 1 and Port 2 refer to Forward control and Reverse control ports on the PCM.
 	   - Like all ports we use, we will store this in the RobotMap.
 
-!!! summary ""
+!!! abstract ""
     **2)** Create your DoubleSolenoid named pitchSolenoid now using the same technique used to create a talon but replacing Talon with DoubleSolenoid. (For single solenoids just use Solenoid).
 
 ??? Example
@@ -104,10 +104,10 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
 	
 ### Creating Pitch Up/Down Methods
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a public void method called pitchUp.
    
-!!! summary ""   
+!!! abstract ""   
     **2)** Inside type:
     
     ```java
@@ -118,7 +118,7 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
       !!! note
 	if you wanted multiple solenoids to deploy at the same time also have them do .set(Value.kForward);
    
-!!! summary ""   
+!!! abstract ""   
     **3)** Do the same for the **pitchDown** method but change **kForward** to **kReverse**.
     
 ??? Example
@@ -144,18 +144,18 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
    - **InstantCommands** work the same as regular commands but hide everything except for initialize(). (InstantCommand extends Command)
    - Internally, they set isFinished to return always true so execute never runs.
    
-!!! summary ""   
+!!! abstract ""   
     **1)** Create a new **InstantCommand** called **ShooterUp**
 
     - Alternatively: Create a regular **Command** and set **isFinished** to **true**
    
-!!! summary ""
+!!! abstract ""
     **2)** In the constructor adds requires(Robot.m_shooter)
 
-!!! summary ""
+!!! abstract ""
     **3)** In initialize() add our newly created method **pitchUp** method 
 
-!!! summary ""
+!!! abstract ""
     **4)** Repeat steps for **ShooterDown** command but change **pitchUp* to **pitchDown**
    
 ??? Example
@@ -229,13 +229,13 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
 - Now that we have created our ShooterUp and ShooterDown commands we need a way to run them. 
 - Lets map them to buttons on our controller!
 
-!!! summary ""
+!!! abstract ""
     **1)** Open OI.java
 
-!!! summary ""
+!!! abstract ""
       **2)** Under our created joystick we will create Button variables and assign them to a button on our joystick 
 
-!!! summary ""
+!!! abstract ""
       **3)** Type: 
       
     ```java
@@ -244,7 +244,7 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
          
 	 - This creates a new Button named D1 (D representing driverController and 1 representing the button number) and sets it as a JoystickButton on the controller ‘driverController’ and button value 1 (this can be found in the Driverstation software). 
 
-!!! summary ""
+!!! abstract ""
 	 **4)** Do this for the rest of the buttons on your controller.
 	 
 ??? Example
@@ -282,10 +282,10 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
 
 - Now that we have created the buttons in the code we can map certain commands to them. 
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a constructor for OI 
 
-!!! summary ""
+!!! abstract ""
      **2)** In the constructor type: 
      
     ```java
@@ -295,7 +295,7 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
        - This means **when** the button D1 is **pressed** it runs the ShooterUp command and deploys our pneumatic piston. 
        - There are other types of activations for buttons besides **whenPressed** like: **whenRelease, whileHeld, etc**. 
 
-!!! summary ""
+!!! abstract ""
     **3)** Create a whenPressed button for ShooterDown as well
    
 ??? Example

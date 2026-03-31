@@ -19,7 +19,7 @@ In this section we will be going over
 
 ## Programming Switches (i.e. Limit Switches)
 
-!!! summary ""
+!!! abstract ""
     **1)** For this tutorial we are going to add a **switch** to a **shooter subsystem** to automatically change the pitch of the shooter
     
     - Inside the shooter subsystem we are going to create a **switch** called **shooterSwitch**
@@ -51,12 +51,12 @@ In this section we will be going over
 
 ### Creating isShooterSwitchClosed Method
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a **public boolean** method called **isShooterSwitchClosed**
     
     - This method will tell us when the shooter switch is pressed
 
-!!! summary ""
+!!! abstract ""
     **2)** Inside type:
    
     ```java
@@ -112,21 +112,21 @@ In this section we will be going over
 
 - We will create a **command** that gives an example of how a Shooter switch may be used
 
-!!! summary ""
+!!! abstract ""
      **1)** For this tutorial we will use the switch to create a button that automatically pitches the shooter up after the switch is pressed
 
-!!! summary ""
+!!! abstract ""
     **2)** Create a new **command** called **ShooterUpAuto**
    
-!!! summary "" 
+!!! abstract "" 
     **3)** In the constructor add requires(Robot.m_Shooter)
     
-!!! summary ""
+!!! abstract ""
     **4)** In isFinished return our **isShooterSwitchClosed** method
     
     - we will not put anything in initialize or execute because we don't want anything to happen until the switch is closed
     
-!!! summary "" 
+!!! abstract "" 
     **5)** In end add our **pitchUp** method
      
     - we will not put end in interrupted either because we only want to change the pitch of the shooter if the switch is closed
@@ -200,10 +200,10 @@ In this section we will be going over
 	   
 ## Programming Encoders
 
-!!! summary ""
+!!! abstract ""
     **1)** For this tutorial we are going to add a **encoder** to the **Drivetrain** subsystem to keep track of the distance the robot has driven
     
-!!! summary ""
+!!! abstract ""
     **2)** Inside the **Drivetrain** subsystem we are going to create an **encoder** called **driveEncoder**
     
     - It will be created as an Encoder
@@ -227,10 +227,10 @@ In this section we will be going over
 	   
 ### Creating Drive Encoder Methods
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a public double method called **getDriveEncoderCount**
     
-!!! summary ""
+!!! abstract ""
     **2)** Inside type: 
     
     ```java
@@ -242,10 +242,10 @@ In this section we will be going over
     - Encoders will return counts as an int
     - Depending which direction the encoder shaft rotates the value will increase or decrease
     
-!!! summary ""
+!!! abstract ""
     **3)** Create a public method called **resetDriveEncoderCount**
     
-!!! summary ""
+!!! abstract ""
     **4)** Inside type:
     
     ```java
@@ -273,13 +273,13 @@ In this section we will be going over
 - We need to create a command to use the **resetDriveEncoder** method since it’s a **void** method
 - We will create a **InstantCommand** since we will only use it to reset the drive encoder
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a new **InstantCommand** called **DriveResetEncoder**
     
-!!! summary ""
+!!! abstract ""
     **2)** In the constructor add requires(Robot.m_drivetrain)
     
-!!! summary ""
+!!! abstract ""
     **3)** In initialize() add our **resetDriveEncoder** method
     
 ??? Example
