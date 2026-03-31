@@ -40,8 +40,8 @@ In this section we will be going over
 !!! abstract ""
     **3)** Inside type:
 
-    ```java
-    SmartDashboard.putData("Reset Drive Encoder", new DriveResetEncoder());
+    ```java title="Telemetry.java"
+    --8<-- "docs/code_examples/Telemetry.java:constructor-drivetrain"
     ```
 
 !!! abstract ""
@@ -52,8 +52,8 @@ In this section we will be going over
 !!! abstract ""
     **5)** Inside type:
 
-    ```java
-    SmartDashboard.putNumber("Drivetrain Encoder Count", Robot.m_drivetrain.getDriveEncoderCount());
+    ```java title="Telemetry.java"
+    --8<-- "docs/code_examples/Telemetry.java:update-drivetrain"
     ```
 
 !!! abstract ""
@@ -66,45 +66,8 @@ In this section we will be going over
 
 	Your full **Telemetry.java** should look like this
 
-	```java
-	package frc.robot.subsystems;
-
-	import edu.wpi.first.wpilibj.command.Subsystem;
-	import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-	import frc.robot.Robot;
-	import frc.robot.commands.*;
-
-	/**
-	 * Add your docs here.
-	 */
-	public class Telemetry extends Subsystem {
-	    // Put methods for controlling this subsystem
-	    // here. Call these from Commands.
-
-	    public Telemetry() {
-	        // Drivetrain
-	        SmartDashboard.putData("Reset Drive Encoder", new DriveResetEncoder());
-
-	        // Shooter
-	        SmartDashboard.putData("Shooter Up", new ShooterUp());
-	        SmartDashboard.putData("Shooter Down", new ShooterDown());
-	        SmartDashboard.putData("Shooter Up Auto", new ShooterUpAuto());
-	    }
-
-	    public void update() {
-	        // Drivetrain
-	        SmartDashboard.putNumber("Drive Encoder Count", Robot.m_drivetrain.getDriveEncoderCount());
-
-	        // Shooter
-	        SmartDashboard.putBoolean("Shooter Switch", Robot.m_shooter.isShooterSwitchClosed());
-	    }
-
-	    @Override
-	    public void initDefaultCommand() {
-	        // Set the default command for a subsystem here.
-	        // setDefaultCommand(new MySpecialCommand());
-	    }
-	}
+	```java title="Telemetry.java"
+	--8<-- "docs/code_examples/Telemetry.java:full-class"
 	```
 
 ## Adding The Telemetry Subsystem to Robot.java
@@ -126,20 +89,20 @@ In this section we will be going over
 
 	The code you typed before **robotInit** should be this
 
-	```java
-	public static Telemetry m_telemetry;
+	```java title="Robot.java"
+	--8<-- "docs/code_examples/RobotTelemetry.java:field-declaration"
 	```
 
 	The code you typed in **robotInit** should be this
 
-	```java
-	m_telemetry = new Telemetry(); //This must be initialized after all other robot subsystems
+	```java title="Robot.java"
+	--8<-- "docs/code_examples/RobotTelemetry.java:robot-init"
 	```
 
 	The code you typed in **disabledPeriodic, autonomousPeriodic**, and **teleopPeriodic** should be this
 
-	```java
-	Robot.m_telemetry.update();
+	```java title="Robot.java"
+	--8<-- "docs/code_examples/RobotTelemetry.java:periodic-update"
 	```
 
 ## Opening Elastic

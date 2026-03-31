@@ -177,15 +177,15 @@ JavaScript runtime Markdown renderer (MIT). No build step — Markdown is fetche
 
 ---
 
-### 8. mdBook
+### 8. [mdBook](https://rust-lang.github.io/mdBook/)
 
 Rust-based static site generator (Apache 2.0 / MIT) maintained by the Rust language team. Used for official Rust documentation.
 
-**Markdown Support:** CommonMark + some GFM extensions. Custom preprocessors (Rust or any subprocess). MathJax and Mermaid via preprocessors.
+**Markdown Support:** CommonMark + some GFM extensions. Custom preprocessors (Rust or any subprocess). [MathJax](https://www.mathjax.org/) and [Mermaid](https://mermaid.js.org/) via preprocessors.
 
 **Quiz Support:**
 - [`mdbook-quiz`](https://crates.io/crates/mdbook-quiz) (Apache 2.0 + MIT, v0.4.0, 148 GitHub stars): dedicated quiz preprocessor with questions authored in TOML files. Question types: ShortAnswer, MultipleChoice, and Tracing (predict Rust code output — Rust-specific). Used by Will Crichton's Rust learning materials at Brown University.
-- `mdbook-exercises` (December 2025): interactive exercise blocks with hints, solutions, Rust Playground integration, difficulty levels, time estimates.
+- [`mdbook-exercises`](https://github.com/rust-lang/mdBook/wiki/Third-party-plugins) (December 2025): interactive exercise blocks with hints, solutions, [Rust Playground](https://play.rust-lang.org/) integration, difficulty levels, time estimates.
 - `cache-answers = true` stores user answers in localStorage.
 
 **Progress Tracking:** `mdbook-quiz` with `cache-answers` persists quiz answers. No cross-book progress dashboard.
@@ -200,7 +200,7 @@ Rust-based static site generator (Apache 2.0 / MIT) maintained by the Rust langu
 
 ---
 
-### 9. LiaScript *(Purpose-Built)*
+### 9. [LiaScript](https://liascript.github.io/) *(Purpose-Built)*
 
 Open-source browser-based Markdown interpreter (MIT) extended with interactive learning primitives. Developed at TU Bergakademie Freiberg for Open Educational Resources. No server or build step required.
 
@@ -210,7 +210,7 @@ Open-source browser-based Markdown interpreter (MIT) extended with interactive l
 
 **Progress Tracking:** Built-in. LiaScript is a Progressive Web App (PWA) and stores course progress locally. Works offline after first load.
 
-**LMS Export:** SCORM 1.2 and SCORM 2004 export via `LiaScript-Exporter` CLI. Also exports to IMS, PDF, standalone web project, and Android APK. Most LMS-compatible platform reviewed — supports Moodle, ILIAS, OpenOlat, Canvas, Blackboard.
+**LMS Export:** SCORM 1.2 and SCORM 2004 export via [`LiaScript-Exporter`](https://github.com/LiaScript/LiaScript-Exporter) CLI. Also exports to IMS, PDF, standalone web project, and Android APK. Most LMS-compatible platform reviewed — supports [Moodle](https://moodle.org/), [ILIAS](https://www.ilias.de/), [OpenOlat](https://www.openolat.com/), [Canvas](https://www.instructure.com/canvas), [Blackboard](https://www.anthology.com/products/teaching-and-learning/blackboard-learn).
 
 **Hosting:** Content can be served from GitHub, GitLab, Nextcloud, Dropbox, IPFS, and more. The LiaScript interpreter loads from a CDN and processes a Markdown URL — content and renderer are completely decoupled.
 
@@ -246,7 +246,7 @@ Open-source browser-based Markdown interpreter (MIT) extended with interactive l
 
 ### Recommendation 1 — Minimal effort, maximum immediate capability
 
-**Stay on MkDocs + Material and add `mkdocs-quiz` and `mkdocs-material-mark-as-read`.**
+**Stay on [MkDocs](https://www.mkdocs.org/) + [Material](https://squidfunk.github.io/mkdocs-material/) and add [`mkdocs-quiz`](https://ewels.github.io/mkdocs-quiz/) and [`mkdocs-material-mark-as-read`](https://github.com/berk-karaal/mkdocs-material-mark-as-read).**
 
 ```bash
 pip install mkdocs-quiz mkdocs-material-mark-as-read
@@ -268,15 +268,15 @@ This delivers:
 
 No framework migration. No new toolchain. Existing content unchanged. Working quizzes within an hour of setup.
 
-The Material maintenance-mode concern is real but not urgent — existing functionality is stable. Monitor **Zensical** (the MIT-licensed successor by the same maintainer) as the natural long-term migration target with minimal content changes.
+The Material maintenance-mode concern is real but not urgent — existing functionality is stable. Monitor **[Zensical](https://github.com/zensical/zensical)** (the MIT-licensed successor by the same maintainer) as the natural long-term migration target with minimal content changes.
 
 ---
 
 ### Recommendation 2 — Migration path with maximum extensibility
 
-**Migrate to Docusaurus** if React expertise exists and the project needs quiz UI beyond multiple-choice (e.g., embedded code exercises, interactive robot simulators, code-grading sandboxes).
+**Migrate to [Docusaurus](https://docusaurus.io/)** if React expertise exists and the project needs quiz UI beyond multiple-choice (e.g., embedded code exercises, interactive robot simulators, code-grading sandboxes).
 
-MDX allows any React component in any page. The `@sp-days-framework/docusaurus-plugin-interactive-tasks` provides structured task completion with sidebar badges immediately. Custom quiz components can be built incrementally. Docusaurus has no maintenance concerns and the largest ecosystem.
+[MDX](https://mdxjs.com/) allows any React component in any page. The [`@sp-days-framework/docusaurus-plugin-interactive-tasks`](https://www.npmjs.com/package/@sp-days-framework/docusaurus-plugin-interactive-tasks) provides structured task completion with sidebar badges immediately. Custom quiz components can be built incrementally. Docusaurus has no maintenance concerns and the largest ecosystem.
 
 Migration cost: several days — `mkdocs.yml` nav → `docusaurus.config.js`, PyMdown admonition syntax → Docusaurus admonition syntax, custom overrides rebuild.
 
@@ -284,7 +284,7 @@ Migration cost: several days — `mkdocs.yml` nav → `docusaurus.config.js`, Py
 
 ### Recommendation 3 — LMS integration requirement
 
-**Evaluate LiaScript** alongside the existing MkDocs reference site if FRC tutorial content needs to integrate with school LMS platforms (Moodle, Canvas) for grading or credit.
+**Evaluate [LiaScript](https://liascript.github.io/)** alongside the existing MkDocs reference site if FRC tutorial content needs to integrate with school LMS platforms ([Moodle](https://moodle.org/), [Canvas](https://www.instructure.com/canvas)) for grading or credit.
 
 LiaScript Markdown files can live in the same GitHub repository. SCORM export is a one-command CLI operation. The course content (Markdown) is shared; only the rendering layer differs between the MkDocs documentation site and the LiaScript course export.
 
