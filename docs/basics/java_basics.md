@@ -8,14 +8,14 @@ Learning What's What
 
 - Objects, variables, and classes (in Java) make up our programs. We define, modify, and use these variables and objects to make our programs run.
 - Programs use key words to define characteristics of variables or objects. Basic keywords:
-    - `#!java public` - an object accessible by other classes (files)
-    - `#!java private` - an object only accessible by its containing class (file).
-    - `#!java protected` - like private but can be seen by subclasses
-    - `#!java return` - value to return or give back after method execution (run). 
-    - `#!java void` - a method that returns no value
-    - `#!java null` - a value that means empty or nothing
+    - `public` - an object accessible by other classes (files)
+    - `private` - an object only accessible by its containing class (file).
+    - `protected` - like private but can be seen by subclasses
+    - `return` - value to return or give back after method execution (run). 
+    - `void` - a method that returns no value
+    - `null` - a value that means empty or nothing
 
-!!! Warning "IMPORTANT NOTE"
+!!! warning "IMPORTANT NOTE"
 	Java is case sensitive, meaning capitalization matters!
 ***
 
@@ -23,9 +23,11 @@ Learning What's What
 
 - Classes are the files that contain our programming
 - A program can be made up of one class but can also be made up of many classes
-    - All programs run a main class that can optionally load additional classes either directly or indirectly 
-    - !!! example
-    	main loads class1, class1 loads class2
+    - All programs run a main class that can optionally load additional classes either directly or indirectly
+
+    !!! example
+        main loads class1, class1 loads class2
+
 - Classes are made up of variables and methods and are often used to separate and organize your code.
 - Classes can also **call** (use) variables or methods of other classes if those have been set to public.
 
@@ -37,8 +39,9 @@ Learning What's What
     - They can be called again if the class is programmed to be unloaded (destroyed) and reloaded.
     - Calls to methods, and assignment of values, within the constructor will run as soon as the class is called (loaded) in the code.
     - The **new** operator creates an object of a type of class using a constructor
-    - !!! example
-    	classObject = new className();
+
+    !!! example
+        classObject = new className();
 
 ***
 
@@ -82,25 +85,28 @@ Learning What's What
 - Variables are assigned names and data types on creation
     - Names can be anything with the exception of pre-existing keywords such as `public` or `int`
 - Data types define what type of data is being stored in the variables:
-    - `#!java int` - integers (whole numbers)
-    - `#!java double` - double precision floating point (fractional/decimal values) 
-    - `#!java boolean` - true or false (true = 1 or false = 0) values.
-    - `#!java string` - text values contained in parentheses
-    - !!! Example "Example: `#!java int sum;`"
-    	A variable that can hold whole number values
-	- !!! Example "Example: `#!java boolean isFull = true;`"
-    	A variable can either hold a true or false value and is being assigned a true value
+    - `int` - integers (whole numbers)
+    - `double` - double precision floating point (fractional/decimal values)
+    - `boolean` - true or false (true = 1 or false = 0) values.
+    - `string` - text values contained in parentheses
+
+!!! example "Example: `int sum;`"
+    A variable that can hold whole number values
+
+!!! example "Example: `boolean isFull = true;`"
+	A variable can either hold a true or false value and is being assigned a true value
 
 ### Constants
 
 Most variables can have their values assigned or reassigned at any point elsewhere in your program. To avoid having a variable change its value during runtime you can make it a **constant**
 
-- In Java you can create constants using the `#!java static final` keywords together in front of the data type of the variable
-    - The static modifier causes the variable to be available without loading the class where it is defined. 
+- In Java you can create constants using the `static final` keywords together in front of the data type of the variable
+    - The static modifier causes the variable to be available without loading the class where it is defined.
     - The final modifier causes the variable to be unchangeable.
     - Java constants are normally declared in ALL CAPS. Words in Java constants are normally separated by underscores.
-    - !!! Example "Example: `#!java public static final double PI_VALUE = 3.14159;`"
-        A variable that cannot be modified during code run time.
+
+!!! example "Example: `public static final double PI_VALUE = 3.14159;`"
+    A variable that cannot be modified during code run time.
   
 ### Scope
 
@@ -171,9 +177,10 @@ Most variables can have their values assigned or reassigned at any point elsewhe
 - There are also many different conventions when programming, this ensures that programs are readable between different people.
 - A common naming convention:
     - Programming is often done in CamelCase or lowerCamelCase
-    - Instead of adding spaces, capitalize the first letter of each word 
-    - !!! example
-        ThreeMotorDrive, driveForward, setSpeed
+    - Instead of adding spaces, capitalize the first letter of each word
 
-!!! info  
+!!! example
+    ThreeMotorDrive, driveForward, setSpeed
+
+!!! info
     There are other naming conventions, but for this tutorial we will use the camel cases

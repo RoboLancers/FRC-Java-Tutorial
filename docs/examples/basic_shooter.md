@@ -29,5 +29,5 @@ This section will help you learn to BLANK.
 - Info
 - Info 2
 
-!!! Tip
+!!! tip
     This is a tip.

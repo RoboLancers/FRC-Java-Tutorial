@@ -115,7 +115,7 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
     ```
        
     - This sets the value of the solenoid to forward (deployed) 
-      !!! Note
+      !!! note
 	if you wanted multiple solenoids to deploy at the same time also have them do .set(Value.kForward);
    
 !!! summary ""   
@@ -309,7 +309,7 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
 	}
 	```
 	  
-!!! Tip
+!!! tip
    	You can change your import at the top of the file from:  
    	`import frc.robot.commands.ShooterUp;` to  
    	`import frc.robot.commands.*;`

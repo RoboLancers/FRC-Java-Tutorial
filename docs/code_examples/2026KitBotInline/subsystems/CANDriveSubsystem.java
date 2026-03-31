@@ -27,7 +27,10 @@ public class CANDriveSubsystem extends SubsystemBase {
   private final SparkMax rightFollower;
 
   // --8<-- [end: motors]
+
+  // --8<-- [start: differential-drive-variable]
   private final DifferentialDrive drive;
+  // --8<-- [end: differential-drive-variable]
 
   // --8<-- [start: constructor]
   
@@ -44,35 +47,45 @@ public class CANDriveSubsystem extends SubsystemBase {
     // Set can timeout. Because this project only sets parameters once on
     // construction, the timeout can be long without blocking robot operation. Code
     // which sets or gets parameters during operation may need a shorter timeout.
+    // --8<-- [start: can-timeout]
     leftLeader.setCANTimeout(250);
     rightLeader.setCANTimeout(250);
     leftFollower.setCANTimeout(250);
     rightFollower.setCANTimeout(250);
+    // --8<-- [end: can-timeout]
 
     // Create the configuration to apply to motors. Voltage compensation
     // helps the robot perform more similarly on different
     // battery voltages (at the cost of a little bit of top speed on a fully charged
     // battery). The current limit helps prevent tripping
     // breakers.
+    // --8<-- [start: voltage-compensation]
     SparkMaxConfig config = new SparkMaxConfig();
     config.voltageCompensation(12);
     config.smartCurrentLimit(DRIVE_MOTOR_CURRENT_LIMIT);
+    // --8<-- [end: voltage-compensation]
 
     // Set configuration to follow each leader and then apply it to corresponding
     // follower. Resetting in case a new controller is swapped
     // in and persisting in case of a controller reset due to breaker trip
+    // --8<-- [start: follower-config]
     config.follow(leftLeader);
     leftFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     config.follow(rightLeader);
     rightFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // --8<-- [end: follower-config]
 
     // Remove following, then apply config to right leader
+    // --8<-- [start: right-leader-config]
     config.disableFollowerMode();
     rightLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // --8<-- [end: right-leader-config]
     // Set config to inverted and then apply to left leader. Set Left side inverted
     // so that postive values drive both sides forward
+    // --8<-- [start: left-inversion]
     config.inverted(true);
     leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // --8<-- [end: left-inversion]
   }
 
   // --8<-- [end: constructor]
@@ -82,8 +95,10 @@ public class CANDriveSubsystem extends SubsystemBase {
   }
 
   // Command factory to create command to drive the robot with joystick inputs.
+  // --8<-- [start: drive-arcade-method]
   public Command driveArcade(DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     return this.run(
         () -> drive.arcadeDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()));
   }
+  // --8<-- [end: drive-arcade-method]
 }

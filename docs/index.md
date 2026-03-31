@@ -4,8 +4,8 @@
 
 The unofficial FIRST Robotics Competition Java Programming Tutorial for FRC Teams 321 and 427, the Robolancers
 
-!!! Info
-	Updated for the 2026 Season  
+!!! info
+	Updated for the 2026 Season
 	Last updated: 1/9/2026
 
 	**Disclaimer:** Some screenshots may have different colors, icons, more/less folders/files than you due to themes or personal settings. This is normal and should not impact the tutorial. If you still have any questions please contact us.

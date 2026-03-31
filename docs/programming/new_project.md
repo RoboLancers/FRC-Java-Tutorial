@@ -115,12 +115,12 @@ Newly created projects have many files within them. We only care about the conte
 
 !!! summary ""
 	**1)** In RobotContainer.java we will create a new **public** **global** **constant** variable of type `DesiredSubsystemName` (i.e. `Drivetrain`):  
-    `#!java public static final m_desiredSubsystemName = new DesiredSubsystemName();`  
-    (i.e. `#!java public static final m_drivetrain = new Drivetrain();`)
+    `public static final m_desiredSubsystemName = new DesiredSubsystemName();`  
+    (i.e. `public static final m_drivetrain = new Drivetrain();`)
 
 	![](../assets/images/new_project/subsystem/step_6.png)
 
-Now when we use this subsystem in commands, we must call `#!java RobotContainer.m_desiredSubsystemName.` to get access to it and its methods. (i.e. `#!java RobotContainer.m_drivetrain.someMethod()`)
+Now when we use this subsystem in commands, we must call `RobotContainer.m_desiredSubsystemName.` to get access to it and its methods. (i.e. `RobotContainer.m_drivetrain.someMethod()`)
 
 ### Default Subsystem Contents
 

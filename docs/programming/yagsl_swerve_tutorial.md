@@ -507,7 +507,7 @@ For more code setup details, see [Code Setup Documentation](https://docs.yagsl.c
 
 ### Field-Oriented Drive Command
 
-!!! Tip
+!!! tip
     Field-oriented drive means the robot moves relative to the field coordinate system, not its own orientation. Forward on the joystick always moves the robot toward the same direction on the field (e.g., toward the opponent's goal), regardless of how the robot is currently rotated. This is the most intuitive and commonly used drive mode for FRC competition robots.
 
 ```java
@@ -535,7 +535,7 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
 
 ### Robot-Oriented Drive
 
-!!! Tip
+!!! tip
     Robot-oriented drive means the robot moves relative to its own orientation. Forward on the joystick always moves the robot in the direction it's currently facing. This mode is useful for precise movements or when field orientation isn't important, but can be confusing for drivers during competition.
 
 ```java
@@ -551,7 +551,7 @@ public void driveRobotOriented(double xSpeed, double ySpeed, double rot) {
 
 ### ChassisSpeeds Drive
 
-!!! Tip
+!!! tip
     ChassisSpeeds drive accepts a WPILib ChassisSpeeds object, which represents the desired velocity of the robot chassis. This is useful when integrating with path planning libraries like PathPlanner or when you have calculated velocities from other sources. It provides the most control over robot motion.
 
 ```java
@@ -562,7 +562,7 @@ public void driveFieldOriented(ChassisSpeeds velocity) {
 
 ### Joystick Integration
 
-!!! Tip
+!!! tip
     Joystick integration shows how to connect driver inputs to the drive commands. The default command runs continuously while no other command is active. Note the axis inversions (-driverController.getLeftY()) which account for typical joystick orientations where pushing forward gives negative Y values.
 
 ```java
@@ -584,7 +584,7 @@ public RobotContainer() {
 
 ### Odometry and Pose Reset
 
-!!! Tip
+!!! tip
     Odometry tracks the robot's position and orientation on the field using wheel encoders and IMU data. Pose reset is useful for correcting odometry drift, often done at the start of autonomous or when vision systems provide accurate position data.
 
 ```java

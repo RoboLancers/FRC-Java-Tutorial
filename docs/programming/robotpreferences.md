@@ -41,8 +41,8 @@ In this section we will be going over
 	  return Preferences.getInstance().getVariableType("preferenceName", value);
 	```
 	   
-??? Example
-	
+??? example
+
 	Your full **RobotPreferences.java** should look like this
 	
 	```java
@@ -81,10 +81,10 @@ In this section we will be going over
      
     - This will divide the current encoder count by however many counts there are in a foot then multiply that number by 12 to give us the encoder distance in inches
     
-!!! Note
+!!! note
     You may need to invert this value if your encoder counts backward when the robot is driving forward
-    
-!!! Example
+
+!!! example
 
 	The code you typed should be this
 	
@@ -106,7 +106,7 @@ In this section we will be going over
 - If you double click on the preference value you will notice that you can change its value
 - If you change a preference value it will update **immediately**
 
-!!! Tip 
+!!! tip
     If you want to save your robot preference values that you've changed make sure you hardcode them in **RobotPreferences.java** later or take a picture if you want to use them again later
     
 ## Measuring Distance Using Encoders

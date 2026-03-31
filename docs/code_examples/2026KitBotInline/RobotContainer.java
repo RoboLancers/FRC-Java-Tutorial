@@ -84,10 +84,12 @@ public class RobotContainer {
     // value). The X-axis is also inverted so a positive value (stick to the right)
     // results in clockwise rotation (front of the robot turning right). Both axes
     // are also scaled down so the rotation is more easily controllable.
+    // --8<-- [start: drive-config]
     driveSubsystem.setDefaultCommand(
         driveSubsystem.driveArcade(
             () -> -driverController.getLeftY() * DRIVE_SCALING,
             () -> -driverController.getRightX() * ROTATION_SCALING));
+    // --8<-- [end: drive-config]
   }
 
   /**
