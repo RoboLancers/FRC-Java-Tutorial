@@ -1,0 +1,32 @@
+name: Deploy Site
+permissions:
+  contents: write
+on:
+  # pull_request: 
+  #   branches:
+  #     - robolancer_updates
+  push:
+   branches:
+    - robolancer_updates
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: pip install -r requirements.txt
+      - run: mkdocs build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install mkdocs
+      - run: pip install -r requirements.txt
+      - run: mkdocs gh-deploy --force

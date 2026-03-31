@@ -8,7 +8,7 @@ Flashing the firmware
 
 Before we can deploy code to the robot, we must flash a software image on to the roboRIO and possibly update the firmware. This can be accomplished with the roboRIO imaging tool:
 
-!!! Warning "IMPORTANT NOTE"
+!!! warning "IMPORTANT NOTE"
 	The [FRC Game Tools (Windows Only)](imaging_roboRIO.md#installing-the-frc-game-tools) need to be installed to access the roboRIO imaging tool.
 ***
 

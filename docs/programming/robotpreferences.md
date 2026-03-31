@@ -6,7 +6,7 @@
 
 In this section we will be going over
 
-1. Creating and using RobotPreferences in shuffleboard
+1. Creating and using RobotPreferences in Elastic
 2. How to convert encoder counts to inches
 
 ***
@@ -19,13 +19,13 @@ In this section we will be going over
 
 ## Creating RobotPreferences
 
-!!! summary "" 
+!!! abstract "" 
     **1)** Create a new **empty class** called **RobotPreferences**
     
     - This is where we store all of our **RobotPreferences** to access anywhere
     - If we want to use a **RobotPreference** we call RobotPreferences.preferenceName()
 
-!!! summary "" 
+!!! abstract "" 
     **2)** Inside the constructor type:
     
 	```java 
@@ -41,8 +41,8 @@ In this section we will be going over
 	  return Preferences.getInstance().getVariableType("preferenceName", value);
 	```
 	   
-??? Example
-	
+??? example
+
 	Your full **RobotPreferences.java** should look like this
 	
 	```java
@@ -69,10 +69,10 @@ In this section we will be going over
 
 - We will use this **RobotPreference** to help us create a method that can keep track of the distance our robot has driven in inches
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a method called **getDriveEncoderDistance** inside of **Drivetrain**
     
-!!! summary ""
+!!! abstract ""
     **2)** Inside type:
     
     ```java
@@ -81,10 +81,10 @@ In this section we will be going over
      
     - This will divide the current encoder count by however many counts there are in a foot then multiply that number by 12 to give us the encoder distance in inches
     
-!!! Note
+!!! note
     You may need to invert this value if your encoder counts backward when the robot is driving forward
-    
-!!! Example
+
+!!! example
 
 	The code you typed should be this
 	
@@ -94,19 +94,25 @@ In this section we will be going over
   	}
 	```
 	  
-!!! summary ""
+!!! abstract ""
     **3)** Add the method to the **update** method in **Telemetry**
     
 ## Using RobotPreferences
 
-<!-- TODO: Explain in more detail how to add RobotPreferences and add pictures -->
+- After deploying the code to your robot, open **Elastic** from the Driver Station.
+- In the top menu go to **File → Add Widget** (or look in the left-side widget panel) and find the **Robot Preferences** widget, then drag it onto a tab.
+- Alternatively, right-click on an empty area of a tab and select **Add Widget → Robot Preferences**.
 
-- After deploying the code to your robot find the **RobotPreferences** widget and add it to your page
-- Click the add button and enter the **string** of the **RobotPreference** and its type (doubles and ints are numbers)
+Once the widget is visible:
+
+- Click the **+** (Add) button inside the widget.
+- A dialog will appear. Enter the **key name** (the string you passed to `Preferences.getInstance()`, e.g. `"driveEncoderCountsPerFoot"`) and select the matching **type** (Number for doubles and ints, String for text, Boolean for true/false).
+- The preference will appear in the widget with its default value.
+- Double-click the value field next to a preference to edit it — changes take effect **immediately** on the running robot without redeploying.
 - If you double click on the preference value you will notice that you can change its value
 - If you change a preference value it will update **immediately**
 
-!!! Tip 
+!!! tip
     If you want to save your robot preference values that you've changed make sure you hardcode them in **RobotPreferences.java** later or take a picture if you want to use them again later
     
 ## Measuring Distance Using Encoders
@@ -114,27 +120,27 @@ In this section we will be going over
 - Right now the encoders tell us distance in terms of encoder counts
 - We will use our **driveEncoderCountsPerFoot** preference to save how many counts there are when the robot drives 1 foot
 
-!!! summary ""
+!!! abstract ""
     **1)** Move the wheel on your robot with the **Drivetrain** encoder attached 1 foot or drive your robot 1 foot
     
-!!! summary ""
+!!! abstract ""
     **2)** Read how many counts your encoder has in the **Drive Encoder Count** window
     
     - If you want to measure again press the **Reset Drive Encoder** command button to reset the **Drivetrain** encoder count
     
-!!! summary ""
+!!! abstract ""
     **3)** Change the value of **driveEncoderCountsPerFoot** in the widget to this number
     
-!!! summary ""
+!!! abstract ""
     **4)** Reset the **Drivetrain** encoder and move the wheel 1 foot or drive the robot 1 foot again
  
-!!! summary ""
+!!! abstract ""
     **5)** Make sure your **Drive Encoder Distance** window reads approximately 12 (this is in inches)
     
     - If not repeat these steps again
     
-!!! summary ""
+!!! abstract ""
     **6)** Save your **RobotPreferences** widget with this value
    
-!!! summary ""
+!!! abstract ""
     **7)** Hardcode this value in **RobotPreferences.java** in the **driveEncoderCountsPerFoot** method incase you cannot recover your **RobotPreferences** save

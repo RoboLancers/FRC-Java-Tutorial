@@ -19,7 +19,7 @@ In this section we will be going over
 
 ## Programming Switches (i.e. Limit Switches)
 
-!!! summary ""
+!!! abstract ""
     **1)** For this tutorial we are going to add a **switch** to a **shooter subsystem** to automatically change the pitch of the shooter
     
     - Inside the shooter subsystem we are going to create a **switch** called **shooterSwitch**
@@ -51,12 +51,12 @@ In this section we will be going over
 
 ### Creating isShooterSwitchClosed Method
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a **public boolean** method called **isShooterSwitchClosed**
     
     - This method will tell us when the shooter switch is pressed
 
-!!! summary ""
+!!! abstract ""
     **2)** Inside type:
    
     ```java
@@ -64,9 +64,18 @@ In this section we will be going over
     ```
 
    - Switches have 2 states: open and closed.
-    <!-- TODO: Add a tip about keeping inversions at the lowest level or in the subsystems -->
-   <!-- TODO: Make note about normally open/close which to choose and why. talk about how we do one and invert the code so if the switch becomes unplugged it defaults to closed (off)  -->
-   - Make sure you know which is true or false or you may have to invert the switch by rewiring or using the ! operator
+   - Make sure you know which is true or false or you may have to invert the switch by rewiring or using the `!` operator
+
+!!! note "Normally Open vs Normally Closed"
+    Switches come in two configurations:
+
+    - **Normally Open (NO)** — the circuit is open (disconnected) when the switch is not pressed. `DigitalInput.get()` returns `true` when unpressed.
+    - **Normally Closed (NC)** — the circuit is closed (connected) when the switch is not pressed. `DigitalInput.get()` returns `false` when unpressed.
+
+    **Recommendation:** Use a Normally Open switch and invert the reading in code: `return !shooterSwitch.get();`. This way, if the switch wiring becomes disconnected, the robot reads the sensor as "not pressed" (`false`) instead of "pressed" (`true`). A disconnected sensor should never accidentally trigger an action.
+
+!!! tip "Keep inversions in the subsystem"
+    Always handle sensor inversions inside the subsystem method, not in commands or other classes. This way every caller gets the correct logical value without needing to know about the hardware wiring. For example, use `return !shooterSwitch.get();` here rather than inverting in each command that uses the switch.
    
 ??? Example
 	
@@ -112,21 +121,21 @@ In this section we will be going over
 
 - We will create a **command** that gives an example of how a Shooter switch may be used
 
-!!! summary ""
+!!! abstract ""
      **1)** For this tutorial we will use the switch to create a button that automatically pitches the shooter up after the switch is pressed
 
-!!! summary ""
+!!! abstract ""
     **2)** Create a new **command** called **ShooterUpAuto**
    
-!!! summary "" 
+!!! abstract "" 
     **3)** In the constructor add requires(Robot.m_Shooter)
     
-!!! summary ""
+!!! abstract ""
     **4)** In isFinished return our **isShooterSwitchClosed** method
     
     - we will not put anything in initialize or execute because we don't want anything to happen until the switch is closed
     
-!!! summary "" 
+!!! abstract "" 
     **5)** In end add our **pitchUp** method
      
     - we will not put end in interrupted either because we only want to change the pitch of the shooter if the switch is closed
@@ -200,10 +209,10 @@ In this section we will be going over
 	   
 ## Programming Encoders
 
-!!! summary ""
+!!! abstract ""
     **1)** For this tutorial we are going to add a **encoder** to the **Drivetrain** subsystem to keep track of the distance the robot has driven
     
-!!! summary ""
+!!! abstract ""
     **2)** Inside the **Drivetrain** subsystem we are going to create an **encoder** called **driveEncoder**
     
     - It will be created as an Encoder
@@ -227,25 +236,26 @@ In this section we will be going over
 	   
 ### Creating Drive Encoder Methods
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a public double method called **getDriveEncoderCount**
     
-!!! summary ""
+!!! abstract ""
     **2)** Inside type: 
     
     ```java
     return driveEncoder.get();
     ```
        
-    <!-- TODO: Explain why the method is a returning a double from an int -->
-   
+    !!! note
+        Even though `driveEncoder.get()` returns an `int`, we declare `getDriveEncoderCount()` as returning a `double`. This avoids integer division later — for example, dividing by a `double` preference value like `driveEncoderCountsPerFoot` without a manual cast, so the result is always a precise decimal rather than a truncated whole number.
+
     - Encoders will return counts as an int
     - Depending which direction the encoder shaft rotates the value will increase or decrease
     
-!!! summary ""
+!!! abstract ""
     **3)** Create a public method called **resetDriveEncoderCount**
     
-!!! summary ""
+!!! abstract ""
     **4)** Inside type:
     
     ```java
@@ -273,13 +283,13 @@ In this section we will be going over
 - We need to create a command to use the **resetDriveEncoder** method since it’s a **void** method
 - We will create a **InstantCommand** since we will only use it to reset the drive encoder
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a new **InstantCommand** called **DriveResetEncoder**
     
-!!! summary ""
+!!! abstract ""
     **2)** In the constructor add requires(Robot.m_drivetrain)
     
-!!! summary ""
+!!! abstract ""
     **3)** In initialize() add our **resetDriveEncoder** method
     
 ??? Example

@@ -1,0 +1,37 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+	"name": "python:3:10",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:debian",
+	"features": {
+		"ghcr.io/devcontainers-extra/features/mkdocs:2": {},
+		"ghcr.io/devcontainers/features/python:1":{}
+	},
+	"postCreateCommand": [
+		"pip3 install --user -r requirements.txt",
+		"pip3 install --user first-agentic-csa"
+		"curl -fsSL https://claude.ai/install.sh | bash"
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"main-branch.mkdocs-snippet-lens",
+				"aikebang.mkdocs-syntax-highlight",
+				"ytianle.mkdocs-material-linter"
+			]
+		}
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Configure tool-specific properties.
+	
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

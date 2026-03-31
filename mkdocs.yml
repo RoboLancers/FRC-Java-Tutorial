@@ -3,11 +3,18 @@ nav:
 - Home:
   - 'index.md'
   - 'why_software.md'
+- Setup:
+  - 3rd_party_libs.md
+- Version Control:
+  - 'version_control/BasicGit.md'
+  - 'version_control/GitWorkflow.md'
+  - 'version_control/github.md'
 - Programming Basics:
   - 'basics/roboRIO.md'
   - 'basics/sensors.md'
   - 'basics/wpilib.md'
   - 'basics/java_basics.md'
+  - 'basics/ElectronicsCrashCourse.md'
   - 'basics/vscode_tips.md'
   # - 'basics/driverstation_tips.md'
 - FRC Development Environment Setup:
@@ -20,58 +27,67 @@ nav:
   - 'programming/deploying.md'
   - 'programming/using_sensors.md'
   - 'programming/pneumatics.md'
-  - 'programming/shuffleboard.md'
+  - 'programming/Elastic.md'
   - 'programming/robotpreferences.md'
   - 'programming/autonomous.md'
   - 'programming/pid.md'
+  - 'programming/AdvantageKit.md'
+  - 'programming/AKitStructureReference.md'
   # - 'programming/super_core.md'
 - Example Subsystems:
   - 'examples/basic_elevator.md'
   - 'examples/basic_shooter.md'
   - 'examples/pid_elevator.md'
   - 'examples/pid_shooter.md'
-- Version Control:
-  - 'version_control/github.md'
+
 - Improve the Documentation:
   - 'contributing.md'
 
 # Setup
 site_name: FRC Java Programming
 repo_name: Tutorial Bot
-repo_url: https://github.com/FRCTeam3255/FRC-Java-Tutorial/tree/main
-edit_uri: https://github.com/FRCTeam3255/FRC-Java-Tutorial/edit/main/Docs_Source/docs/
-site_author: Tayler Uva
+repo_url: https://github.com/RoboLancers/FRC-Java-Tutorial/tree/main
+edit_uri: https://github.com/RoboLancers/FRC-Java-Tutorial/edit/main/docs/
+site_author: Tayler Uva, Carl Stanton
 
 # Theme
 theme:
-  name: 'readthedocs'
+  name: 'material'
   favicon: assets/favicon.png
-  icon:
-    logo: assets/favicon.png
+  #icon:
+  #  logo: assets/favicon.png
+  features:
+    - content.tabs.link
+    - content.code.copy
 use_directory_urls: false
 
 # Extensions
 markdown_extensions:
   - admonition
-  - pymdownx.superfences
   - pymdownx.critic
   - pymdownx.details
+  - pymdownx.blocks.tab
   - pymdownx.betterem
   - pymdownx.tasklist
-  - pymdownx.extra
+  - attr_list
   - pymdownx.inlinehilite
   - pymdownx.highlight:
-      css_class: 'codehilite'
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.snippets:
+      base_path: ["."]
   - toc:
-        permalink: "#"
+      permalink: "#"
 
 # Plugins
 plugins:
   - search
-  - minify:
-      minify_html: true
-      minify_js: true
-
-google_analytics:
-  - UA-47256977-4
-  - auto
+  # - minify:
+  #     minify_html: true
+  #     minify_js: true

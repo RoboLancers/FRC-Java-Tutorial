@@ -39,5 +39,5 @@ This subsystem will contain:
 - Info
 - Info 2
 
-!!! Tip
+!!! tip
     This is a tip.

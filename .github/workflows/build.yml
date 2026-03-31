@@ -1,8 +1,8 @@
 name: Build MkDocs
 on:
-  pull_request: 
+  push:
     branches:
-      - main
+      - robolancer_updates 
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -24,37 +24,37 @@ In this section we will be going over
 
 ## Creating the Telemetry Subsystem
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a new **Subsystem** called **Telemetry**
     
-!!! summary ""
+!!! abstract ""
     **2)** Create a constructor for the **Telemetry** class
     
     - The constructor is where we will create buttons for shuffleboard
     
-!!! summary ""
+!!! abstract ""
     **3)** Inside type: 
     
     ```java
     SmartDashboard.putData(“Reset Drive Encoder”, new DriveResetEncoder());
     ```
        
-!!! summary ""
+!!! abstract ""
     **4)** Create a public method called update
     
     - This method will run periodically in Robot.java to update sensor data on shuffleboard
     
-!!! summary "" 
+!!! abstract "" 
     **5)** Inside type: 
     
     ```java 
     SmartDashboard.putNumber(“Drivetrain Encoder Count”, Robot.m_drivetrain.getDriveEncoderCount());
     ```
        
-!!! summary ""
+!!! abstract ""
     **6)** Do the same for the **getDriveEncoderDistance** method
     
-!!! summary ""
+!!! abstract ""
     **7)** Try adding the **Shooter** Subsystem commands and sensor methods where they should be
     
 ??? Example 
@@ -104,15 +104,16 @@ In this section we will be going over
 	   
 ## Adding The Telemetry Subsystem to Robot.java
 
-!!! summary ""
+!!! abstract ""
     **1)** When adding **Telemetry** to **Robot.java**, in **robotInit** we must add **Telemetry** after the other subsystems
   
     - This is because the **Telemetry** subsystem relies on methods that are created in other subsystems before it
     - It can be added before or after **OI** since they don’t use methods from each other
 
-    <!-- TODO: Explain why we don't put it in robotPeriodic -->
+    !!! note "Why not robotPeriodic?"
+        `robotPeriodic` runs at the very start of every loop, *before* the command scheduler runs. Putting `update()` there means the displayed values would lag one loop cycle behind the current robot state. By placing `update()` in mode-specific methods (`disabledPeriodic`, `autonomousPeriodic`, `teleopPeriodic`), the dashboard always reflects the most current values after all commands for that loop have executed.
 
-!!! summary ""
+!!! abstract ""
 
     **2)** It is **important** that we add the **update** method to **disabledPeriodic, autonomousPeriodic**, and **teleopPeriodic** so that the **Shuffleboard** is always being updated with information on our sensors.
 
@@ -146,4 +147,34 @@ In this section we will be going over
 
 ## Using Shuffleboard
 
-<!-- TODO: Add information and pictures on how to use tabs, group widgets together, saving layouts, etc -->
+Shuffleboard has several features that help you organize and save your dashboard layout.
+
+### Tabs
+
+Tabs let you separate widgets into logical groups — for example one tab for drivetrain data and another for shooter data.
+
+- Click the **+** button in the top-right corner of Shuffleboard to add a new tab.
+- Double-click a tab name to rename it.
+- You can drag widgets between tabs by selecting them and using cut/paste, or by dragging them to the tab bar.
+
+### Moving and Resizing Widgets
+
+- Click and drag a widget to reposition it on the grid.
+- Hover over the bottom-right corner of a widget until a resize cursor appears, then drag to resize it.
+- Right-click a widget to access options such as changing the widget type (e.g. switch between a number display and a graph).
+
+### Grouping Widgets
+
+- You can place related widgets near each other and use a **Layout** container to visually group them.
+- Right-click on an empty area of the tab and select **Add Layout** to add a List Layout or Grid Layout container.
+- Drag widgets into the layout container to group them.
+
+### Saving Layouts
+
+Shuffleboard saves your layout automatically when you close it, but you can also save a named layout file to restore later.
+
+- Go to **File → Save Layout** to save the current arrangement to a `.json` file.
+- Go to **File → Load Layout** to restore a previously saved layout.
+
+!!! tip
+    Save your layout to a file in your robot project's repository so that the whole team can use the same dashboard configuration.

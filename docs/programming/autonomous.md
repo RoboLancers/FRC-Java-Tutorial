@@ -4,7 +4,7 @@
 
 ## Overview
 
-In this section we will be going over
+In this section we will be going over:
 
 1. Creating an autonomous command group
 2. Using RobotPreferences to quickly change our autonomous values
@@ -20,51 +20,62 @@ In this section we will be going over
 
 - An autonomous command is a command that is ran during "autonomous mode" under the **autonomousInit** method in **Robot.java** 
 - It could be a single **command** or a **command group**
-- It's especially helpful to have if you don't have any cameras to drive the robot during a 
-"sandstorm" period (2019 game mechanic where the drivers couldn't see during the pre tele-op phase)
-- For this tutorial we will create an autonomous **command group** that makes the robot drive forward 5 feet, wait 5 seconds, and then pitch the shooter up during autonomous 
+- It's especially helpful to have if you don't have any cameras to drive the robot during autonomous (rare, but does happen)
+- For this tutorial we will create a simple autonomous **command ** that makes the robot drive forward slightly.
 	
 ## Creating Commands For Autonomous
 
 - Since we can't control our robot during an autonomous command we will want to create commands that allow the robot to move independently of a driver
 
-## Creating the DriveDistance Command 
+## Creating a basic Autonomous Command 
 
-!!! summary ""
-    **1)** Create a new command called **DriveDistance**
+!!! abstract ""
+    **1)** Create a new command called **AutoCommand** using the `create new class/command` feature in Vscode.
+	
     
-!!! summary ""
+!!! abstract ""
     **2)** Before the constructor create a **double** called **distance**
+	```java
+		private Double distance;
+	```
     
     - We will use this to tell the command to finish when the robot drives the inputted distance
+
+	**3)** Also create a **Timer** called `runtime`. 
+	 
+	```java
+		private Time runTime;
+	```
+	
+	- This will be used to control how long the robot will move for. 
     
-!!! summary ""
-    **3)** In the **DriveDistance** constructor add a **double** parameter called **inches**
+!!! abstract ""
+    **3)** In the **AutoCommand** constructor add a **DriveSubsystem** parameter called **driveSubsystem**
     
-!!! summary ""
+!!! abstract ""
     **4)** Inside type:
     
 	```java
 	distance = inches;
 	```
         
-!!! summary ""
+!!! abstract ""
     **5)** In **initialize** add our **resetDriveEncoder** method
     
     - We want to reset the encoder before we drive so that it counts the distance from zero
     
-!!! summary ""
+!!! abstract ""
     **6)** In **execute** add our **arcadeDrive** method and change the **moveSpeed** parameter to a **RobotPreference** named **driveDistanceSpeed** and **rotateSpeed** to 0.0
     
     - We only want to drive the robot forward; a **RobotPreference** will help us tune the drive speed
     
-!!! summary ""
+!!! abstract ""
     **7)** In **isFinished** type:
     
 	```java
 	return Robot.m_drivetrain.getDriveEncoderDistance() == distance;
 	```
-!!! summary ""
+!!! abstract ""
     **8)** In **end** stop the **Drivetrain** and call **end** in **interrupted**
     
 ??? Example
@@ -74,50 +85,42 @@ In this section we will be going over
 	```java
 	package frc.robot.commands;
 
-	import edu.wpi.first.wpilibj.command.Command;
-	import frc.robot.Robot;
+	import edu.wpi.first.wpilibj2.command.Command;
+	import frc.robot.subsystems.Drivetrain;
 	import frc.robot.RobotPreferences;
 
 	public class DriveDistance extends Command {
 
-		private double distance;
+		private final Drivetrain drivetrain;
+		private final double distance;
 
-		public DriveDistance(double inches) {
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
-		requires(Robot.m_drivetrain);
-		distance = inches;
+		public DriveDistance(Drivetrain drivetrain, double inches) {
+			this.drivetrain = drivetrain;
+			this.distance = inches;
+			addRequirements(drivetrain);
 		}
 
-		// Called just before this Command runs the first time
 		@Override
-		protected void initialize() {
-		Robot.m_drivetrain.resetDriveEncoder();
+		public void initialize() {
+			drivetrain.resetDriveEncoder();
 		}
 
 		// Called repeatedly when this Command is scheduled to run
 		@Override
-		protected void execute() {
-		Robot.m_drivetrain.arcadeDrive(RobotPreferences.driveDistanceSpeed(), 0.0);
+		public void execute() {
+			drivetrain.arcadeDrive(RobotPreferences.driveDistanceSpeed(), 0.0);
 		}
 
 		// Make this return true when this Command no longer needs to run execute()
 		@Override
-		protected boolean isFinished() {
-		return Robot.m_drivetrain.getDriveEncoderDistance() == distance;
+		public boolean isFinished() {
+			return drivetrain.getDriveEncoderDistance() >= distance;
 		}
 
 		// Called once after isFinished returns true
 		@Override
-		protected void end() {
-		Robot.m_drivetrain.arcadeDrive(0.0, 0.0);
-		}
-
-		// Called when another command which requires one or more of the same
-		// subsystems is scheduled to run
-		@Override
-		protected void interrupted() {
-		end();
+		public void end(boolean interrupted) {
+			drivetrain.arcadeDrive(0.0, 0.0);
 		}
 	}
 	```
@@ -134,10 +137,10 @@ In this section we will be going over
 
 - We will create an **Autonomous command group** with the **DriveDistance** command and the **ShooterPitchUp** command
 
-!!! summary ""
+!!! abstract ""
     **1)** Create a new **Command Group** named **Autonomous**
 	
-!!! summary ""
+!!! abstract ""
  	**2)** In the constructor type
 	
 	```java
@@ -152,30 +155,30 @@ In this section we will be going over
 - In order to add timing in between our **commands** in our **command groups** we will need to create a **DoDelay** command
 - Unlike regular **delays** the **DoDelay** command will not stall our robot, but wait a certain amount of time before running a command
 
-!!! summary ""
+!!! abstract ""
 	**1)** Create a new command called **DoDelay**
 	
-!!! summary ""
+!!! abstract ""
 	**2)** Before the constructor add two private **doubles** called **expireTime** and **timeout**
 		   
-!!! summary ""
+!!! abstract ""
 	**3)** In the constructor add a **double** called **seconds** in the parameter
 	
-!!! summary ""
+!!! abstract ""
 	**4)** Inside the constructor set **timeout** equal to **seconds**
 
-!!! summary ""
+!!! abstract ""
 	**5)** Create a protected **void** method called **startTimer**
 
-!!! summary ""
+!!! abstract ""
 	**6)** Inside set **expireTime** equal to **timeSinceInitialized** + **timeout**
 	
 	- This will let the robot know how much time will have passed since the command was initialized when it finishes
 	
-!!! summary ""
+!!! abstract ""
 	**7)** In **initialized** add our **startTimer** method
 	
-!!! summary ""
+!!! abstract ""
 	**8)** In **isFinished** return **timeSinceInitialized** is greater or equal to **expireTime**
 	
 ??? Example
@@ -234,7 +237,7 @@ In this section we will be going over
     
 ## Adding the DoDelay Command to Autonomous.java
 
-!!! summary ""
+!!! abstract ""
 	- Add our **DoDelay** command in between **DriveDistance** and **ShooterPitchUp** with a **RobotPreference** called **autoDelay**
 	
 ??? Example 
@@ -277,8 +280,9 @@ In this section we will be going over
 
 - In **Robot.java** under **autonomousInit** find **m_autonomousCommand = m_chooser.getSelected();** and change it to
 		
-	<!-- TODO: Explain why we don't use chooser? -->
-	
+	!!! note "Why not use the chooser?"
+		`SendableChooser` allows selecting between multiple autonomous routines from the dashboard at match start, which is useful when you have several autonomous options. For this tutorial we only have one autonomous routine, so using the chooser would add boilerplate (creating options, registering them, fetching the selection) without any benefit. Once you have multiple routines worth choosing from, replacing this line with a `SendableChooser` is a natural next step.
+
 	```java
 	public void autonomousInit() {
 	m_autonomousCommand = new Autonomous();
@@ -287,7 +291,7 @@ In this section we will be going over
 		   
 ## Testing Our Autonomous Command
 
-- Now that we have finished coding our **Autonomous** command deploy code and add our new **RobotPreferences** to the widget on the **ShuffleBoard**
+- Now that we have finished coding our **Autonomous** command deploy code and add our new **RobotPreferences** to the widget in **Elastic**
 - We have three preferences that change our autonomous behavior **driveDistanceSpeed**, **autoDriveDistance** and **autoDelay**
 - **driveDistanceSpeed** will determine the **direction** and how **fast** the robot drives 
 - **autoDriveDistance** will determine how many **inches** the robot drives **forward** or **backward**  

@@ -39,13 +39,13 @@ Please use the [New Page Template](#new-page-template)
 
 [Click here to see tips on creating markdown documents](https://www.markdownguide.org/cheat-sheet/){target=_blank}
 
-!!! Warning
+!!! warning
     Make sure all documentation files end in `.md`
 
-!!! Tip
+!!! tip
     You can add to a certain tab by appending `/tab_name/` to the file name
 
-!!! Tip
+!!! tip
     Visit [Admonitions (call-out) references](https://squidfunk.github.io/mkdocs-material/reference/admonitions/) for a list off call-outs like this one.
 
 ***
@@ -122,6 +122,6 @@ This section will help you learn to BLANK.
 - Info
 - Info 2
 
-!!! Tip
+!!! tip
     This is a tip.
 ```

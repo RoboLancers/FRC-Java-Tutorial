@@ -12,6 +12,7 @@ Before we can start programing a robot we must install the necessary software fo
 **See table of contents for a breakdown of this section.**
 
 !!! tip
+
 	You can install both the **Development Tools** and the **FRC Game Tools** on the same computer or separate computers. However many teams (3255 included) have a development laptop (with both) and a dedicated driverstation laptop (with only the FRC Game Tools) that often stays disconnected from the internet.
 
 ***
@@ -26,7 +27,7 @@ For **Windows, macOS, or Linux:**
 
 [Official FRC installation guide (Windows, macOS, or Linux)](https://docs.wpilib.org/en/stable/docs/getting-started/getting-started-frc-control-system/wpilib-setup.html){target=_blank}
 
-!!! Warning "IMPORTANT NOTE"
+!!! warning "IMPORTANT NOTE"
 	These tools only allow you to program and deploy code to an already imaged roboRIO. They do not allow you to drive the robot or image/update the roboRIO. To accomplish those tasks you must install the [FRC Game Tools](#installing-the-frc-game-tools).
 
 ***
@@ -41,7 +42,7 @@ For **Windows ONLY:**
 
 [Official FRC installation guide (Windows only)](https://docs.wpilib.org/en/stable/docs/getting-started/getting-started-frc-control-system/frc-game-tools.html){target=_blank}
 
-!!! Warning "IMPORTANT NOTE"
+!!! warning "IMPORTANT NOTE"
 	These tools only allow you to drive the robot and image/update a roboRIO. They do not allow you to program the robot. To accomplish those tasks you must install the [Java Development Tools](#installing-java-development-tools).
 
 ***
@@ -55,3 +56,7 @@ In order to enable wireless connectivity to the robot outside of FRC events or t
 For **Windows ONLY:**
 
 [Official FRC Radio Configuration Utility and Use guide (Windows only)](https://docs.wpilib.org/en/stable/docs/getting-started/getting-started-frc-control-system/radio-programming.html){target=_blank}
+
+## customizing WPILIB Vscode
+
+
