@@ -64,9 +64,18 @@ In this section we will be going over
     ```
 
    - Switches have 2 states: open and closed.
-    <!-- TODO: Add a tip about keeping inversions at the lowest level or in the subsystems -->
-   <!-- TODO: Make note about normally open/close which to choose and why. talk about how we do one and invert the code so if the switch becomes unplugged it defaults to closed (off)  -->
-   - Make sure you know which is true or false or you may have to invert the switch by rewiring or using the ! operator
+   - Make sure you know which is true or false or you may have to invert the switch by rewiring or using the `!` operator
+
+!!! note "Normally Open vs Normally Closed"
+    Switches come in two configurations:
+
+    - **Normally Open (NO)** — the circuit is open (disconnected) when the switch is not pressed. `DigitalInput.get()` returns `true` when unpressed.
+    - **Normally Closed (NC)** — the circuit is closed (connected) when the switch is not pressed. `DigitalInput.get()` returns `false` when unpressed.
+
+    **Recommendation:** Use a Normally Open switch and invert the reading in code: `return !shooterSwitch.get();`. This way, if the switch wiring becomes disconnected, the robot reads the sensor as "not pressed" (`false`) instead of "pressed" (`true`). A disconnected sensor should never accidentally trigger an action.
+
+!!! tip "Keep inversions in the subsystem"
+    Always handle sensor inversions inside the subsystem method, not in commands or other classes. This way every caller gets the correct logical value without needing to know about the hardware wiring. For example, use `return !shooterSwitch.get();` here rather than inverting in each command that uses the switch.
    
 ??? Example
 	
@@ -237,8 +246,9 @@ In this section we will be going over
     return driveEncoder.get();
     ```
        
-    <!-- TODO: Explain why the method is a returning a double from an int -->
-   
+    !!! note
+        Even though `driveEncoder.get()` returns an `int`, we declare `getDriveEncoderCount()` as returning a `double`. This avoids integer division later — for example, dividing by a `double` preference value like `driveEncoderCountsPerFoot` without a manual cast, so the result is always a precise decimal rather than a truncated whole number.
+
     - Encoders will return counts as an int
     - Depending which direction the encoder shaft rotates the value will increase or decrease
     

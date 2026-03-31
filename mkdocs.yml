@@ -27,7 +27,7 @@ nav:
   - 'programming/deploying.md'
   - 'programming/using_sensors.md'
   - 'programming/pneumatics.md'
-  - 'programming/shuffleboard.md'
+  - 'programming/Elastic.md'
   - 'programming/robotpreferences.md'
   - 'programming/autonomous.md'
   - 'programming/pid.md'

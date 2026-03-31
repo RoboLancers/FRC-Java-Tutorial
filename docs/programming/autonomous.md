@@ -280,8 +280,9 @@ In this section we will be going over:
 
 - In **Robot.java** under **autonomousInit** find **m_autonomousCommand = m_chooser.getSelected();** and change it to
 		
-	<!-- TODO: Explain why we don't use chooser? -->
-	
+	!!! note "Why not use the chooser?"
+		`SendableChooser` allows selecting between multiple autonomous routines from the dashboard at match start, which is useful when you have several autonomous options. For this tutorial we only have one autonomous routine, so using the chooser would add boilerplate (creating options, registering them, fetching the selection) without any benefit. Once you have multiple routines worth choosing from, replacing this line with a `SendableChooser` is a natural next step.
+
 	```java
 	public void autonomousInit() {
 	m_autonomousCommand = new Autonomous();
@@ -290,7 +291,7 @@ In this section we will be going over:
 		   
 ## Testing Our Autonomous Command
 
-- Now that we have finished coding our **Autonomous** command deploy code and add our new **RobotPreferences** to the widget on the **ShuffleBoard**
+- Now that we have finished coding our **Autonomous** command deploy code and add our new **RobotPreferences** to the widget in **Elastic**
 - We have three preferences that change our autonomous behavior **driveDistanceSpeed**, **autoDriveDistance** and **autoDelay**
 - **driveDistanceSpeed** will determine the **direction** and how **fast** the robot drives 
 - **autoDriveDistance** will determine how many **inches** the robot drives **forward** or **backward**  

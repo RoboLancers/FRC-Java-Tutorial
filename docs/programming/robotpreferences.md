@@ -6,7 +6,7 @@
 
 In this section we will be going over
 
-1. Creating and using RobotPreferences in shuffleboard
+1. Creating and using RobotPreferences in Elastic
 2. How to convert encoder counts to inches
 
 ***
@@ -99,10 +99,16 @@ In this section we will be going over
     
 ## Using RobotPreferences
 
-<!-- TODO: Explain in more detail how to add RobotPreferences and add pictures -->
+- After deploying the code to your robot, open **Elastic** from the Driver Station.
+- In the top menu go to **File → Add Widget** (or look in the left-side widget panel) and find the **Robot Preferences** widget, then drag it onto a tab.
+- Alternatively, right-click on an empty area of a tab and select **Add Widget → Robot Preferences**.
 
-- After deploying the code to your robot find the **RobotPreferences** widget and add it to your page
-- Click the add button and enter the **string** of the **RobotPreference** and its type (doubles and ints are numbers)
+Once the widget is visible:
+
+- Click the **+** (Add) button inside the widget.
+- A dialog will appear. Enter the **key name** (the string you passed to `Preferences.getInstance()`, e.g. `"driveEncoderCountsPerFoot"`) and select the matching **type** (Number for doubles and ints, String for text, Boolean for true/false).
+- The preference will appear in the widget with its default value.
+- Double-click the value field next to a preference to edit it — changes take effect **immediately** on the running robot without redeploying.
 - If you double click on the preference value you will notice that you can change its value
 - If you change a preference value it will update **immediately**
 

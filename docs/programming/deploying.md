@@ -53,4 +53,11 @@ To deploy code, first make sure your computer is  connected to the robot in **ON
 3. Try moving the joysticks on your controller when enabled.
       1. If it doesn’t, check your port numbers for your controller, axes, and motor controllers
 
-<!-- TODO: make note about reading error log. resource allocation and robots don't quit -->
+!!! tip "Reading the error log"
+    If the robot does not behave as expected after enabling, check the **Messages** panel at the bottom of the Driver Station window for error output. Common errors to look for:
+
+    - **Resource allocation errors** — if two motor controllers, sensors, or other devices are configured to use the same port or CAN ID, the roboRIO will log an allocation error stating that there are conflicting IDS. Double-check your `Constants.java` values and make sure no two devices share a port.
+    !!! note
+        Duplicate CAN ID's must be fixed with either the robot powered off, or with the SparkMax controller unplugged, as the SparkMax will not allow you to change its CAN ID while it is powered on and connected to the CAN bus.
+    - **"Robot program exited unexpectedly"** — unlike a regular Java application, the robot program does not stop running when an exception is thrown. Unhandled exceptions will be printed to the log but the program will continue running, sometimes in a broken state. Always check the log if the robot acts strangely.
+    - **CAN bus errors** — if a SparkMax or other CAN device isn't responding, it will log timeout messages. Make sure the device is powered on and wired correctly.

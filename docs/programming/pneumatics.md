@@ -220,8 +220,6 @@ See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_
 	}
 	```
 
-<!-- TODO: make into new section -->
-
 ### Mapping Commands to Buttons
 
 ### Creating Joystick Buttons

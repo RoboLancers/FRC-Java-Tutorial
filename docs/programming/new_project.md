@@ -106,7 +106,9 @@ Newly created projects have many files within them. We only care about the conte
 
 ### Adding the Subsystem to RobotContainer.java
 
-<!-- TODO: Make import note -->
+!!! note "Importing the subsystem"
+    After typing the new subsystem type (e.g. `Drivetrain`), VSCode will underline it in red because the class hasn't been imported yet. Click the light bulb that appears (or press ++ctrl+period++) and select **Import 'Drivetrain' (frc.robot.subsystems)**. See [Visual Studio Code Tips](../basics/vscode_tips.md){target=_blank} for more on using quick fixes.
+
 !!! warning "Do not forget this step!"
 	When a robot program runs on the roboRIO it only runs the main file Robot.java and anything Robot.java links to such as RobotContainer.java.  
 	We have created a new subsystem but we have not yet linked it to Robot.java through RobotContainer.java.  

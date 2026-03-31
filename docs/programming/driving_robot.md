@@ -54,7 +54,8 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
     --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:motors"
     ```
 
-<!-- TODO: Generalize this more -->
+!!! note "Using a different motor controller?"
+    The steps in this section use `SparkMax`, but the pattern is the same for other controllers. Replace `SparkMax` with your controller type (e.g. `TalonFX`, `VictorSP`) and use the corresponding import. Constructor parameters and configuration APIs differ by vendor — consult your vendor's documentation or WPILib's [hardware API guide](https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/index.html){target=_blank} for the correct syntax.
 
 **If an error occurs (red squiggles)**
 
@@ -100,7 +101,8 @@ Now that we have created the SparkMaxes  and the Drive Constants we must initial
 
 ### Using Constants
 
-<!-- TODO: Link this as example where robot map mentioned -->
+!!! note
+    `Constants.java` fills the same role that older WPILib projects called `RobotMap.java` — a single file mapping every physical port to a named constant. If you see references to `RobotMap` in older FRC code examples, treat them the same as `Constants`.
 
 Since each subsystem has its own components with their own ports, it is easy to lose track of which ports are being used and for what. To counter this you can use a class called **Constants** to hold all these values in a single location.
 
@@ -173,7 +175,7 @@ See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDri
 
 - The FIRST Drive class has many pre-configured methods available to us including DifferentialDrive, and many alterations of MecanumDrive.
 - DifferentialDrive contains subsections such as TankDrive and ArcadeDrive.
-    <!-- TODO: add back - For more information and details on drive bases see the WPILib documentation -->
+    For more information and details on drive bases see the [WPILib documentation](https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html){target=_blank}.
 - For our tutorial we will be creating an ArcadeDrive
 - Arcade drives run by taking a moveSpeed and rotateSpeed. moveSpeed defines the forward and reverse speed and rotateSpeed defines the turning left and right speed.
 - To create an arcade drive we will be using our already existing Drivetrain class and adding to it.
@@ -372,7 +374,8 @@ In order to drive our robot, it needs to know what will be controlling it. To do
     - in the imports section, change `ExampleCommand` to `DriveArcade`.
     - inside the class, find the line ` private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();` and change `ExampleSubsystem` to `Drivetrain` and `m_exampleSubsystem` to `drivetrain`.
 
-<!-- TODO: add details on how to find joystick port in driverstation tips -->
+!!! tip "Finding your joystick port in the Driver Station"
+    If you are not sure which port your controller is on, open the **Driver Station** application, click the **USB** tab (the icon that looks like a USB plug on the left side), and look at the numbered list of connected devices. The number next to your controller is the port you should use for `kDriverControllerPort` in Constants. Devices can be dragged up or down in the list to change their assigned port number.
 
 ### Using setDefaultCommand
 
