@@ -47,7 +47,7 @@ nav:
 site_name: FRC Java Programming
 repo_name: Tutorial Bot
 repo_url: https://github.com/RoboLancers/FRC-Java-Tutorial/tree/main
-edit_uri: https://github.com/RoboLancers/FRC-Java-Tutorial/edit/main/Docs_Source/docs/
+edit_uri: https://github.com/RoboLancers/FRC-Java-Tutorial/edit/main/docs/
 site_author: Tayler Uva, Carl Stanton
 
 # Theme
@@ -58,29 +58,32 @@ theme:
   #  logo: assets/favicon.png
   features:
     - content.tabs.link
-  color_mode: auto
+    - content.code.copy
 use_directory_urls: false
 
 # Extensions
 markdown_extensions:
-  - pymdownx.blocks.admonition
+  - admonition
   - pymdownx.critic
-  - pymdownx.blocks.details
+  - pymdownx.details
   - pymdownx.blocks.tab
   - pymdownx.betterem
   - pymdownx.tasklist
-  #- pymdownx.extra
+  - attr_list
   - pymdownx.inlinehilite
-  - pymdownx.superfences
-  - pymdownx.snippets:
-      base_path: ["docs/code_examples"]
   - pymdownx.highlight:
-      #css_class: 'codehilite'
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.snippets:
+      base_path: ["."]
   - toc:
-        permalink: "#"
+      permalink: "#"
 
 # Plugins
 plugins:

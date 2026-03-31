@@ -35,7 +35,7 @@ In this section we will be going over:
     
 !!! summary ""
     **2)** Before the constructor create a **double** called **distance**
-	```Java
+	```java
 		private Double distance;
 	```
     
@@ -43,7 +43,7 @@ In this section we will be going over:
 
 	**3)** Also create a **Timer** called `runtime`. 
 	 
-	```Java
+	```java
 		private Time runTime;
 	```
 	

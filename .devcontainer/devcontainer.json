@@ -11,6 +11,7 @@
 	"postCreateCommand": [
 		"pip3 install --user -r requirements.txt",
 		"pip3 install --user first-agentic-csa"
+		"curl -fsSL https://claude.ai/install.sh | bash"
 	],
 	"customizations": {
 		"vscode": {

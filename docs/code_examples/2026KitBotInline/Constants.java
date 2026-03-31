@@ -15,7 +15,7 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  // --8<-- [start: constants]
+  // --8<-- [start:constants]
   public static final class DriveConstants {
     // Motor controller IDs for drivetrain motors
     public static final int LEFT_LEADER_ID = 1;
@@ -27,7 +27,7 @@ public final class Constants {
     // likelihood of tripping breakers or damaging CIM motors
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
   }
-  //--8<-- [end: constants]
+  //--8<-- [end:constants]
 
   public static final class FuelConstants {
     // Motor controller IDs for Fuel Mechanism motors

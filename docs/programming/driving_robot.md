@@ -104,9 +104,8 @@ Now that we have created the SparkMaxes  and the Drive Constants we must initial
 
 Since each subsystem has its own components with their own ports, it is easy to lose track of which ports are being used and for what. To counter this you can use a class called **Constants** to hold all these values in a single location.
 
-
-    - Names should follow the pattern SUBSYSTEM_NAME_OF_COMPONENT
-    - The name is all caps since it is a **constant** ([more info on constants](../basics/java_basics.md#constants){target=_blank}).
+- Names should follow the pattern SUBSYSTEM_NAME_OF_COMPONENT
+- The name is all caps since it is a **constant** ([more info on constants](../basics/java_basics.md#constants){target=_blank}).
 
 
 
@@ -183,53 +182,51 @@ See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDri
 
 <!-- TODO: Add instructions for TalonSRX -->
 
-!!! summary ""
-    **1)** Create the DifferentialDrive object.
+**1)** Create the DifferentialDrive object.
 
-    **Member Variable Declaration:**
-    ```java
-    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:differential-drive-variable"
-    ```
-    This defines the drive object that we will use to drive the robot.
+**Member Variable Declaration:**
+```java
+--8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:differential-drive-variable"
+```
+This defines the drive object that we will use to drive the robot.
 
-    **Constructor Initialization:**
-    ```java
-    drive = new DifferentialDrive(leftLeader, rightLeader);
-    ```
-    This initializes the differential drive object with the left and right leader motors.
+**Constructor Initialization:**
+```java
+drive = new DifferentialDrive(leftLeader, rightLeader);
+```
+This initializes the differential drive object with the left and right leader motors.
 
-    - Since DifferentialDrive takes 2 parameters we pass the left and right leader motors.
-    - The follower motors are configured to follow these leaders through the SparkMax configuration.
+- Since DifferentialDrive takes 2 parameters we pass the left and right leader motors.
+- The follower motors are configured to follow these leaders through the SparkMax configuration.
 
-    !!! warning
-        You should only group motors that are spinning the same direction physically when positive power is being applied otherwise you could damage your robot.
+!!! warning
+    You should only group motors that are spinning the same direction physically when positive power is being applied otherwise you could damage your robot.
 
-!!! note
-    **2)** In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower.
-    In the constructor we are going to set the follower motors and link them to the leader motors. To do this we will need to include a couple more classes from the REV Library:
-    ```Java
-    import com.revrobotics.spark.SparkBase.PersistMode;
-    import com.revrobotics.spark.SparkBase.ResetMode;
-    ```
-    Then in the constructor, configure the followers to follow the leaders:
+**2)** In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower.
+In the constructor we are going to set the follower motors and link them to the leader motors. To do this we will need to include a couple more classes from the REV Library:
+```java
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+```
+Then in the constructor, configure the followers to follow the leaders:
 
-    **Set follower configuration:**
-    ```java
-    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:follower-config"
-    ```
+**Set follower configuration:**
+```java
+--8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:follower-config"
+```
 
-    **Configure right leader:**
-    ```java
-    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:right-leader-config"
-    ```
+**Configure right leader:**
+```java
+--8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:right-leader-config"
+```
 
-    **Invert left leader for correct motor direction:**
-    ```java
-    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:left-inversion"
-    ```
+**Invert left leader for correct motor direction:**
+```java
+--8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:left-inversion"
+```
 
 ??? example "Full Drive Subsystem Example"
-    See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/src/main/java/frc/robot/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.
+    See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.
 
 ### Creating the arcadeDrive method
 
@@ -249,7 +246,7 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
     !!! tip
         By putting something in the parentheses it makes the method require a parameter when it is used. When the method gets used and parameters are passed, they will be store in moveSpeed and rotateSpeed (in that order). See [parameters](../basics/java_basics.md#parameters){target=_blank} for more info.
 
-!!! abstract “”
+!!! abstract 
     **2)** Now lets make our method call the differentialDrive’s arcadeDrive method.
 
     Inside our method type the call to the differential drive:
@@ -260,9 +257,9 @@ Now it’s time to make an arcadeDrive from our differentialDrive!
 
     DifferentialDrive’s arcadeDrive method takes parameters moveValue and rotateValue.
 
-    !!! note
-        At this point you could instead create a tank drive, however implementation differs slightly.
-        To do so type `differentialDrive.tankDrive(moveSpeed, rotateSpeed);` instead of `differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);` and change the method name reflect this.
+!!! note
+    At this point you could instead create a tank drive, however implementation differs slightly.
+    To do so type `differentialDrive.tankDrive(moveSpeed, rotateSpeed);` instead of `differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);` and change the method name reflect this.
 
     !!! tip
         If you want to limit the max speed you can multiple the speeds by a decimal (i.e. 0.5*moveSpeed will make the motors only move half of their maximum speed)
@@ -281,7 +278,7 @@ Before we begin we must create the class file for the DriveArcade command. See [
 
 ### Define variables
 
-!!! summary “”
+!!! note 
     **1)** Create `xspeed` and `zrotation` variables. (to be passed to drive subsystem). These will be declared as `DoubleSuppliers`, which is a function that return a type. This is important for later.
     **2)** Create an emtpy `driveSubsystem` instance of `Drivetrain`
 
@@ -298,14 +295,14 @@ Before we begin we must create the class file for the DriveArcade command. See [
 
 ### In the constructor
 
-!!! summary “”
+!!! note
     **1)** Inside the parenthesis of the constructor `driveArcade()` add 3 variables:
     ```java title=”DriveArcadeCommand.java”
     --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:constructor-signature”
     ```
     These are values that will be passed into the command in `RobotContainer.java`
 
-!!! summary “”
+!!! note
     **2)** Inside constructor implementation type:
 
     ```java title=”DriveArcadeCommand.java”
@@ -316,7 +313,7 @@ Before we begin we must create the class file for the DriveArcade command. See [
     !!! tip
         `this` is how the class instance `object` refers to itself in code.
 
-!!! summary “”
+!!! note “”
     - `addRequirements` means this command will end all other commands currently using drivetrain and will run instead when executed.
     - It also means, other commands that require drivetrain will stop this command and run instead when executed.
 
@@ -325,7 +322,7 @@ Before we begin we must create the class file for the DriveArcade command. See [
 
 ### In the execute method
 
-!!! summary “”
+!!! note
     **1)** In the execute method we will we want to call the **arcadeDrive** method we created in **Drivetrain** and give it the variables **moveSpeed** `xspeed` and **rotateSpeed** `zrotation` we created as parameters.
 
     ```java title=”DriveArcadeCommand.java”
@@ -336,7 +333,7 @@ Before we begin we must create the class file for the DriveArcade command. See [
 
 Since we will be using this command to control the robot we want it to run indefinitely.
 
-!!! summary “”
+!!! note
     **1)** To do this we are going to continue having isFinished return false, meaning the command will never finish.
 
     ```java title=”DriveArcadeCommand.java”
@@ -351,7 +348,7 @@ Since we will be using this command to control the robot we want it to run indef
 
 ### In the end method
 
-!!! summary “”
+!!! note 
     **1)** We will call the arcadeDrive method and give it 0 and 0 as the parameters. this will stop the robot when the command completes.
 
     ```java title=”DriveArcadeCommand.java”
@@ -368,7 +365,7 @@ See [DriveArcadeCommand.java](../code_examples/2026KitBotInline/commands/DriveAr
 
 In order to drive our robot, it needs to know what will be controlling it. To do so, we will use the joystick in `RobotContainer.java`, as `m_drivecontroller`.
 
-!!! summary ""
+!!! note 
     **1)** Open Constants.java
       Check and make sure the `kDriverControllerPort` constant is present.
     **2)** Open RobotContainer.java
@@ -379,7 +376,7 @@ In order to drive our robot, it needs to know what will be controlling it. To do
 
 ### Using setDefaultCommand
 
-!!! summary ""
+!!! note
     **1)** Back in **RobotContainer.java** We will need to remove everything inside the `configureBindings` method.
     **2)** in the `configureBindings`we will call the `setDefaultCommand` of `drivetrain` and create a new `DriveArcade` command with parameters. 
 
@@ -395,7 +392,7 @@ In order to drive our robot, it needs to know what will be controlling it. To do
     --8<-- "docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config"
     ```
     !!! tip
-        - Notice the `()->` notation above. This notation creates lamdas or anonymous methods. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=blank}
+        - Notice the `()->` notation above. This notation creates lamdas or anonymous methods. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=_blank}
         - The lambas are required because we set the parameter types of `xpeed` and 'zrotation' in our `DriveArcade` to be `DoubleSuppliers`, which are methods that return doubles. (Which is what the lambdas above return.)
         - These are declared as such so that they get and send the updated values from `m_driverController.getLeftY()` and `m_driverController.getRightX()` to the drive motors continuously.
 

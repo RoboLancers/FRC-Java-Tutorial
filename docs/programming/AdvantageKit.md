@@ -53,9 +53,9 @@ While this does require some additional effort to write subsystems, it also make
 
 ### Exercises
 
-- Follow this [tutorial](2.8_KitbotAKitRefactor.md) to add AdvantageKit to your kitbot code.
+- Follow this tutorial to add AdvantageKit to your kitbot code. *(coming soon)*
 
 ### Notes
 
-- See the [AdvantageKit Structure Reference](2.7_AKitStructureReference.md) article for more on the IO layer structure
+- See the [AdvantageKit Structure Reference](AKitStructureReference.md) article for more on the IO layer structure
 - [Here](https://drive.google.com/drive/folders/1qNMZ7aYOGI31dQNAwt7rhFo97NR7mxtr) are some logs from our 2023-2024 season

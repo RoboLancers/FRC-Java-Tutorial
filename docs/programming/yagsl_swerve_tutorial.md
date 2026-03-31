@@ -77,7 +77,7 @@ For a complete list, see [Getting to Know Your Robot](https://docs.yagsl.com/con
 YAGSL uses JSON configuration files to define your robot's swerve drive. These files are placed in the `deploy/swerve/` directory of your robot project.
 
 ### Directory Structure
-```
+```plaintext
 deploy/
 └── swerve/
     ├── controllerproperties.json
