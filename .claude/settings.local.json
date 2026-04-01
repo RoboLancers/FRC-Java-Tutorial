@@ -3,7 +3,14 @@
     "allow": [
       "Bash(grep:*)",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(python3 -m pip install --user --quiet mkdocs mkdocs-material pymdown-extensions)",
+      "Bash(pip install:*)",
+      "Bash(mkdocs --version)",
+      "Bash(python3 -m mkdocs build)",
+      "Bash(pip3 install:*)",
+      "Bash(git mv:*)",
+      "Bash(python3.14 -m mkdocs build)"
     ]
   }
 }

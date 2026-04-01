@@ -11,7 +11,6 @@ The subsystem has two motors:
 - **Flywheel motor** — a brushless NEO that spins a wheel to launch game pieces
 - **Feeder motor** — a brushless NEO that pushes game pieces from a hopper/indexer into the flywheel
 
-
 **See the table of contents for a breakdown of each section.**
 
 ***
@@ -30,8 +29,8 @@ The subsystem has two motors:
 
 The complete subsystem code is split across two files in the same folder:
 
-- [`docs/code_examples/ShooterConstants.java`](../../code_examples/ShooterConstants.java) — all tunable values
-- [`docs/code_examples/BasicShooterSubsystem.java`](../../code_examples/BasicShooterSubsystem.java) — the subsystem logic
+- [`docs/code_examples/ShooterConstants.java`](../code_examples/ShooterConstants.java) — all tunable values
+- [`docs/code_examples/BasicShooterSubsystem.java`](../code_examples/BasicShooterSubsystem.java) — the subsystem logic
 
 Every snippet in this guide is pulled directly from those files.
 
@@ -49,7 +48,7 @@ Constants are stored in their own file, `ShooterConstants.java`, placed in the s
 ```
 
 | Constant | Purpose |
-|---|---|
+| --- | --- |
 | `FLYWHEEL_MOTOR_ID` | CAN ID of the flywheel SparkMax |
 | `FEEDER_MOTOR_ID` | CAN ID of the feeder SparkMax |
 | `FLYWHEEL_CURRENT_LIMIT` | Protects the flywheel motor and prevents breaker trips |
@@ -169,7 +168,7 @@ m_shooter.setDefaultCommand(m_shooter.stopCommand());
 
 ### Bind Buttons
 
-A typical workflow binds spin-up to one button and the full shoot sequence to another, so the driver can pre-spin the flywheel before feeding balls into the shooter. This ensures the flywheel is up to speed and prevents it from slowing down when a game piece enters. 
+A typical workflow binds spin-up to one button and the full shoot sequence to another, so the driver can pre-spin the flywheel before feeding balls into the shooter. This ensures the flywheel is up to speed and prevents it from slowing down when a game piece enters.
 
 ```java title="RobotContainer.java"
 // Hold the right bumper to spin the flywheel up to speed

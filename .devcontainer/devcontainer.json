@@ -10,7 +10,7 @@
 	},
 	"postCreateCommand": [
 		"pip3 install --user -r requirements.txt",
-		"pip3 install --user first-agentic-csa"
+		//"pip3 install --user first-agentic-csa",
 		"curl -fsSL https://claude.ai/install.sh | bash"
 	],
 	"customizations": {
@@ -18,11 +18,15 @@
 			"extensions": [
 				"main-branch.mkdocs-snippet-lens",
 				"aikebang.mkdocs-syntax-highlight",
-				"ytianle.mkdocs-material-linter"
+				"ytianle.mkdocs-material-linter",
+				"anthropic.claude-vscode"
 			]
 		}
 	},
-
+	"mounts": [
+		"source=${localWorkspaceFolder}/../../.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/../../.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
+	]
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 

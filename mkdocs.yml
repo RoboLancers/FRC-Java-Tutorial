@@ -4,7 +4,7 @@ nav:
   - 'index.md'
   - 'why_software.md'
 - Setup:
-  - 3rd_party_libs.md
+  - 'setup/3rd_party_libs.md'
 - Version Control:
   - 'version_control/BasicGit.md'
   - 'version_control/GitWorkflow.md'
