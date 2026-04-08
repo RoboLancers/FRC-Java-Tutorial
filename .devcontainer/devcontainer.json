@@ -6,12 +6,11 @@
 	"image": "mcr.microsoft.com/devcontainers/base:debian",
 	"features": {
 		"ghcr.io/devcontainers-extra/features/mkdocs:2": {},
-		"ghcr.io/devcontainers/features/python:1":{}
-	},
+		"ghcr.io/devcontainers/features/python:1":{},
+  		"ghcr.io/devcontainers/features/git:1": {}
+	},				
 	"postCreateCommand": [
-		"pip3 install --user -r requirements.txt",
-		//"pip3 install --user first-agentic-csa",
-		"curl -fsSL https://claude.ai/install.sh | bash"
+		"pip install -r requirements.txt && curl -fsSL https://claude.ai/install.sh | bash"
 	],
 	"customizations": {
 		"vscode": {
@@ -19,13 +18,13 @@
 				"main-branch.mkdocs-snippet-lens",
 				"aikebang.mkdocs-syntax-highlight",
 				"ytianle.mkdocs-material-linter",
-				"anthropic.claude-vscode"
+				"Anthropic.claude-code"
 			]
 		}
 	},
 	"mounts": [
-		"source=${localWorkspaceFolder}/../../.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
-		"source=${localWorkspaceFolder}/../../.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
+		"source=${localWorkspaceFolder}/../../../.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/../../../.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
 	]
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},

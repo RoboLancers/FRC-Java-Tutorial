@@ -4,3 +4,4 @@ mkdocs
 mkdocs-material
 pymdown-extensions
 mkdocs-minify-plugin
+mkdocs-quiz
