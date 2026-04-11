@@ -10,7 +10,8 @@
       "Bash(python3 -m mkdocs build)",
       "Bash(pip3 install:*)",
       "Bash(git mv:*)",
-      "Bash(python3.14 -m mkdocs build)"
+      "Bash(python3.14 -m mkdocs build)",
+      "Bash(mkdocs build:*)"
     ]
   }
 }

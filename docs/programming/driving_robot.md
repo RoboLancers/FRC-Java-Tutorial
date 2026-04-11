@@ -230,191 +230,62 @@ Then in the constructor, configure the followers to follow the leaders:
 ??? example "Full Drive Subsystem Example"
     See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.
 
-### Creating the arcadeDrive method
+### Creating the driveArcade Command Factory
 
-Now it’s time to make an arcadeDrive from our differentialDrive!
+Instead of writing a separate command class, we use the **command factory pattern** — a method on the subsystem that returns a `Command`. This is the modern WPILib approach and keeps drive logic inside `CANDriveSubsystem` where it belongs. See [Command Based Robot](../basics/wpilib.md#command-based-robot){target=_blank} for background on commands.
 
 !!! abstract
-    **1)** Let’s create a public void method called “arcadeDrive” with type “double” parameters moveSpeed and rotateSpeed.
+    Below the `periodic` method, add the `driveArcade` factory method:
 
-    Below the `periodic` method create a new method called `arcadeDrive`. This method will be called from our Drive command to actually move the robot.
-
-    ```java
-    public void arcadeDrive(double moveSpeed, double rotateSpeed) {
-
-    }
-    ```
-
-    !!! tip
-        By putting something in the parentheses it makes the method require a parameter when it is used. When the method gets used and parameters are passed, they will be store in moveSpeed and rotateSpeed (in that order). See [parameters](../basics/java_basics.md#parameters){target=_blank} for more info.
-
-!!! abstract 
-    **2)** Now lets make our method call the differentialDrive’s arcadeDrive method.
-
-    Inside our method type the call to the differential drive:
-
-    ```java
+    ```java title=”CANDriveSubsystem.java”
     --8<-- “docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:drive-arcade-method”
     ```
 
-    DifferentialDrive’s arcadeDrive method takes parameters moveValue and rotateValue.
+    - `this.run(...)` creates a command that calls the lambda repeatedly while scheduled. The subsystem is automatically added as a requirement.  
+    - The parameters are `DoubleSupplier` (a function that returns a `double`) rather than plain `double` values. This ensures the joystick reading is evaluated every loop cycle instead of being captured once. this is important to ensure the robot continuously responds to joystick movement.
+    - `drive.arcadeDrive(...)` is the WPILib `DifferentialDrive` call that physically moves the motors.
 
 !!! note
-    At this point you could instead create a tank drive, however implementation differs slightly.
-    To do so type `differentialDrive.tankDrive(moveSpeed, rotateSpeed);` instead of `differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);` and change the method name reflect this.
+    To use tank drive instead, replace `drive.arcadeDrive(...)` with `drive.tankDrive(...)` and rename the method accordingly.
 
     !!! tip
-        If you want to limit the max speed you can multiple the speeds by a decimal (i.e. 0.5*moveSpeed will make the motors only move half of their maximum speed)
+        Multiply the speed values by a decimal to cap the max speed during initial testing (e.g. `xSpeed.getAsDouble() * 0.5`). This makes it easier to verify the robot drives in the correct directions before running at full power/speed.
 
-        You may want to do this for initial testing to make sure everything is going the right direction.
+## Wiring Up in RobotContainer
 
-### Making our robot controllable
+Now we connect the subsystem to the driver’s controller by setting a default command in `RobotContainer.java`.
 
-## Creating the Drivearcade Command
+### Adding the Driver Controller
 
-- Remember that **methods** tell the robot what it can do but in order to make it do these things we must give it a **command**. See [Command Based Robot](../basics/wpilib.md#command-based-robot){target=_blank}
-- Now that we have created the method, we need to create a command to call and use that method.
-- Let’s create a new command called **DriveArcade** that calls arcadeDrive method we just created!
-
-Before we begin we must create the class file for the DriveArcade command. See [Creating a New Command](new_project.md#creating-a-new-command){target=_blank} for info on how to do this and info on what each pre-created method does.
-
-### Define variables
-
-!!! note 
-    **1)** Create `xspeed` and `zrotation` variables. (to be passed to drive subsystem). These will be declared as `DoubleSuppliers`, which is a function that return a type. This is important for later.
-    **2)** Create an emtpy `driveSubsystem` instance of `Drivetrain`
-
-    !!! warning
-        `DoubleSupplier` and `Drivetrain` will have to be imported as follows:
-        ```Java
-        import frc.robot.subsystems.CANDriveSubsystem;
-        import java.util.function.DoubleSupplier;
-        ```
-
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:class-variables”
-    ```
-
-### In the constructor
+The `RobotContainer` class holds all subsystems, controllers, and command bindings. A `CommandXboxController` is declared here and reads joystick input.
 
 !!! note
-    **1)** Inside the parenthesis of the constructor `driveArcade()` add 3 variables:
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:constructor-signature”
-    ```
-    These are values that will be passed into the command in `RobotContainer.java`
+    **1)** Open `Constants.java` and confirm the `DRIVER_CONTROLLER_PORT` constant is present inside `OperatorConstants`.
 
-!!! note
-    **2)** Inside constructor implementation type:
+    **2)** Open `RobotContainer.java` and confirm a `CommandXboxController driverController` field is declared at the top of the class that uses that constant.
 
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:constructor-body”
-    ```
-
-    - The lines starting with `this` set the global variables we defined at the top of our class file to the values being passed into the consturctor.
-    !!! tip
-        `this` is how the class instance `object` refers to itself in code.
-
-!!! note “”
-    - `addRequirements` means this command will end all other commands currently using drivetrain and will run instead when executed.
-    - It also means, other commands that require drivetrain will stop this command and run instead when executed.
-
-    !!! warning
-        If you use the light bulb to import ‘Robot’, be sure to import the one with “frc.robot”
-
-### In the execute method
-
-!!! note
-    **1)** In the execute method we will we want to call the **arcadeDrive** method we created in **Drivetrain** and give it the variables **moveSpeed** `xspeed` and **rotateSpeed** `zrotation` we created as parameters.
-
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:execute-method”
-    ```
-
-### In the isFinished method
-
-Since we will be using this command to control the robot we want it to run indefinitely.
-
-!!! note
-    **1)** To do this we are going to continue having isFinished return false, meaning the command will never finish.
-
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:is-finished-method”
-    ```
-
-    !!! tip
-        - If we did want a command to finish, we make this return true.
-          - This can be done by replacing false with true to make it finish instantly
-          - Alternatively we can make a condition which can return true
-              - For example `(timePassed > 10)` will return true after 10 seconds but return false anytime before 10 seconds have passed.
-
-### In the end method
-
-!!! note 
-    **1)** We will call the arcadeDrive method and give it 0 and 0 as the parameters. this will stop the robot when the command completes.
-
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:end-method”
-    ```
-
-    - This make the motors stop running when the command ends by setting the movement speed to zero and rotation speed to zero.
-
-### Completed Example
-
-See [DriveArcadeCommand.java](../code_examples/2026KitBotInline/commands/DriveArcadeCommand.java) for the complete command class implementation.
-
-### Creating the Joystick
-
-In order to drive our robot, it needs to know what will be controlling it. To do so, we will use the joystick in `RobotContainer.java`, as `m_drivecontroller`.
-
-!!! note 
-    **1)** Open Constants.java
-      Check and make sure the `kDriverControllerPort` constant is present.
-    **2)** Open RobotContainer.java
-    - in the imports section, change `ExampleCommand` to `DriveArcade`.
-    - inside the class, find the line ` private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();` and change `ExampleSubsystem` to `Drivetrain` and `m_exampleSubsystem` to `drivetrain`.
-
-!!! tip "Finding your joystick port in the Driver Station"
-    If you are not sure which port your controller is on, open the **Driver Station** application, click the **USB** tab (the icon that looks like a USB plug on the left side), and look at the numbered list of connected devices. The number next to your controller is the port you should use for `kDriverControllerPort` in Constants. Devices can be dragged up or down in the list to change their assigned port number.
+!!! tip “Finding your joystick port in the Driver Station”
+    Open the **Driver Station** application and click the **USB** tab (the plug icon on the left). The number next to your controller is its port — use that value for `DRIVER_CONTROLLER_PORT` in Constants. Controllers can be dragged in the list to change their assigned port (the controller port is usually 0 by default if only one controller is plugged in).
 
 ### Using setDefaultCommand
 
-!!! note
-    **1)** Back in **RobotContainer.java** We will need to remove everything inside the `configureBindings` method.
-    **2)** in the `configureBindings`we will call the `setDefaultCommand` of `drivetrain` and create a new `DriveArcade` command with parameters. 
+`setDefaultCommand` tells a subsystem which command to run whenever no other command is using it. Since we always want the driver to be able to move the robot, the drive factory command is set as the default.
 
-    !!! tip
-        - Commands in this method will run when the robot is enabled.
-          - They also run if no other commands using the subsystem are running.
-          - This is why we write **addRequirements(Robot.subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
-    - We will the default command for the drive subsystem to an instance of the `DriveArcade` with the values provided by the joystick axes on the driver controller.
-      - The Y axis of the controller is inverted so that pushing the stick away from you (a negative value) drives the robot forwards (a positive value).
-      - Similarly for the X axis where we need to flip the value so the joystick matches the WPILib convention of counter-clockwise positive
-  
-    ```java title="RobotContainer.java"
-    --8<-- "docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config"
-    ```
-    !!! tip
-        - Notice the `()->` notation above. This notation creates lamdas or anonymous methods. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=_blank}
-        - The lambas are required because we set the parameter types of `xpeed` and 'zrotation' in our `DriveArcade` to be `DoubleSuppliers`, which are methods that return doubles. (Which is what the lambdas above return.)
-        - These are declared as such so that they get and send the updated values from `m_driverController.getLeftY()` and `m_driverController.getRightX()` to the drive motors continuously.
+!!! abstract
+    Inside `configureBindings()` in `RobotContainer.java`, add:
 
-    !!! tip
-        Remember to use the light bulb for importing if needed!
-    !!! tip
-        The `New` keyword creates a new instance of a class (object)
-
-??? example "Full RobotContainer Example"
-    See [RobotContainer.java](../code_examples/2026KitBotInline/RobotContainer.java) for the complete RobotContainer implementation.
-
-    The key part for drive configuration is in `configureBindings()`:
-
-    ```java title="RobotContainer.java"
-    --8<-- "docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config"
+    ```java title=”RobotContainer.java”
+    --8<-- “docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config”
     ```
 
-    This sets arcade drive as the default command, using:
+    - The Y axis is negated so pushing the stick away from you (a negative joystick value) drives the robot forward (positive motor output).
+    - The X axis is negated to match WPILib’s counter-clockwise-positive rotation convention.
+    - Both axes are scaled by constants defined in `OperatorConstants` to make the robot easier to control at full stick deflection.
 
-    - The negative Y-axis of the left joystick (inverted so pushing away drives forward)
-    - The negative X-axis of the right joystick (inverted for WPILib counter-clockwise positive convention)
-    - Both axes scaled for controllability
+    !!! tip
+        The `()->` syntax creates a **lambda** — an anonymous function. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=_blank}
+
+        Lambdas are required here because `driveArcade` expects `DoubleSupplier` parameters. A lambda `() -> driverController.getLeftY()` is a `DoubleSupplier` — it gets called every loop cycle so the robot continuously responds to joystick movement.
+
+??? example “Full RobotContainer Example”
+    See [RobotContainer.java](../code_examples/2026KitBotInline/RobotContainer.java) for the complete `RobotContainer` implementation.
