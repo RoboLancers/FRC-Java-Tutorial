@@ -36,8 +36,11 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 
 **1)** Create 4 global variables of data type **SparkMax** and name them: `leftLeader`, `rightLeader`, `leftFollower`, `rightFollower`
 
-- To get started type the word SparkMax followed by the name i.e. `private Final SparkMax leftLeader;`
+- To get started type the word SparkMax followed by the name i.e. `private final SparkMax leftLeader;`
 - These will eventually hold the object values for SparkMaxes, their port numbers, and their motor type (brushed or brushless).
+
+!!! note "Java concept: `private final` fields"
+    `private` means only this class can access this variable — no other subsystem or command can accidentally change your motor objects. `final` means the variable is assigned once (in the constructor) and never reassigned. Together they say "this motor belongs exclusively to this subsystem." See [Variables and Data Types](../basics/java_types_variables.md#constants) for more on `final` and [Classes](../basics/java_classes.md#fields) for more on `private`.
 
 
 **2)** These are declared without values right now.
@@ -78,6 +81,10 @@ Now that we have created the SparkMaxes  and the Drive Constants we must initial
 
 - This initializes a new SparkMax, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`. 
 - This should be done within the constructor `Drivetrain()`
+
+!!! note "Java concept: Constructor"
+    The constructor is a special method that runs once when an object is created with `new`. It is where hardware gets initialized — motors receive their port numbers, controllers get configured. The constructor name always matches the class name exactly. See [Java Classes](../basics/java_classes.md#constructors).
+
 - This calls the constructor `SparkMax(int, MotorType)` in the SparkMax class. 
     - The constructor `SparkMax(int, MotorType)` takes a variable of type `int` for the CAN ID and `MotorType` for brushless or brushed. In this case the `int` (integer) refers to the CAN ID on the roboRIO. 
     
@@ -107,7 +114,7 @@ Now that we have created the SparkMaxes  and the Drive Constants we must initial
 Since each subsystem has its own components with their own ports, it is easy to lose track of which ports are being used and for what. To counter this you can use a class called **Constants** to hold all these values in a single location.
 
 - Names should follow the pattern SUBSYSTEM_NAME_OF_COMPONENT
-- The name is all caps since it is a **constant** ([more info on constants](../basics/java_basics.md#constants){target=_blank}).
+- The name is all caps since it is a **constant** ([more info on constants](../basics/java_types_variables.md#constants){target=_blank}).
 
 
 

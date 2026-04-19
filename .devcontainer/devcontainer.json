@@ -9,9 +9,10 @@
 		"ghcr.io/devcontainers/features/python:1":{},
   		"ghcr.io/devcontainers/features/git:1": {}
 	},				
-	"postCreateCommand": [
-		"pip install -r requirements.txt && curl -fsSL https://claude.ai/install.sh | bash"
-	],
+	"postCreateCommand": {
+		"install-deps": "pip install --break-system-packages -r requirements.txt",
+		//"install-claude": "curl -fsSL https://claude.ai/install.sh | sh"
+	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -22,10 +23,10 @@
 			]
 		}
 	},
-	"mounts": [
-		"source=${localWorkspaceFolder}/../../../.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
-		"source=${localWorkspaceFolder}/../../../.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
-	]
+	// "mounts": [
+	// 	"source=${localWorkspaceFolder}/../../../.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+	// 	"source=${localWorkspaceFolder}/../../../.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
+	// ]
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 

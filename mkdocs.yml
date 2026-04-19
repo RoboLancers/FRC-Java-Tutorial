@@ -9,11 +9,15 @@ nav:
   - 'version_control/BasicGit.md'
   - 'version_control/GitWorkflow.md'
   - 'version_control/github.md'
-- Programming Basics:
+- Java Fundamentals:
+  - 'basics/java_types_variables.md'
+  - 'basics/java_methods.md'
+  - 'basics/java_classes.md'
+  - 'basics/java_control_flow.md'
+- FRC Background:
   - 'basics/roboRIO.md'
   - 'basics/sensors.md'
   - 'basics/wpilib.md'
-  - 'basics/java_basics.md'
   - 'basics/ElectronicsCrashCourse.md'
   - 'basics/vscode_tips.md'
   # - 'basics/driverstation_tips.md'
@@ -88,7 +92,7 @@ markdown_extensions:
 # Plugins
 plugins:
   - search
-  - mkdocs_quiz
+  - mkdocs-quiz
   # - minify:
   #     minify_html: true
   #     minify_js: true
