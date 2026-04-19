@@ -92,7 +92,7 @@ markdown_extensions:
 # Plugins
 plugins:
   - search
-  - mkdocs-quiz
+  - mkdocs_quiz
   # - minify:
   #     minify_html: true
   #     minify_js: true

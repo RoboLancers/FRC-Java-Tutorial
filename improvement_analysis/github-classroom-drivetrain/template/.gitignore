@@ -1,0 +1,15 @@
+# Gradle build outputs
+build/
+.gradle/
+
+# Keep the Gradle wrapper jar but ignore generated wrapper scripts
+!gradle/wrapper/gradle-wrapper.jar
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
