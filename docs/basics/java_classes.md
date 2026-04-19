@@ -165,36 +165,35 @@ public void periodic() {
 ## Putting It Together
 
 
-/// details | A complete minimal subsystem class:
-```java
-package frc.robot.subsystems;
+??? example "A complete minimal subsystem class"
+    ```java title="Drivetrain.java"
+    package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+    import com.revrobotics.spark.SparkMax;
+    import com.revrobotics.spark.SparkLowLevel.MotorType;
+    import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Drivetrain extends SubsystemBase {
+    public class Drivetrain extends SubsystemBase {
 
-    private final SparkMax leftLeader;
-    private final SparkMax rightLeader;
+        private final SparkMax leftLeader;
+        private final SparkMax rightLeader;
 
-    public Drivetrain() {
-        leftLeader  = new SparkMax(1, MotorType.kBrushless);
-        rightLeader = new SparkMax(2, MotorType.kBrushless);
+        public Drivetrain() {
+            leftLeader  = new SparkMax(1, MotorType.kBrushless);
+            rightLeader = new SparkMax(2, MotorType.kBrushless);
+        }
+
+        public void setSpeed(double speed) {
+            leftLeader.set(speed);
+            rightLeader.set(speed);
+        }
+
+        @Override
+        public void periodic() {
+            // Update dashboard values here if needed
+        }
     }
-
-    public void setSpeed(double speed) {
-        leftLeader.set(speed);
-        rightLeader.set(speed);
-    }
-
-    @Override
-    public void periodic() {
-        // Update dashboard values here if needed
-    }
-}
-```
-///
+    ```
 
 !!! note
     `private final` on the fields means each motor controller is assigned once in the constructor and never swapped out. See [Variables and Data Types](java_types_variables.md#constants) for more on `final`.

@@ -46,7 +46,7 @@ if (encoderPosition < LOW_SETPOINT) {
 !!! tip
     Conditions must evaluate to a `boolean` (`true` or `false`). See [Variables and Data Types](java_types_variables.md#operators) for comparison and logical operators.
 
-!!! example "FRC Example — soft limit"
+!!! example "FRC Example: soft limit"
     ```java
     public void moveUp(double speed) {
         if (getHeight() < MAX_HEIGHT) {
@@ -70,16 +70,15 @@ while (!atTarget()) {
 motor.set(0);
 ```
 
-!!! warning "Do not use `while` loops inside robot commands"
-    In FRC robot code, **do not put `while` loops inside `execute()`**. The robot scheduler calls `execute()` repeatedly on its own. An inner `while` loop would block the scheduler and freeze the robot — it would stop responding to the driver and could be a safety hazard.
+!!! warning "Do not use while loops inside robot commands"
+    In FRC robot code, **do not put `while` loops inside `execute()`**. The robot scheduler calls `execute()` repeatedly on its own. An inner `while` loop would block the scheduler and freeze the robot. Use `isFinished()` to signal when a command is done instead:
 
-    Use `isFinished()` to signal when a command is done instead:
-    ```java
-    @Override
-    public boolean isFinished() {
-        return m_subsystem.atTarget();
-    }
-    ```
+```java
+@Override
+public boolean isFinished() {
+    return m_subsystem.atTarget();
+}
+```
 
 `while` loops are appropriate in:
 
@@ -120,17 +119,17 @@ for (SparkMax motor : motors) {
 }
 ```
 
-!!! example "FRC Example — configuring multiple motors"
-    ```java
-    SparkMax[] motors = {leftLeader, leftFollower, rightLeader, rightFollower};
+!!! example "FRC Example: configuring multiple motors"
+    Instead of calling `setSmartCurrentLimit` four separate times, apply config to all motors in a loop:
 
-    for (SparkMax motor : motors) {
-        motor.setSmartCurrentLimit(40);
-        motor.setIdleMode(IdleMode.kBrake);
-    }
-    ```
+```java
+SparkMax[] motors = {leftLeader, leftFollower, rightLeader, rightFollower};
 
-    This is much cleaner than calling `setSmartCurrentLimit` four separate times.
+for (SparkMax motor : motors) {
+    motor.setSmartCurrentLimit(40);
+    motor.setIdleMode(IdleMode.kBrake);
+}
+```
 
 ***
 
