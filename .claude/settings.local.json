@@ -12,7 +12,8 @@
       "Bash(git mv:*)",
       "Bash(python3.14 -m mkdocs build)",
       "Bash(mkdocs build:*)",
-      "Bash(pip list *)"
+      "Bash(pip list *)",
+      "Bash(pip show *)"
     ]
   }
 }

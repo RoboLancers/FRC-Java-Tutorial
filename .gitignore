@@ -3,4 +3,5 @@ FRC Programming Tutorial VSC.pdf
 *.key
 .DS_Store
 site/
+.venv/
 .unotes/templates/title_date.hbs
