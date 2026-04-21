@@ -7,7 +7,7 @@ Classes are the blueprints of a Java program.
 
 Java is an **object-oriented** language. Almost everything in Java is an **object** — a bundle of data and behavior — and **classes** are the blueprints that define what an object looks like and what it can do.
 
-In FRC, every subsystem, every command, and every piece of configuration is its own class. Many of these classes are provided for you by the WPILib library, but you will also write your own to define your robot's unique behavior.
+In FRC, every subsystem, every command, and every piece of configuration is its own class. Many of these classes are provided for you by the WPILib or other libraries, but you will also write your own to define your robot's unique behavior.
 
 ***
 
@@ -18,7 +18,6 @@ A class is a template that defines a type of object. Classes contains:
 - **Fields** — variables that store the object's state (e.g., motor controllers, sensors)
 - **Methods** — functions that define what the object can do (e.g., `setSpeed`, `stop`)
 - A **constructor** — a special method that sets the object up when it is first created
-
 
 !!! note
     Classes are typically defined in their own file, and the file name must match the class name exactly (including capitalization). For example, a class named `Drivetrain` must be in a file named `Drivetrain.java`.
@@ -38,7 +37,7 @@ public class Drivetrain extends SubsystemBase {
 
 - `package` — declares which namespace this file belongs to (think of it as a folder path)
 - `import` — brings in a class from another package so you can use it by short name
-- `public` — this class can be used by other classes in the project
+- `public` — this class can be used by other classes in the project. (If you omit this, the class is only visible within its own package.)
 - `class Drivetrain` — the class name, which must match the file name exactly
 - `extends SubsystemBase` — inherits built-in FRC subsystem behavior (see [Inheritance](#inheritance))
 
@@ -49,7 +48,7 @@ public class Drivetrain extends SubsystemBase {
 
 ## Fields
 
-Fields (also called instance variables or member variables) store the object's data. They are declared at the top of the class body, outside any method.
+Fields (also called instance variables or member variables) store the object's data. They are declared at the top of the class body, outside any method. Variables should be declared here if they represent something that is part of the object's state, such as motor controllers or configuration values, or if they need to be accessed by multiple methods in the class.
 
 ```java title="Fields example"
 public class Drivetrain extends SubsystemBase {
@@ -78,6 +77,8 @@ A **constructor** is a special method that runs exactly once — when an object 
 
 - The constructor name must exactly match the class name
 - Constructors have no return type (not even `void`)
+- If the class requires parameters to set up, those must be listed in the constructor definition, inside the parentheses. (see the [this] section (#this))
+- When you create an object with `new`, you must provide arguments that match the constructor's parameters.
 
 ```java title="Constructor example"
 public class Drivetrain extends SubsystemBase {
@@ -91,6 +92,11 @@ public class Drivetrain extends SubsystemBase {
     }
 }
 ```
+!!! note
+    If you do not write a constructor, Java provides a default no-argument constructor that does nothing.
+
+!!! info
+    More about constructors here: [Java Constructors](https://www.geeksforgeeks.org/java/constructors-in-java/)
 
 ### The `new` Keyword
 
@@ -197,3 +203,61 @@ public void periodic() {
 
 !!! note
     `private final` on the fields means each motor controller is assigned once in the constructor and never swapped out. See [Variables and Data Types](java_types_variables.md#constants) for more on `final`.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+What runs automatically the moment you use the `new` keyword to create an object?
+- [ ] The `main` method
+- [x] The constructor
+- [ ] The `@Override` method
+- [ ] The `static` initializer block
+
+The constructor is a special method whose only job is setting up a new object. It runs exactly once — when `new` is called — to initialize fields and perform any required setup.
+</quiz>
+
+<quiz>
+Which access modifier makes a field accessible only within the class it is declared in?
+- [ ] `public`
+- [x] `private`
+- [ ] `protected`
+- [ ] `static`
+
+`private` is the narrowest visibility. In FRC subsystem code, defaulting to `private` for fields keeps other classes from accidentally changing values they shouldn't touch.
+</quiz>
+
+<quiz>
+Inside a class, what does `this` refer to?
+- [ ] The parent (super) class
+- [ ] The constructor parameter that was most recently assigned
+- [x] The current instance of the class
+- [ ] The `class` keyword itself
+
+`this` is a reference to the object the method or constructor is running on. It is most commonly used to distinguish a field from a same-named constructor parameter: `this.topSpeed = topSpeed;`
+</quiz>
+
+<quiz>
+Which keyword is used to inherit fields and methods from another class?
+- [ ] `implements`
+- [ ] `inherits`
+- [ ] `super`
+- [x] `extends`
+
+`extends` sets up the parent-child relationship. In FRC, `public class Drivetrain extends SubsystemBase` gives `Drivetrain` all the built-in WPILib subsystem behavior for free.
+</quiz>
+
+<quiz>
+What is the correct term for the class that is being inherited from?
+- [ ] Subclass
+- [ ] Interface
+- [x] Superclass (parent class)
+- [ ] Override class
+
+The class doing the extending is the **subclass** (child); the class being extended is the **superclass** (parent). A child class inherits everything the parent provides, then can add or override behavior.
+</quiz>
+
+<!-- mkdocs-quiz results -->

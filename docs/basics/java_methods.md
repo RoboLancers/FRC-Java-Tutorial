@@ -149,3 +149,47 @@ protected void execute() {
 
 !!! tip
     Methods that do one thing and do it well are easier to test, reuse, and understand. If a method is getting long, consider splitting it into smaller helpers.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+What does a `void` return type mean?
+- [x] The method performs an action but does not return a value to the caller
+- [ ] The method returns `null`
+- [ ] The method returns the integer `0`
+- [ ] The method is private and cannot be called from outside the class
+
+`void` tells Java (and the reader) that this method does something — like setting a motor speed — but the caller gets nothing back. Use a typed return like `double` or `boolean` when you need to send a value back.
+</quiz>
+
+<quiz>
+What is the main benefit of adding `@Override` when replacing a parent class method?
+- [ ] It makes the method run faster
+- [ ] It prevents other classes from calling the method
+- [x] The compiler warns you if you misspell the method name, catching the typo before it becomes a bug
+- [ ] It creates a brand new method that did not exist in the parent
+
+`@Override` is optional, but if you misspell the method name (e.g., `priodic` instead of `periodic`), the compiler will catch it immediately rather than silently creating a second, unused method.
+</quiz>
+
+<quiz>
+What are parameters in a method declaration?
+- [ ] The value the method returns
+- [ ] Fields that store the object's state
+- [x] Named inputs the method receives from the caller
+- [ ] Annotations that describe the method
+
+Parameters are local variables declared in the method signature. When the method is called, the caller provides **arguments** that are assigned to those parameters.
+</quiz>
+
+<quiz>
+If a method does not return a value, its return type should be: [[void]]
+
+`void` is the keyword used when a method performs an action but has no value to hand back to the caller.
+</quiz>
+
+<!-- mkdocs-quiz results -->

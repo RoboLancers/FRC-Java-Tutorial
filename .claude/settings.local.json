@@ -13,7 +13,12 @@
       "Bash(python3.14 -m mkdocs build)",
       "Bash(mkdocs build:*)",
       "Bash(pip list *)",
-      "Bash(pip show *)"
+      "Bash(pip show *)",
+      "Bash(gh api *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(python3 -c \"import pkgutil; import mkdocs_quiz; print\\(mkdocs_quiz.__doc__\\)\")",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/RoboLancers/management/main/templates/gradle/wrapper/gradle-wrapper.jar\" -o /workspaces/FRC-Java-Tutorial/improvement_analysis/github-classroom-drivetrain/template/gradle/wrapper/gradle-wrapper.jar)",
+      "Bash(curl -sL \"https://github.com/gradle/gradle/raw/v8.11.0/gradle/wrapper/gradle-wrapper.jar\" -o /tmp/gradle-wrapper.jar)"
     ]
   }
 }

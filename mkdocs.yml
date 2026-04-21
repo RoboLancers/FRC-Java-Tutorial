@@ -10,6 +10,7 @@ nav:
   - 'version_control/GitWorkflow.md'
   - 'version_control/github.md'
 - Java Fundamentals:
+  - 'basics/java_basics.md'
   - 'basics/java_types_variables.md'
   - 'basics/java_methods.md'
   - 'basics/java_classes.md'
@@ -63,6 +64,7 @@ theme:
   features:
     - content.tabs.link
     - content.code.copy
+    - navigation.footer
 use_directory_urls: false
 
 # Extensions

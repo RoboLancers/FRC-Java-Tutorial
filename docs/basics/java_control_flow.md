@@ -177,3 +177,51 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 !!! note
     Notice that `moveUp` and `moveDown` each contain an `if`/`else` — the motor only runs if the elevator is within safe bounds. This pattern of checking limits before applying power is a fundamental safety practice in FRC.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+Why should you **not** put a `while` loop inside a command's `execute()` method in FRC robot code?
+- [ ] `while` loops are slower than `for` loops
+- [ ] `while` loops require a return value
+- [x] It blocks the command scheduler, preventing other commands from running and potentially freezing the robot
+- [ ] `while` loops cannot use boolean conditions inside robot code
+
+The WPILib command scheduler calls `execute()` repeatedly — that repetition IS the loop. Adding your own `while` loop inside `execute()` traps the scheduler and stops the rest of the robot program from running.
+</quiz>
+
+<quiz>
+In a `for` loop header (`for (int i = 0; i < 5; i++)`), which part runs exactly once before the loop begins?
+- [x] The initializer (`int i = 0`)
+- [ ] The condition (`i < 5`)
+- [ ] The update statement (`i++`)
+- [ ] The loop body
+
+The initializer runs once to set up the counter variable. The condition is checked before every iteration, and the update runs after every iteration.
+</quiz>
+
+<quiz>
+Which loop form is the cleanest choice when you need to visit every element in an array and do not need the index?
+- [ ] `while` loop
+- [ ] Traditional `for` loop with an index variable
+- [x] Enhanced for-each loop (`for (Type item : collection)`)
+- [ ] `do`-`while` loop
+
+The for-each loop (`for (SparkMax motor : motors)`) removes the index variable entirely, reducing the chance of off-by-one errors and making the intent clearer.
+</quiz>
+
+<quiz>
+What must always be true about the condition inside an `if` statement?
+- [ ] It must use the `==` operator
+- [ ] It must compare two `int` values
+- [ ] It must call a method
+- [x] It must evaluate to a `boolean` (`true` or `false`)
+
+Java `if` statements require a `boolean` condition. Comparison operators (`<`, `>`, `==`) and logical operators (`&&`, `||`, `!`) all produce `boolean` results and are the typical building blocks of conditions.
+</quiz>
+
+<!-- mkdocs-quiz results -->

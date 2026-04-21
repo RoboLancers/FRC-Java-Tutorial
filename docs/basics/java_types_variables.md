@@ -169,3 +169,61 @@ Consistent naming makes code readable across a team.
 | Classes | `UpperCamelCase` | `Drivetrain`, `ShooterSubsystem` |
 | Constants | `ALL_CAPS_UNDERSCORES` | `MAX_SPEED`, `LEFT_LEADER_ID` |
 | Packages | all lowercase | `frc.robot.subsystems` |
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+Which data type stores whole numbers without a decimal point?
+- [x] `int`
+- [ ] `double`
+- [ ] `boolean`
+- [ ] `String`
+
+`int` holds integers like `1`, `42`, or `-7`. Use `double` when you need decimal precision (e.g., `0.75`).
+</quiz>
+
+<quiz>
+What naming convention should Java constants follow?
+- [ ] `lowerCamelCase`
+- [ ] `UpperCamelCase`
+- [x] `ALL_CAPS_UNDERSCORES`
+- [ ] `kebab-case`
+
+Constants use `ALL_CAPS_WITH_UNDERSCORES` to visually distinguish them from regular variables. Example: `public static final int MAX_SPEED = 100;`
+</quiz>
+
+<quiz>
+A variable declared inside a method is called a:
+- [ ] Field
+- [ ] Constant
+- [ ] Parameter
+- [x] Local variable
+
+Local variables exist only while the method runs. Fields are declared outside methods and are available to all methods in the class.
+</quiz>
+
+<quiz>
+Which arithmetic operator gives the **remainder** after division?
+- [ ] `/`
+- [ ] `*`
+- [ ] `-`
+- [x] `%`
+
+`%` is the modulo operator. For example, `7 % 3` equals `1` because 3 goes into 7 twice with 1 left over.
+</quiz>
+
+<quiz>
+Which is the correct way to declare a motor port constant that any class can read and that can never change?
+- [ ] `int LEFT_MOTOR_PORT = 1;`
+- [ ] `private final int leftMotorPort = 1;`
+- [x] `public static final int LEFT_MOTOR_PORT = 1;`
+- [ ] `public int LEFT_MOTOR_PORT = 1;`
+
+`public` makes it readable by other classes, `static` means it belongs to the class itself (no object needed), and `final` prevents reassignment. Together they form the standard Java constant pattern.
+</quiz>
+
+<!-- mkdocs-quiz results -->
