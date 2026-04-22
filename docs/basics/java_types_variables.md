@@ -35,21 +35,12 @@ Java has several built-in data types. The four you will use most in FRC programm
 **Declaration** creates the variable. **Assignment** gives it a value. You can do both at once or separately:
 
 ```java
-// Declare only — value is unset
-int motorPort;
-
-// Declare and assign together
-int motorPort = 1;
-
-// Assign later
-motorPort = 2;
+--8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:declare_assign"
 ```
 
 !!! example "FRC Example"
     ```java
-    double driveSpeed = 0.5;          // half speed
-    boolean isShooterRunning = false;
-    int leftMotorPort = 1;
+    --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:frc_variables"
     ```
 
 ***
@@ -59,13 +50,13 @@ motorPort = 2;
 If a variable should never change after it is first set, declare it with `final`. This prevents accidental reassignment and makes your intent clear.
 
 ```java
-final int LEFT_MOTOR_PORT = 1;
+--8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:final_local"
 ```
 
 In FRC code you will often see `public static final` together:
 
 ```java
-public static final int LEFT_LEADER_ID = 1;
+--8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:public_static_final"
 ```
 
 - `public` — any class can read this value
@@ -76,8 +67,8 @@ public static final int LEFT_LEADER_ID = 1;
     Java constants are written in `ALL_CAPS_WITH_UNDERSCORES`. Regular variables use `lowerCamelCase`.
 
     ```java
-    public static final int MAX_SPEED = 100;   // constant
-    double currentSpeed = 0.0;                  // variable
+    --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:naming_convention"
+    --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:naming_convention_local"
     ```
 
 ***
@@ -89,16 +80,8 @@ Where you declare a variable determines where it can be used — this is called 
 - **Field** (class-level variable) — declared outside any method, available to all methods in the class. Fields are covered in depth in [Java Classes](java_classes.md#fields).
 - **Local variable** — declared inside a method, only exists while that method is running
 
-```java
-public class Drivetrain extends SubsystemBase {
-
-    private double topSpeed = 1.0;  // field — available in all methods
-
-    public void setSpeed(double speed) {
-        double adjusted = speed * topSpeed;  // local — only exists in this method
-        motor.set(adjusted);
-    }
-}
+```java title="Drivetrain.java"
+--8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:scope"
 ```
 
 !!! tip
@@ -144,17 +127,7 @@ public class Drivetrain extends SubsystemBase {
 Comments are ignored by the compiler and are used to explain code to other programmers (including your future self).
 
 ```java
-// Single line comment
-
-/*
-   Multi-line comment —
-   spans multiple lines
-*/
-
-/**
- * Doc comment — appears when you hover over this item in VSCode.
- * Supports HTML formatting.
- */
+--8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:comments"
 ```
 
 ***

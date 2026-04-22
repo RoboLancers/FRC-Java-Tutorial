@@ -93,10 +93,53 @@
       } catch (_) { return null; }
     }
 
+    function isSessionValid(session) {
+      if (!session?.access_token) return false;
+      if (!session.expires_at) return false;
+      const nowInSeconds = Math.floor(Date.now() / 1000);
+      return session.expires_at > nowInSeconds;
+    }
+
+    async function refreshSession(session) {
+      if (!session?.refresh_token) return null;
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({
+            refresh_token: session.refresh_token,
+          }),
+        });
+
+        if (!res.ok) return null;
+
+        const newSession = await res.json();
+        const updated = {
+          access_token: newSession.access_token,
+          refresh_token: newSession.refresh_token || session.refresh_token,
+          expires_at: Math.floor(Date.now() / 1000) + (newSession.expires_in || 3600),
+          user: session.user,
+        };
+        localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+        return updated;
+      } catch (_) {
+        return null;
+      }
+    }
+
     function signIn() {
       const redirectTo = window.location.origin + window.location.pathname + window.location.search;
       const url = `${SUPABASE_URL}/auth/v1/authorize?provider=github&redirect_to=${encodeURIComponent(redirectTo)}`;
       window.location.href = url;
+    }
+
+    function signOut() {
+      localStorage.removeItem(SESSION_KEY);
+      init();
     }
 
     async function loadResults() {
@@ -116,6 +159,17 @@
           'Authorization': `Bearer ${session.access_token}`,
         }
       });
+
+      // If token expired during the API call, handle it
+      if (res.status === 401) {
+        localStorage.removeItem(SESSION_KEY);
+        document.getElementById('message').textContent = 'Session expired. Please sign in again.';
+        document.getElementById('sign-in-btn').style.display = '';
+        document.getElementById('user-label').innerHTML = '<button onclick="signIn()" style="padding:4px 8px;cursor:pointer;">Sign in</button>';
+        document.getElementById('controls').style.display = 'none';
+        document.getElementById('results-table').style.display = 'none';
+        return;
+      }
 
       const rows = await res.json();
       const msg = document.getElementById('message');
@@ -145,17 +199,29 @@
     }
 
     async function init() {
-      const session = getSession();
+      let session = getSession();
       const msg = document.getElementById('message');
+
+      // Check if session exists and is valid
+      if (session && !isSessionValid(session)) {
+        // Try to refresh the token
+        session = await refreshSession(session);
+        if (!session) {
+          localStorage.removeItem(SESSION_KEY);
+        }
+      }
 
       if (!session?.access_token) {
         document.getElementById('sign-in-btn').style.display = '';
+        document.getElementById('user-label').innerHTML = '<button onclick="signIn()" style="padding:4px 8px;cursor:pointer;">Sign in</button>';
         msg.textContent = 'Sign in with your GitHub account to view results.';
+        document.getElementById('controls').style.display = 'none';
+        document.getElementById('results-table').style.display = 'none';
         return;
       }
 
       const login = session.user?.user_metadata?.user_name || session.user?.email;
-      document.getElementById('user-label').textContent = `Signed in as ${login}`;
+      document.getElementById('user-label').innerHTML = `Signed in as <strong>${login}</strong> <button onclick="signOut()" style="padding:4px 8px;margin-left:1rem;cursor:pointer;">Sign out</button>`;
       document.getElementById('controls').style.display = '';
       await loadResults();
     }

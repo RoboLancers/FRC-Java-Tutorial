@@ -11,36 +11,24 @@ Programs rarely run straight from top to bottom. **Control flow** statements let
 
 ***
 
-## `if` / `else`
+## `if` / `else` (conditional statements)
 
 An `if` statement runs a block of code only when a condition is `true`.
 
 ```java
-if (speed > 1.0) {
-    speed = 1.0;  // clamp to maximum
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:if_clamp"
 ```
 
 Add `else` to handle the `false` case:
 
 ```java
-if (limitSwitch.get()) {
-    motor.set(0);       // stop if limit switch is triggered
-} else {
-    motor.set(0.5);     // otherwise keep moving
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:if_else_limit"
 ```
 
 Chain multiple conditions with `else if`:
 
 ```java
-if (encoderPosition < LOW_SETPOINT) {
-    elevator.set(0.3);
-} else if (encoderPosition > HIGH_SETPOINT) {
-    elevator.set(-0.3);
-} else {
-    elevator.set(0);    // within range — hold position
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:else_if_chain"
 ```
 
 !!! tip
@@ -48,15 +36,10 @@ if (encoderPosition < LOW_SETPOINT) {
 
 !!! example "FRC Example: soft limit"
     ```java
-    public void moveUp(double speed) {
-        if (getHeight() < MAX_HEIGHT) {
-            motor.set(speed);
-        } else {
-            motor.set(0);
-        }
-    }
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:soft_limit_method"
     ```
-
+!!! warning
+    If you are setting a value based on a condition, **always** include an `else` case to handle the `false` condition. In FRC code, this is a critical safety practice — for example, if you only set motor power in the `if` block, then when the condition is `false` the motor will continue doing whatever it was doing before, which could lead to dangerous runaway behavior.
 ***
 
 ## `while` Loop
@@ -64,20 +47,14 @@ if (encoderPosition < LOW_SETPOINT) {
 A `while` loop repeats its body as long as its condition remains `true`.
 
 ```java
-while (!atTarget()) {
-    motor.set(0.5);
-}
-motor.set(0);
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:while_loop"
 ```
 
 !!! warning "Do not use while loops inside robot commands"
     In FRC robot code, **do not put `while` loops inside `execute()`**. The robot scheduler calls `execute()` repeatedly on its own. An inner `while` loop would block the scheduler and freeze the robot. Use `isFinished()` to signal when a command is done instead:
 
 ```java
-@Override
-public boolean isFinished() {
-    return m_subsystem.atTarget();
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:is_finished"
 ```
 
 `while` loops are appropriate in:
@@ -94,9 +71,7 @@ A `for` loop runs a fixed number of times, or once for each item in a collection
 ### Counting loop
 
 ```java
-for (int i = 0; i < 5; i++) {
-    System.out.println("Iteration: " + i);
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:for_counting"
 ```
 
 The three parts of the `for` header:
@@ -112,23 +87,14 @@ The three parts of the `for` header:
 When you want every item in a collection and don't need the index, the for-each form is cleaner:
 
 ```java
-SparkMax[] motors = {leftLeader, leftFollower, rightLeader, rightFollower};
-
-for (SparkMax motor : motors) {
-    motor.setSmartCurrentLimit(40);
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:for_each_basic"
 ```
 
 !!! example "FRC Example: configuring multiple motors"
     Instead of calling `setSmartCurrentLimit` four separate times, apply config to all motors in a loop:
 
 ```java
-SparkMax[] motors = {leftLeader, leftFollower, rightLeader, rightFollower};
-
-for (SparkMax motor : motors) {
-    motor.setSmartCurrentLimit(40);       // REV API: cap current draw to 40 amps
-    motor.setIdleMode(IdleMode.kBrake);   // REV API: hold position when not powered
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:frc_motor_config"
 ```
 
 ***
@@ -138,41 +104,7 @@ for (SparkMax motor : motors) {
 A realistic example combining `if`/`else` and a field to implement elevator soft limits:
 
 ```java
-public class ElevatorSubsystem extends SubsystemBase {
-
-    private final SparkMax motor;
-    private static final double MAX_HEIGHT = 50.0;  // encoder rotations
-    private static final double MIN_HEIGHT = 0.0;
-
-    public ElevatorSubsystem() {
-        motor = new SparkMax(5, MotorType.kBrushless);
-    }
-
-    public void moveUp(double speed) {
-        if (getHeight() < MAX_HEIGHT) {
-            motor.set(speed);
-        } else {
-            motor.set(0);
-        }
-    }
-
-    public void moveDown(double speed) {
-        if (getHeight() > MIN_HEIGHT) {
-            motor.set(-speed);
-        } else {
-            motor.set(0);
-        }
-    }
-
-    public double getHeight() {
-        return motor.getEncoder().getPosition();
-    }
-
-    @Override
-    public void periodic() {
-        // Could log getHeight() to the dashboard here
-    }
-}
+--8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:elevator_subsystem"
 ```
 
 !!! note

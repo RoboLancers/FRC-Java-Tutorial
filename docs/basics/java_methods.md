@@ -14,9 +14,7 @@ A **method** is a named block of code that performs a specific task. Methods let
 ## Declaring a Method
 
 ```java
-public void setSpeed(double speed) {
-    motor.set(speed);
-}
+--8<-- "docs/code_examples/basics/methods/Drivetrain.java:declare_method"
 ```
 
 !!! note
@@ -41,20 +39,7 @@ A method either returns a value or returns nothing.
 - Any data type — the method computes and returns a value of that type
 
 ```java
-// Returns nothing — just sets the motor
-public void setSpeed(double speed) {
-    motor.set(speed);
-}
-
-// Returns a boolean — whether the encoder has reached the target
-public boolean atTarget() {
-    return encoder.getPosition() >= targetPosition;
-}
-
-// Returns a double — the current motor output
-public double getSpeed() {
-    return motor.get();
-}
+--8<-- "docs/code_examples/basics/methods/Drivetrain.java:return_types"
 ```
 
 !!! tip
@@ -67,21 +52,7 @@ public double getSpeed() {
 Parameters are inputs you pass to a method when calling it. You can have zero or more, separated by commas.
 
 ```java
-// No parameters
-public void stop() {
-    motor.set(0);
-}
-
-// One parameter
-public void setSpeed(double speed) {
-    motor.set(speed);
-}
-
-// Two parameters
-public void setLeftRight(double leftSpeed, double rightSpeed) {
-    leftMotor.set(leftSpeed);
-    rightMotor.set(rightSpeed);
-}
+--8<-- "docs/code_examples/basics/methods/Drivetrain.java:parameters"
 ```
 
 !!! note
@@ -94,25 +65,13 @@ public void setLeftRight(double leftSpeed, double rightSpeed) {
 To run a method, write its name followed by parentheses containing any required arguments:
 
 ```java
-// Calling a void method
-drivetrain.setSpeed(0.5);
-
-// Calling a method and storing the return value
-boolean done = shooter.atTarget();
-
-// Using a return value directly in a condition
-if (shooter.atTarget()) {
-    shooter.stop();
-}
+--8<-- "docs/code_examples/basics/methods/CommandExamples.java:calling_methods"
 ```
 
 !!! example "FRC Example"
     In a command's `execute()` method, calling the drivetrain subsystem to move the robot:
     ```java
-    m_drivetrain.setLeftRight(
-        -driverController.getLeftY(),
-        -driverController.getRightY()
-    );
+    --8<-- "docs/code_examples/basics/methods/CommandExamples.java:frc_drive_call"
     ```
 
 ***
@@ -122,11 +81,7 @@ if (shooter.atTarget()) {
 When a class **extends** a parent class (see [Java Classes](java_classes.md#inheritance)), it can replace one of the parent's methods with its own version. The `@Override` annotation marks this intentionally.
 
 ```java
-@Override
-public void periodic() {
-    // This replaces the empty periodic() in SubsystemBase
-    // and runs every robot loop cycle
-}
+--8<-- "docs/code_examples/basics/methods/Drivetrain.java:override_periodic"
 ```
 
 `@Override` is optional but strongly recommended — if you misspell the method name, the compiler will warn you that there is no matching method to override, catching the typo before it becomes a bug.
@@ -138,16 +93,7 @@ public void periodic() {
 Methods can call other methods, including methods of other objects. This is how FRC subsystems and commands interact.
 
 ```java
-// A subsystem method that calls motor methods
-public void stop() {
-    leftMotor.set(0);
-    rightMotor.set(0);
-}
-
-// A command calling a subsystem method
-protected void execute() {
-    m_drivetrain.stop();
-}
+--8<-- "docs/code_examples/basics/methods/CommandExamples.java:methods_calling_methods"
 ```
 
 !!! tip

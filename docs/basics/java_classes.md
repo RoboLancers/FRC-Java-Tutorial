@@ -26,13 +26,7 @@ A class is a template that defines a type of object. Classes contains:
 ## Declaring a Class
 
 ```java title="Drivetrain.java"
-package frc.robot.subsystems;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-public class Drivetrain extends SubsystemBase {
-    // fields and methods go here
-}
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:class_skeleton"
 ```
 
 - `package` — declares which folder this file lives in. `frc.robot.subsystems` maps to the directory path `frc/robot/subsystems/` inside your project.
@@ -54,11 +48,7 @@ Fields (also called instance variables or member variables) store the object's d
     A SparkMax is a motor controller — a small electronic device that connects to a motor and controls how fast it spins. In FRC code, you declare one field per physical motor controller on your robot. The SparkMax is made by REV Robotics and is one of the most common motor controllers used in FRC.
 
 ```java title="Fields example"
-public class Drivetrain extends SubsystemBase {
-    private SparkMax leftLeader;
-    private SparkMax rightLeader;
-    private double topSpeed;
-}
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:fields"
 ```
 
 ### Access Modifiers
@@ -84,16 +74,7 @@ A **constructor** is a special method that runs exactly once — when an object 
 - When you create an object with `new`, you must provide arguments that match the constructor's parameters.
 
 ```java title="Constructor example"
-public class Drivetrain extends SubsystemBase {
-    private SparkMax leftLeader;
-    private SparkMax rightLeader;
-
-    // Constructor
-    public Drivetrain() {
-        leftLeader  = new SparkMax(1, MotorType.kBrushless);
-        rightLeader = new SparkMax(2, MotorType.kBrushless);
-    }
-}
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:constructor"
 ```
 !!! note
     If you do not write a constructor, Java provides a default no-argument constructor that does nothing.
@@ -106,8 +87,7 @@ public class Drivetrain extends SubsystemBase {
 `new` creates an object from a class and calls its constructor:
 
 ```java
-Drivetrain myDrivetrain = new Drivetrain();
-SparkMax motor = new SparkMax(1, MotorType.kBrushless);
+--8<-- "docs/code_examples/basics/classes/NewKeywordExamples.java:new_keyword"
 ```
 
 The variable on the left holds a **reference** to the object — think of it as a label pointing to the object in memory.
@@ -117,13 +97,7 @@ The variable on the left holds a **reference** to the object — think of it as 
 Inside a class, `this` refers to the current object. It is most commonly used when a constructor parameter has the same name as a field — without `this`, Java cannot tell which one you mean:
 
 ```java title="Example usage of this"
-public class Drivetrain extends SubsystemBase {
-    private double topSpeed;
-
-    public Drivetrain(double topSpeed) {
-        this.topSpeed = topSpeed;  // "this.topSpeed" is the field; "topSpeed" alone is the parameter
-    }
-}
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:this_keyword"
 ```
 
 ***
@@ -135,9 +109,7 @@ A class can `extend` another class to inherit all of its fields and methods. The
 Think of it like categories in real life: a `Dog` is an `Animal` — it automatically has everything that comes with being an animal (it breathes, it moves), plus its own extras (it barks). In the same way, `Drivetrain extends SubsystemBase` means your drivetrain automatically has everything WPILib built into `SubsystemBase`, plus whatever drive logic you add.
 
 ```java title="Inheritance example"
-public class Drivetrain extends SubsystemBase {
-    // Drivetrain automatically has everything SubsystemBase provides
-}
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:inheritance"
 ```
 
 In FRC:
@@ -152,11 +124,7 @@ Inheritance lets you build on top of pre-built FRC plumbing without writing it f
 When a child class replaces a method from the parent, it marks it with `@Override`:
 
 ```java
-@Override
-public void periodic() {
-    // Replaces the empty version in SubsystemBase;
-    // runs every robot loop cycle
-}
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:override_periodic"
 ```
 
 The annotation is optional but recommended — if you misspell the method name, the compiler will tell you there is nothing to override, catching the typo early.
@@ -164,11 +132,7 @@ The annotation is optional but recommended — if you misspell the method name, 
 A method that is overridden replaces the parent version completely with your own implementation. If you want to run the parent method as well, you can call it with `super`:
 
 ```java title="Example of calling super"
-@Override
-public void periodic() {
-    super.periodic();  // runs the parent version (if it does anything)
-    // then add your own code here
-}
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:super_periodic"
 ```
 
 ***
@@ -178,32 +142,7 @@ public void periodic() {
 
 ??? example "A complete minimal subsystem class"
     ```java title="Drivetrain.java"
-    package frc.robot.subsystems;
-
-    import com.revrobotics.spark.SparkMax;
-    import com.revrobotics.spark.SparkLowLevel.MotorType;
-    import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-    public class Drivetrain extends SubsystemBase {
-
-        private final SparkMax leftLeader;
-        private final SparkMax rightLeader;
-
-        public Drivetrain() {
-            leftLeader  = new SparkMax(1, MotorType.kBrushless);
-            rightLeader = new SparkMax(2, MotorType.kBrushless);
-        }
-
-        public void setSpeed(double speed) {
-            leftLeader.set(speed);
-            rightLeader.set(speed);
-        }
-
-        @Override
-        public void periodic() {
-            // Update dashboard values here if needed
-        }
-    }
+    --8<-- "docs/code_examples/basics/classes/Drivetrain.java:putting_it_together"
     ```
 
 !!! note
