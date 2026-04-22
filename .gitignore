@@ -9,3 +9,4 @@ site/
 .gradle/
 *.class
 *.jar
+improvement_analysis/github-classroom-drivetrain/template/bin/*
