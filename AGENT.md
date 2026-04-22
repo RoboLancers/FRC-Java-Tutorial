@@ -46,10 +46,7 @@ New pages must be added to the `nav:` section of [mkdocs.yml](mkdocs.yml) to app
 
 ### FRC-specific content policy
 
-Before writing or editing any FRC programming content (WPILib APIs, vendor libraries, motor controllers, sensors), use the documentation defined in .claude/wpilib-vendor-libraries.md. This file defines a set of commands for searching and fetching documentation from WPILib and major FRC vendors (REV, CTRE, Redux). Always use these commands to find the most up-to-date information, and include citations in your answers. Do not rely solely on training data for vendor APIs, as they change frequently.:
-
-<!-- - `mcp_wpilib_search_frc_docs(query=..., vendors=[...])` — search docs
-- `mcp_wpilib_fetch_frc_doc_page(url=...)` — fetch full page -->
+Before writing or editing any FRC programming content (WPILib APIs, vendor libraries, motor controllers, sensors), use the documentation defined in .claude/wpilib-vendor-libraries.md. This file defines a set of commands for searching and fetching documentation from WPILib and major FRC vendors (REV, CTRE, Redux). Always search the links found there to find the most up-to-date information, and include citations in your answers. Do not rely solely on training data for vendor APIs, as they change frequently.
 
 Always base FRC answers on these results and include citations. Do not rely solely on training data for vendor APIs (REV, CTRE, Redux, etc.).
 

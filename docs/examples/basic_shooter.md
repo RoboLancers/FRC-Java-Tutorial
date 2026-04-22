@@ -1,6 +1,6 @@
 # Basic Shooter Subsystem
 
-A basic, open-loop shooter subsystem with a flywheel and feeder using REV SparkMax motor controllers.
+A basic, open-loop shooter subsystem with a flywheel and feeder using motor controllers (REV SparkMax or CTRE TalonFX).
 
 ## Overview
 
@@ -17,11 +17,19 @@ The subsystem has two motors:
 
 ## What You'll Need
 
-- Two [REV SparkMax](https://docs.revrobotics.com/brushless/revlib/sparkmax-overview){target=_blank} motor controllers with NEO brushless motors
-- [REVLib](https://docs.revrobotics.com/brushless/revlib/overview){target=_blank} vendor dependency installed in your project
+=== "SparkMax"
+    - Two [REV SparkMax](https://docs.revrobotics.com/brushless/revlib/sparkmax-overview){target=_blank} motor controllers with NEO brushless motors
+    - [REVLib](https://docs.revrobotics.com/brushless/revlib/overview){target=_blank} vendor dependency installed in your project
 
-!!! tip
-    If you haven't installed REVLib yet, go to **WPILib Command Palette → Manage Vendor Libraries → Install new library (online)** and paste in the REVLib JSON URL from the [REV documentation](https://docs.revrobotics.com){target=_blank}.
+    !!! tip
+        If you haven't installed REVLib yet, go to **WPILib Command Palette → Manage Vendor Libraries → Install new library (online)** and paste in the REVLib JSON URL from the [REV documentation](https://docs.revrobotics.com){target=_blank}.
+
+=== "TalonFX"
+    - Two [CTRE TalonFX](https://store.ctr-electronics.com/talonfx/){target=_blank} motor controllers (brushless only)
+    - [Phoenix 6](https://store.ctr-electronics.com/phoenix-6/){target=_blank} vendor dependency installed in your project
+
+    !!! tip
+        If you haven't installed Phoenix 6 yet, go to **WPILib Command Palette → Manage Vendor Libraries → Install new library (online)** and paste in the Phoenix 6 JSON URL from the [CTRE documentation](https://docs.ctr-electronics.com/en/stable/docs/migration/migration-guide.html){target=_blank}.
 
 ***
 
@@ -29,8 +37,9 @@ The subsystem has two motors:
 
 The complete subsystem code is split across two files in the same folder:
 
-- [`docs/code_examples/ShooterConstants.java`](../code_examples/ShooterConstants.java) — all tunable values
-- [`docs/code_examples/BasicShooterSubsystem.java`](../code_examples/BasicShooterSubsystem.java) — the subsystem logic
+- [`docs/code_examples/ShooterConstants.java`](../code_examples/ShooterConstants.java) — all tunable values (same for both SparkMax and TalonFX)
+- [`docs/code_examples/BasicShooterSubsystem.java`](../code_examples/BasicShooterSubsystem.java) — SparkMax subsystem implementation
+- [`docs/code_examples/BasicShooterSubsystemTalonFX.java`](../code_examples/BasicShooterSubsystemTalonFX.java) — TalonFX subsystem implementation
 
 Every snippet in this guide is pulled directly from those files.
 
@@ -72,27 +81,39 @@ This lets you write `FLYWHEEL_SHOOT_VOLTAGE` directly in the subsystem instead o
 
 ## Declaring the Motors
 
-At the class level, declare `private final` fields for each SparkMax. Marking them `final` prevents them from accidentally being reassigned later.
+At the class level, declare `private final` fields for each motor controller. Marking them `final` prevents them from accidentally being reassigned later.
 
-```java title="BasicShooterSubsystem.java"
---8<-- "docs/code_examples/BasicShooterSubsystem.java:motors"
-```
+=== "SparkMax"
+    ```java title="BasicShooterSubsystem.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystem.java:motors"
+    ```
+
+=== "TalonFX"
+    ```java title="BasicShooterSubsystemTalonFX.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystemTalonFX.java:motors"
+    ```
 
 ***
 
 ## The Constructor
 
-The constructor instantiates each SparkMax and applies a configuration to it. Configuration lets you set things like current limits and motor inversion before the robot runs.
+The constructor instantiates each motor controller and applies a configuration to it. Configuration lets you set things like current limits and motor inversion before the robot runs.
 
-```java title="BasicShooterSubsystem.java"
---8<-- "docs/code_examples/BasicShooterSubsystem.java:constructor"
-```
+=== "SparkMax"
+    ```java title="BasicShooterSubsystem.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystem.java:constructor"
+    ```
+
+    !!! warning
+        `ResetMode.kResetSafeParameters` clears any previously saved configuration on the SparkMax before applying the new one. This ensures the motor controller is in a known state each time the robot starts.
+
+=== "TalonFX"
+    ```java title="BasicShooterSubsystemTalonFX.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystemTalonFX.java:constructor"
+    ```
 
 !!! note
     The feeder motor is inverted so that positive voltage always means "feed toward the flywheel." Without this, you would need to use negative voltages for the feeder, which is confusing to read.
-
-!!! warning
-    `ResetMode.kResetSafeParameters` clears any previously saved configuration on the SparkMax before applying the new one. This ensures the motor controller is in a known state each time the robot starts.
 
 ***
 
@@ -102,9 +123,15 @@ The constructor instantiates each SparkMax and applies a configuration to it. Co
 
 Spins the flywheel to a lower spin-up voltage while keeping the feeder stopped. Use this to get the flywheel up to speed *before* feeding a game piece.
 
-```java title="BasicShooterSubsystem.java"
---8<-- "docs/code_examples/BasicShooterSubsystem.java:spinup"
-```
+=== "SparkMax"
+    ```java title="BasicShooterSubsystem.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystem.java:spinup"
+    ```
+
+=== "TalonFX"
+    ```java title="BasicShooterSubsystemTalonFX.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystemTalonFX.java:spinup"
+    ```
 
 !!! tip
     Spinning up before shooting prevents the flywheel from slowing down the moment a game piece enters it. This gives you a more consistent launch every time.
@@ -115,9 +142,15 @@ Spins the flywheel to a lower spin-up voltage while keeping the feeder stopped. 
 
 Runs the flywheel at full shoot voltage/speed and engages the feeder to push the game piece(s) into the flywheel.
 
-```java title="BasicShooterSubsystem.java"
---8<-- "docs/code_examples/BasicShooterSubsystem.java:shoot"
-```
+=== "SparkMax"
+    ```java title="BasicShooterSubsystem.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystem.java:shoot"
+    ```
+
+=== "TalonFX"
+    ```java title="BasicShooterSubsystemTalonFX.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystemTalonFX.java:shoot"
+    ```
 
 ***
 
@@ -125,9 +158,15 @@ Runs the flywheel at full shoot voltage/speed and engages the feeder to push the
 
 Stops both motors. Call this when the shoot button is released or when a command ends.
 
-```java title="BasicShooterSubsystem.java"
---8<-- "docs/code_examples/BasicShooterSubsystem.java:stop"
-```
+=== "SparkMax"
+    ```java title="BasicShooterSubsystem.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystem.java:stop"
+    ```
+
+=== "TalonFX"
+    ```java title="BasicShooterSubsystemTalonFX.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystemTalonFX.java:stop"
+    ```
 
 ***
 
@@ -136,9 +175,15 @@ Stops both motors. Call this when the shoot button is released or when a command
 WPILib's [command-based framework](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html){target=_blank} lets you convert methods into [`Command`](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands.html){target=_blank} objects that the scheduler can run, interrupt, and chain together. Each factory method below wraps one of the shooter methods in a command. This allows you to easily bind them to buttons and use them in more complex command sequences later on.
 Commands can also be written as separate classes, but for simple one-line methods like these, factory methods are a quick and easy way to get commands without extra boilerplate. Separate commmand classes are better when complex logic, multiple steps, or additional requirements are involved.
 
-```java title="BasicShooterSubsystem.java"
---8<-- "docs/code_examples/BasicShooterSubsystem.java:commands"
-```
+=== "SparkMax"
+    ```java title="BasicShooterSubsystem.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystem.java:commands"
+    ```
+
+=== "TalonFX"
+    ```java title="BasicShooterSubsystemTalonFX.java"
+    --8<-- "docs/code_examples/BasicShooterSubsystemTalonFX.java:commands"
+    ```
 
 - `this.run(...)` creates a command that calls the lambda **every robot loop** (20 ms) for as long as the command is scheduled.
 - `this.runOnce(...)` creates a command that calls the lambda **once** and then immediately finishes. This is appropriate for `stop()` since you only need to set the motors to 0 one time.
