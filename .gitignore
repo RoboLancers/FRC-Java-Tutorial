@@ -5,3 +5,7 @@ FRC Programming Tutorial VSC.pdf
 site/
 .venv/
 .unotes/templates/title_date.hbs
+*.gradle
+.gradle/
+*.class
+*.jar
