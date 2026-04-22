@@ -5,7 +5,7 @@ Reusable blocks of code
 
 ## Overview
 
-A **method** is a named block of code that performs a specific task. Methods let you write logic once and call (use) it as many times as needed. This is better than copying and pasting: if you copy the same logic into five places and later find a bug, you have to fix it five times — and if you miss one, the bug remains.
+A **method** is a named block of code that performs a specific task. In more simple terms, a method is a function inside a class. Methods let you write logic once and call (use) it as many times as needed. This is better than copying and pasting: if you copy the same logic into five places and later find a bug, you have to fix it five times — and if you miss one, the bug remains. With a method, you fix the bug once in the method definition, and every call to that method automatically gets the fix. 
 
 **See table of contents for a breakdown of this section.**
 
@@ -35,7 +35,7 @@ Every method declaration has four parts:
 
 A method either returns a value or returns nothing.
 
-- `void` — the method does something but gives nothing back to the code that called it
+- `void` — the method does something but gives nothing back (returns nothing) to the code that called it
 - Any data type — the method computes and returns a value of that type
 
 ```java
@@ -78,13 +78,13 @@ To run a method, write its name followed by parentheses containing any required 
 
 ## `@Override`
 
-When a class **extends** a parent class (see [Java Classes](java_classes.md#inheritance)), it can replace one of the parent's methods with its own version. The `@Override` annotation marks this intentionally.
+When a class **extends** a parent class (see [Java Classes](java_classes.md#inheritance)), the `@Override` annotation can replace one of the parent's methods with its own version. The annotation marks in a clear way that a method is being overridden.
 
 ```java
 --8<-- "docs/code_examples/basics/methods/Drivetrain.java:override_periodic"
 ```
-
-`@Override` is optional but strongly recommended — if you misspell the method name, the compiler will warn you that there is no matching method to override, catching the typo before it becomes a bug.
+!!! note
+    `@Override` is optional but strongly recommended — if you misspell the method name, the compiler will warn you that there is no matching method to override, catching the typo before it becomes a bug.
 
 ***
 

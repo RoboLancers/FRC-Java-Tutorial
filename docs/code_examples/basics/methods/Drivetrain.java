@@ -16,8 +16,8 @@ public class Drivetrain extends SubsystemBase {
     // --8<-- [start:return_types]
     // Returns nothing — just sets the motor
     // --8<-- [start:declare_method]
-    public void setSpeed(double speed) {
-        motor.set(speed);
+    public void doSomething(parameter_type parameterName) {
+        // Do things here.
     }
     // --8<-- [end:declare_method]
 
@@ -38,7 +38,10 @@ public class Drivetrain extends SubsystemBase {
         motor.set(0);
     }
 
-    // One parameter — setSpeed is shown in the return types section above
+    // One parameter — the speed to set
+    public void setSpeed(double speed) {
+        motor.set(speed);
+    }
 
     // Two parameters
     public void setLeftRight(double leftSpeed, double rightSpeed) {
