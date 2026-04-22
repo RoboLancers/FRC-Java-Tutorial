@@ -38,16 +38,15 @@ A method either returns a value or returns nothing.
 - `void` — the method does something but gives nothing back (returns nothing) to the code that called it
 - Any data type — the method computes and returns a value of that type
 
-/// tab | SparkMax
+=== "SparkMax"
     ```java title="Return type examples"
     --8<-- "docs/code_examples/basics/methods/Drivetrain.java:return_types"
     ```
-///
-/// tab | TalonFX
+
+=== "TalonFX"
     ```java title="Return type examples"
     --8<-- "docs/code_examples/basics/methods/DrivetrainTalonFX.java:return_types_talon"
     ```
-///
 
 !!! tip
     Use the `return` keyword to send a value back to the code that called this method. The type after `return` must match the declared return type. A `void` method may use `return;` (no value) to exit early.
@@ -58,16 +57,14 @@ A method either returns a value or returns nothing.
 
 Parameters are inputs you pass to a method when calling it. You can have zero or more, separated by commas.
 
-/// tab | SparkMax
+=== "SparkMax"
     ```java title="Parameter examples"
     --8<-- "docs/code_examples/basics/methods/Drivetrain.java:parameters"
     ```
-///
-/// tab | TalonFX
+=== "TalonFX"
     ```java title="Parameter examples"
     --8<-- "docs/code_examples/basics/methods/DrivetrainTalonFX.java:parameters_talon"
     ```
-///
 
 !!! note
     Parameters are **local variables** — they only exist inside the method and disappear when the method finishes.
@@ -106,16 +103,18 @@ When a class **extends** a parent class (see [Java Classes](java_classes.md#inhe
 
 Methods can call other methods, including methods of other objects. This is how FRC subsystems and commands interact.
 
-/// tab | SparkMax
+=== "SparkMax"
     ```java title="Methods calling other methods"
     --8<-- "docs/code_examples/basics/methods/CommandExamples.java:methods_calling_methods"
     ```
-///
-/// tab | TalonFX
+=== "TalonFX"
     ```java title="Methods calling other methods"
     --8<-- "docs/code_examples/basics/methods/CommandExamplesTalonFX.java:methods_calling_methods_talon"
     ```
-///
+=== "Explanation"
+    ```markdown
+    In this example, the `DriveForwardCommand` calls the `setSpeed()` method of the `Drivetrain` subsystem to move the robot forward. This is a common pattern in FRC code: commands call subsystem methods to control hardware.
+    ```
 
 !!! tip
     Methods that do one thing and do it well are easier to test, reuse, and understand. If a method is getting long, consider splitting it into smaller helpers.

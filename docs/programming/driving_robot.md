@@ -66,7 +66,7 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 ![](../assets/images/driving_robot/fix_error_1.PNG)
 
 2. 💡 Click "quick fix" 
-![](../assets/images/driving_robot/quick_fix_click.png)
+![](../assets/images/driving_robot/quick_fix_click.PNG)
 
 3. Select "Import 'SparkMax' (com.revrobotics.spark)"
 ![](../assets/images/driving_robot/Quick_fix_import.png)
