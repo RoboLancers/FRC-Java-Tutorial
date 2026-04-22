@@ -72,7 +72,7 @@ markdown_extensions:
   - admonition
   - pymdownx.critic
   - pymdownx.details
-  - pymdownx.blocks.tab
+  #- pymdownx.blocks.tab
   - pymdownx.betterem
   - pymdownx.tasklist
   - attr_list
@@ -88,6 +88,8 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.snippets:
       base_path: ["."]
+  - pymdownx.tabbed:
+      alternate_style: true
   - toc:
       permalink: "#"
 

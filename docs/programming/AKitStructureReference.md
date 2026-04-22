@@ -108,7 +108,7 @@ We can add all of these values into our `IntakeIOInputs` class.
 Finally, add a `updateInputs(IntakeIOInputs inputs)` method that our `IOImplementation`s can call to record these values.
 Our `IntakeIO` file should look something like this now:
 
-```java
+```java title="IntakeIO.java"
 // Imports go here
 
 public interface IntakeIO {
@@ -151,7 +151,7 @@ This will contain all of the hardware we want to interact with on the real robot
 First, we will need to define the hardware we want to use.
 In this case, they will be two `TalonFX`s.
 
-```java
+```java title="Motor controller fields"
 private final TalonFX pivot = new TalonFX(IntakeSubsystem.PIVOT_MOTOR_ID);
 private final TalonFX roller = new TalonFX(IntakeSubsystem.ROLLER_MOTOR_ID);
 ```
@@ -162,7 +162,7 @@ For the sake of brevity, I won't cover that in detail here. *MAKE SUBSYSTEM WALK
 
 In the end you should have something like:
 
-```java
+```java title="IntakeIOReal.java"
 public class IntakeIOReal implements IntakeIO {
     private final TalonFX pivot = new TalonFX(IntakeSubsystem.PIVOT_MOTOR_ID);
     private final TalonFX roller = new TalonFX(IntakeSubsystem.ROLLER_MOTOR_ID);
@@ -207,7 +207,7 @@ It will also contain Command factories to allow the rest of our code to interfac
 
 Add the io and io inputs to the class:
 
-```java
+```java title="IntakeSubsystem.java"
 // Snip imports
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -223,7 +223,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 Then we can add a few Command factories to control the subsystem:
 
-```java
+```java title="Command factories"
 public Command intake(double volts) {
     return Commands.run(() -> {
         io.setAngle(INTAKE_ANGLE);
@@ -241,7 +241,7 @@ public Command stop() {
 
 Finally, let's add our `periodic()` method to update and log our inputs.
 
-```java
+```java title="periodic() method"
 @Override
 public void periodic() {
     io.updateInputs();
@@ -252,7 +252,7 @@ public void periodic() {
 
 Overall, `IntakeSubsystem` should roughly look like:
 
-```java
+```java title="IntakeSubsystem.java (complete)"
 // Snip imports
 
 public class IntakeSubsystem extends SubsystemBase {

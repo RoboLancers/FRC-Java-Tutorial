@@ -34,28 +34,28 @@ Java has several built-in data types. The four you will use most in FRC programm
 
 **Declaration** creates the variable. **Assignment** gives it a value. You can do both at once or separately:
 
-```java
+```java title="Declaring and assigning variables"
 --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:declare_assign"
 ```
 
 !!! example "FRC Example"
-    ```java
+    ```java title="FRC variable declarations"
     --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:frc_variables"
     ```
 
 ***
 
-## Constants and `final`
+## Constants and `final` {#constants}
 
 If a variable should never change after it is first set, declare it with `final`. This prevents accidental reassignment and makes your intent clear.
 
-```java
+```java title="Local final variable"
 --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:final_local"
 ```
 
 In FRC code you will often see `public static final` together:
 
-```java
+```java title="Class constant (public static final)"
 --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:public_static_final"
 ```
 
@@ -66,7 +66,7 @@ In FRC code you will often see `public static final` together:
 !!! tip "Naming convention"
     Java constants are written in `ALL_CAPS_WITH_UNDERSCORES`. Regular variables use `lowerCamelCase`.
 
-    ```java
+    ```java title="Naming conventions"
     --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:naming_convention"
     --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:naming_convention_local"
     ```
@@ -126,7 +126,7 @@ Where you declare a variable determines where it can be used — this is called 
 
 Comments are ignored by the compiler and are used to explain code to other programmers (including your future self).
 
-```java
+```java title="Code comments"
 --8<-- "docs/code_examples/basics/types_variables/TypesVariablesExamples.java:comments"
 ```
 

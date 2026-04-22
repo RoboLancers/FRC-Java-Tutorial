@@ -106,7 +106,7 @@ This file defines the overall swerve drive configuration, including the IMU (gyr
     - `modules`: Array of module configuration file names
 
 **Example - Pigeon2 IMU:**
-```json
+```json title="swervedrive.json - Pigeon2 Configuration"
 {
   "imu": {
     "type": "pigeon2",
@@ -124,7 +124,7 @@ This file defines the overall swerve drive configuration, including the IMU (gyr
 ```
 
 **Example - NavX IMU:**
-```json
+```json title="swervedrive.json - NavX Configuration"
 {
   "imu": {
     "type": "navx",
@@ -142,7 +142,7 @@ This file defines the overall swerve drive configuration, including the IMU (gyr
 ```
 
 **Complete swervedrive.json Example:**
-```json
+```json title="swervedrive.json - Complete Example"
 {
   "imu": {
     "type": "pigeon2",
@@ -181,7 +181,7 @@ Each swerve module (wheel) has its own configuration file defining the drive mot
       - `left`: Distance left from center (inches, negative for right side)
 
 **Example - SparkMax with CANCoder:**
-```json
+```json title="Module Configuration - SparkMax with CANCoder"
 {
   "drive": {
     "type": "sparkmax",
@@ -212,7 +212,7 @@ Each swerve module (wheel) has its own configuration file defining the drive mot
 ```
 
 **Example - TalonFX with CANCoder:**
-```json
+```json title="Module Configuration - TalonFX with CANCoder"
 {
   "drive": {
     "type": "talonfx",
@@ -243,7 +243,7 @@ Each swerve module (wheel) has its own configuration file defining the drive mot
 ```
 
 **Complete frontleft.json Example:**
-```json
+```json title="frontleft.json - Complete Module Example"
 {
   "drive": {
     "type": "sparkmax",
@@ -284,7 +284,7 @@ This file defines the physical characteristics of your robot and swerve modules 
     - `angleGearRatio`: Gear ratio from motor to module rotation (motor rotations per 360° module turn)
 
 **Example - 4-inch wheels with 6.75:1 drive ratio:**
-```json
+```json title="physicalproperties.json - 4-inch Wheels"
 {
   "optimalVoltage": 12.0,
   "wheelDiameter": 4.0,
@@ -294,7 +294,7 @@ This file defines the physical characteristics of your robot and swerve modules 
 ```
 
 **Example - 3-inch wheels with 8.14:1 drive ratio:**
-```json
+```json title="physicalproperties.json - 3-inch Wheels"
 {
   "optimalVoltage": 12.0,
   "wheelDiameter": 3.0,
@@ -304,7 +304,7 @@ This file defines the physical characteristics of your robot and swerve modules 
 ```
 
 **Complete physicalproperties.json Example:**
-```json
+```json title="physicalproperties.json - Complete Example"
 {
   "optimalVoltage": 12.0,
   "wheelDiameter": 4.0,
@@ -327,7 +327,7 @@ This file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning
     - `angle`: PIDF values for angle motors (steering)
 
 **Example - SparkMax tuning values:**
-```json
+```json title="pidfproperties.json - SparkMax Tuning"
 {
   "drive": {
     "p": 0.0020645,
@@ -347,7 +347,7 @@ This file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning
 ```
 
 **Example - TalonFX tuning values:**
-```json
+```json title="pidfproperties.json - TalonFX Tuning"
 {
   "drive": {
     "p": 1.0,
@@ -367,7 +367,7 @@ This file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning
 ```
 
 **Complete pidfproperties.json Example:**
-```json
+```json title="pidfproperties.json - Complete Example"
 {
   "drive": {
     "p": 0.0020645,
@@ -400,7 +400,7 @@ This file configures advanced control parameters for heading correction and velo
       - `y`: PID for Y-axis velocity control
 
 **Example - Default controller settings:**
-```json
+```json title="controllerproperties.json - Default Settings"
 {
   "heading": {
     "p": 0.4,
@@ -423,7 +423,7 @@ This file configures advanced control parameters for heading correction and velo
 ```
 
 **Complete controllerproperties.json Example:**
-```json
+```json title="controllerproperties.json - Complete Example"
 {
   "heading": {
     "p": 0.4,
@@ -459,7 +459,7 @@ For manual configuration details, see [Configuration Documentation](https://docs
 
 ### Importing YAGSL
 Add YAGSL as a vendor dependency (see section 2), then import in your code:
-```java
+```java title="YAGSL Imports"
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -468,7 +468,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 ### Creating the SwerveDrive Object
 In your subsystem constructor:
-```java
+```java title="SwerveSubsystem.java - Constructor"
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrive swerveDrive;
 
@@ -495,7 +495,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
 ### Telemetry Setup
 YAGSL provides extensive telemetry for debugging. Configure verbosity:
-```java
+```java title="Telemetry Configuration"
 SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // Options: NONE, LOW, HIGH
 ```
 
@@ -510,7 +510,7 @@ For more code setup details, see [Code Setup Documentation](https://docs.yagsl.c
 !!! tip
     Field-oriented drive means the robot moves relative to the field coordinate system, not its own orientation. Forward on the joystick always moves the robot toward the same direction on the field (e.g., toward the opponent's goal), regardless of how the robot is currently rotated. This is the most intuitive and commonly used drive mode for FRC competition robots.
 
-```java
+```java title="Field-Oriented Drive Command"
 /**
  * Command to drive the robot using translative values and heading as angular velocity.
  */
@@ -538,7 +538,7 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
 !!! tip
     Robot-oriented drive means the robot moves relative to its own orientation. Forward on the joystick always moves the robot in the direction it's currently facing. This mode is useful for precise movements or when field orientation isn't important, but can be confusing for drivers during competition.
 
-```java
+```java title="Robot-Oriented Drive"
 public void driveRobotOriented(double xSpeed, double ySpeed, double rot) {
     swerveDrive.drive(
         new Translation2d(xSpeed, ySpeed).times(swerveDrive.getMaximumChassisVelocity()),
@@ -554,7 +554,7 @@ public void driveRobotOriented(double xSpeed, double ySpeed, double rot) {
 !!! tip
     ChassisSpeeds drive accepts a WPILib ChassisSpeeds object, which represents the desired velocity of the robot chassis. This is useful when integrating with path planning libraries like PathPlanner or when you have calculated velocities from other sources. It provides the most control over robot motion.
 
-```java
+```java title="ChassisSpeeds Drive"
 public void driveFieldOriented(ChassisSpeeds velocity) {
     swerveDrive.driveFieldOriented(velocity);
 }
@@ -565,7 +565,7 @@ public void driveFieldOriented(ChassisSpeeds velocity) {
 !!! tip
     Joystick integration shows how to connect driver inputs to the drive commands. The default command runs continuously while no other command is active. Note the axis inversions (-driverController.getLeftY()) which account for typical joystick orientations where pushing forward gives negative Y values.
 
-```java
+```java title="Joystick Integration"
 private final CommandXboxController driverController = new CommandXboxController(0);
 
 public RobotContainer() {
@@ -587,7 +587,7 @@ public RobotContainer() {
 !!! tip
     Odometry tracks the robot's position and orientation on the field using wheel encoders and IMU data. Pose reset is useful for correcting odometry drift, often done at the start of autonomous or when vision systems provide accurate position data.
 
-```java
+```java title="Odometry and Pose Management"
 // Get current pose
 public Pose2d getPose() {
     return swerveDrive.getPose();
@@ -607,7 +607,7 @@ For more examples, see the [YAGSL Examples Repository](https://github.com/Yet-An
 YAGSL uses PIDF controllers for both drive and angle motors. Start with these values:
 
 **SparkMax-based systems:**
-```json
+```json title="pidfproperties.json - SparkMax Configuration"
 {
   "drive": {"p": 0.0020645, "i": 0, "d": 0, "f": 0, "iz": 0},
   "angle": {"p": 0.01, "i": 0, "d": 0, "f": 0, "iz": 0}
@@ -615,7 +615,7 @@ YAGSL uses PIDF controllers for both drive and angle motors. Start with these va
 ```
 
 **TalonFX-based systems:**
-```json
+```json title="pidfproperties.json - TalonFX Configuration"
 {
   "drive": {"p": 1, "i": 0, "d": 0, "f": 0, "iz": 0},
   "angle": {"p": 50, "i": 0, "d": 0.32, "f": 0, "iz": 0}

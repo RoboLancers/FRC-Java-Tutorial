@@ -15,29 +15,50 @@ Programs rarely run straight from top to bottom. **Control flow** statements let
 
 An `if` statement runs a block of code only when a condition is `true`.
 
-```java
+```java title="Speed clamp"
 --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:if_clamp"
 ```
 
 Add `else` to handle the `false` case:
 
-```java
---8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:if_else_limit"
-```
+/// tab | SparkMax
+    ```java title="Limit switch: stop on trigger"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:if_else_limit"
+    ```
+///
+/// tab | TalonFX
+    ```java title="Limit switch: stop on trigger"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamplesTalonFX.java:if_else_limit_talon"
+    ```
+///
 
 Chain multiple conditions with `else if`:
 
-```java
---8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:else_if_chain"
-```
+/// tab | SparkMax
+    ```java title="Elevator position control"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:else_if_chain"
+    ```
+///
+/// tab | TalonFX
+    ```java title="Elevator position control"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamplesTalonFX.java:else_if_chain_talon"
+    ```
+///
 
 !!! tip
     Conditions must evaluate to a `boolean` (`true` or `false`). See [Variables and Data Types](java_types_variables.md#operators) for comparison and logical operators.
 
 !!! example "FRC Example: soft limit"
-    ```java
-    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:soft_limit_method"
-    ```
+    /// tab | SparkMax
+        ```java title="Soft limit with if/else"
+        --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:soft_limit_method"
+        ```
+    ///
+    /// tab | TalonFX
+        ```java title="Soft limit with if/else"
+        --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamplesTalonFX.java:soft_limit_method_talon"
+        ```
+    ///
 !!! warning
     If you are setting a value based on a condition, **always** include an `else` case to handle the `false` condition. In FRC code, this is a critical safety practice — for example, if you only set motor power in the `if` block, then when the condition is `false` the motor will continue doing whatever it was doing before, which could lead to dangerous runaway behavior.
 ***
@@ -46,14 +67,21 @@ Chain multiple conditions with `else if`:
 
 A `while` loop repeats its body as long as its condition remains `true`.
 
-```java
---8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:while_loop"
-```
+/// tab | SparkMax
+    ```java title="While loop example"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:while_loop"
+    ```
+///
+/// tab | TalonFX
+    ```java title="While loop example"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamplesTalonFX.java:while_loop_talon"
+    ```
+///
 
 !!! warning "Do not use while loops inside robot commands"
     In FRC robot code, **do not put `while` loops inside `execute()`**. The robot scheduler calls `execute()` repeatedly on its own. An inner `while` loop would block the scheduler and freeze the robot. Use `isFinished()` to signal when a command is done instead:
 
-```java
+```java title="isFinished() pattern"
 --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:is_finished"
 ```
 
@@ -70,7 +98,7 @@ A `for` loop runs a fixed number of times, or once for each item in a collection
 
 ### Counting loop
 
-```java
+```java title="Counting loop"
 --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:for_counting"
 ```
 
@@ -86,16 +114,30 @@ The three parts of the `for` header:
 
 When you want every item in a collection and don't need the index, the for-each form is cleaner:
 
-```java
---8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:for_each_basic"
-```
+/// tab | SparkMax
+    ```java title="For-each loop"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:for_each_basic"
+    ```
+///
+/// tab | TalonFX
+    ```java title="For-each loop"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamplesTalonFX.java:for_each_basic_talon"
+    ```
+///
 
 !!! example "FRC Example: configuring multiple motors"
-    Instead of calling `setSmartCurrentLimit` four separate times, apply config to all motors in a loop:
+    Instead of calling the configuration method four separate times, apply config to all motors in a loop:
 
-```java
---8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:frc_motor_config"
-```
+    /// tab | SparkMax
+        ```java title="Motor configuration loop"
+        --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:frc_motor_config"
+        ```
+    ///
+    /// tab | TalonFX
+        ```java title="Motor configuration loop"
+        --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamplesTalonFX.java:frc_motor_config_talon"
+        ```
+    ///
 
 ***
 
@@ -103,9 +145,16 @@ When you want every item in a collection and don't need the index, the for-each 
 
 A realistic example combining `if`/`else` and a field to implement elevator soft limits:
 
-```java
---8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:elevator_subsystem"
-```
+/// tab | SparkMax
+    ```java title="Elevator subsystem"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamples.java:elevator_subsystem"
+    ```
+///
+/// tab | TalonFX
+    ```java title="Elevator subsystem"
+    --8<-- "docs/code_examples/basics/control_flow/ControlFlowExamplesTalonFX.java:elevator_subsystem_talon"
+    ```
+///
 
 !!! note
     Notice that `moveUp` and `moveDown` each contain an `if`/`else` — the motor only runs if the elevator is within safe bounds. This pattern of checking limits before applying power is a fundamental safety practice in FRC.

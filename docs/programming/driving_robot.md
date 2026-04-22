@@ -94,7 +94,7 @@ Now that we have created the SparkMaxes  and the Drive Constants we must initial
 
 
 ??? example "Constructor Initialization Example"
-    ```java title="Constructor declaration"
+    ```java title="Drivetrain.java - Constructor Declaration"
     public CANDriveSubSystem () {}
     ```
 
@@ -132,7 +132,7 @@ Before we initalize the SparkMax objects we are going to create constants to hol
 !!! note
     To use Constants, instead of putting `0` for the port in the SparkMax type:
 
-    ```java title="constants.java"
+    ```java title="Constants.java - Drive Constants"
     public static final int LEFT_LEADER_ID = 1;
     ```
 
@@ -145,7 +145,7 @@ Before we initalize the SparkMax objects we are going to create constants to hol
 ??? example "DriveConstants Example"
     **Drive Constants Definition:**
 
-    ```java
+    ```java title="Constants.java - Drive Constants Definition"
     --8<-- "docs/code_examples/2026KitBotInline/Constants.java:constants"
     ```
 
@@ -194,13 +194,13 @@ See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDri
 **1)** Create the DifferentialDrive object.
 
 **Member Variable Declaration:**
-```java
+```java title="CANDriveSubsystem.java - Differential Drive Variable"
 --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:differential-drive-variable"
 ```
 This defines the drive object that we will use to drive the robot.
 
 **Constructor Initialization:**
-```java
+```java title="CANDriveSubsystem.java - Drive Initialization"
 drive = new DifferentialDrive(leftLeader, rightLeader);
 ```
 This initializes the differential drive object with the left and right leader motors.
@@ -213,24 +213,24 @@ This initializes the differential drive object with the left and right leader mo
 
 **2)** In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower.
 In the constructor we are going to set the follower motors and link them to the leader motors. To do this we will need to include a couple more classes from the REV Library:
-```java
+```java title="CANDriveSubsystem.java - Required Imports"
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 ```
 Then in the constructor, configure the followers to follow the leaders:
 
 **Set follower configuration:**
-```java
+```java title="CANDriveSubsystem.java - Follower Configuration"
 --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:follower-config"
 ```
 
 **Configure right leader:**
-```java
+```java title="CANDriveSubsystem.java - Right Leader Configuration"
 --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:right-leader-config"
 ```
 
 **Invert left leader for correct motor direction:**
-```java
+```java title="CANDriveSubsystem.java - Left Leader Inversion"
 --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:left-inversion"
 ```
 

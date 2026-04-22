@@ -44,12 +44,18 @@ A class is a template that defines a type of object. Classes contains:
 
 Fields (also called instance variables or member variables) store the object's data. They are declared at the top of the class body, outside any method. Variables should be declared here if they represent something that is part of the object's state, such as motor controllers or configuration values, or if they need to be accessed by multiple methods in the class.
 
-!!! note "What is a SparkMax?"
-    A SparkMax is a motor controller — a small electronic device that connects to a motor and controls how fast it spins. In FRC code, you declare one field per physical motor controller on your robot. The SparkMax is made by REV Robotics and is one of the most common motor controllers used in FRC.
+!!! note "What is a SparkMax / TalonFX?"
+    A **SparkMax** (REV Robotics) and a **TalonFX** (CTRE) are motor controllers — small electronic devices that connect to a motor and control how fast it spins. In FRC code, you declare one field per physical motor controller on your robot. Both are among the most common motor controllers used in FRC.
 
-```java title="Fields example"
---8<-- "docs/code_examples/basics/classes/Drivetrain.java:fields"
-```
+=== "SparkMax"
+    ```java title="Fields example"
+    --8<-- "docs/code_examples/basics/classes/Drivetrain.java:fields"
+    ```
+
+=== "TalonFX"
+    ```java title="Fields example"
+    --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:fields_talon"
+    ```
 
 ### Access Modifiers
 
@@ -73,9 +79,17 @@ A **constructor** is a special method that runs exactly once — when an object 
 - If the class requires parameters to set up, those must be listed in the constructor definition, inside the parentheses. (see the [this] section (#this))
 - When you create an object with `new`, you must provide arguments that match the constructor's parameters.
 
-```java title="Constructor example"
---8<-- "docs/code_examples/basics/classes/Drivetrain.java:constructor"
-```
+=== "SparkMax"
+    ```java title="Constructor example"
+    --8<-- "docs/code_examples/basics/classes/Drivetrain.java:constructor"
+    ```
+
+=== "TalonFX"
+    ```java title="Constructor example"
+    --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:constructor_talon"
+    ```
+
+
 !!! note
     If you do not write a constructor, Java provides a default no-argument constructor that does nothing.
 
@@ -86,9 +100,15 @@ A **constructor** is a special method that runs exactly once — when an object 
 
 `new` creates an object from a class and calls its constructor:
 
-```java
---8<-- "docs/code_examples/basics/classes/NewKeywordExamples.java:new_keyword"
-```
+=== "SparkMax"
+    ```java title="Creating objects with 'new'"
+    --8<-- "docs/code_examples/basics/classes/NewKeywordExamples.java:new_keyword"
+    ```
+
+=== "TalonFX"
+    ```java title="Creating objects with 'new'"
+    --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:new_keyword_talon"
+    ```
 
 The variable on the left holds a **reference** to the object — think of it as a label pointing to the object in memory.
 
@@ -123,7 +143,7 @@ Inheritance lets you build on top of pre-built FRC plumbing without writing it f
 
 When a child class replaces a method from the parent, it marks it with `@Override`:
 
-```java
+```java title="Overriding periodic()"
 --8<-- "docs/code_examples/basics/classes/Drivetrain.java:override_periodic"
 ```
 
@@ -141,9 +161,16 @@ A method that is overridden replaces the parent version completely with your own
 
 
 ??? example "A complete minimal subsystem class"
-    ```java title="Drivetrain.java"
-    --8<-- "docs/code_examples/basics/classes/Drivetrain.java:putting_it_together"
-    ```
+
+    === "SparkMax"
+        ```java title="Drivetrain.java"
+        --8<-- "docs/code_examples/basics/classes/Drivetrain.java:putting_it_together"
+        ```
+    === "TalonFX"
+        ```java title="Drivetrain.java"
+        --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:putting_it_together_talon"
+        ```
+    
 
 !!! note
     `private final` on the fields means each motor controller is assigned once in the constructor and never swapped out. See [Variables and Data Types](java_types_variables.md#constants) for more on `final`.
