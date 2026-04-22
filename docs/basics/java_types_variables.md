@@ -23,7 +23,7 @@ Java has several built-in data types. The four you will use most in FRC programm
 | `String` | Text | `String subsystemName = "Drivetrain";` |
 
 !!! note
-    `String` starts with a capital letter because it is a class, not a primitive type. You will learn more about classes in [Java Classes](java_classes.md).
+    `String` starts with a capital letter because text behaves differently from numbers in Java — don't worry about why yet, just remember to capitalize it. You will learn more in [Java Classes](java_classes.md).
 
 !!! warning "Java is case sensitive"
     `Int` and `int` are different. `Boolean` and `boolean` are different. Always use lowercase for primitive type names.
@@ -69,7 +69,7 @@ public static final int LEFT_LEADER_ID = 1;
 ```
 
 - `public` — any class can read this value
-- `static` — belongs to the class itself, not a specific instance; accessible without creating an object
+- `static` — shared across all uses of the class; accessible without creating an object first
 - `final` — the value cannot be changed after assignment
 
 !!! tip "Naming convention"
@@ -86,7 +86,7 @@ public static final int LEFT_LEADER_ID = 1;
 
 Where you declare a variable determines where it can be used — this is called **scope**.
 
-- **Field variable** — declared outside any method, available to all methods in the class
+- **Field** (class-level variable) — declared outside any method, available to all methods in the class. Fields are covered in depth in [Java Classes](java_classes.md#fields).
 - **Local variable** — declared inside a method, only exists while that method is running
 
 ```java
@@ -116,7 +116,7 @@ public class Drivetrain extends SubsystemBase {
 | `-` | Subtract | `distance - offset` |
 | `*` | Multiply | `speed * 0.5` |
 | `/` | Divide | `ticks / 2048.0` |
-| `%` | Remainder | `count % 2` |
+| `%` | Remainder (leftover after division) | `7 % 2` → `1` |
 
 ### Comparison (result is always `boolean`)
 

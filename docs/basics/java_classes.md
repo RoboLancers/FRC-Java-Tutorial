@@ -35,11 +35,11 @@ public class Drivetrain extends SubsystemBase {
 }
 ```
 
-- `package` — declares which namespace this file belongs to (think of it as a folder path)
-- `import` — brings in a class from another package so you can use it by short name
+- `package` — declares which folder this file lives in. `frc.robot.subsystems` maps to the directory path `frc/robot/subsystems/` inside your project.
+- `import` — makes a class available in this file by its short name. Without an import you would have to write the full path every time — e.g., `edu.wpi.first.wpilibj2.command.SubsystemBase` instead of just `SubsystemBase`.
 - `public` — this class can be used by other classes in the project. (If you omit this, the class is only visible within its own package.)
 - `class Drivetrain` — the class name, which must match the file name exactly
-- `extends SubsystemBase` — inherits built-in FRC subsystem behavior (see [Inheritance](#inheritance))
+- `extends SubsystemBase` — WPILib provides `SubsystemBase` as the foundation for every robot subsystem. Extending it gives your class the scheduling hooks, periodic updates, and other plumbing the robot framework needs to run it. (see [Inheritance](#inheritance))
 
 !!! note "Packages and imports in VSCode"
     VSCode can add `import` statements automatically. When the editor underlines a class name in red because it is not imported, click the 💡 light bulb (or press ++ctrl+period++) and choose the correct import. See [VSCode Tips](../basics/vscode_tips.md).
@@ -49,6 +49,9 @@ public class Drivetrain extends SubsystemBase {
 ## Fields
 
 Fields (also called instance variables or member variables) store the object's data. They are declared at the top of the class body, outside any method. Variables should be declared here if they represent something that is part of the object's state, such as motor controllers or configuration values, or if they need to be accessed by multiple methods in the class.
+
+!!! note "What is a SparkMax?"
+    A SparkMax is a motor controller — a small electronic device that connects to a motor and controls how fast it spins. In FRC code, you declare one field per physical motor controller on your robot. The SparkMax is made by REV Robotics and is one of the most common motor controllers used in FRC.
 
 ```java title="Fields example"
 public class Drivetrain extends SubsystemBase {
@@ -111,14 +114,14 @@ The variable on the left holds a **reference** to the object — think of it as 
 
 ### `this`
 
-Inside a class, `this` refers to the current object. It is most commonly used when a constructor parameter has the same name as a field:
+Inside a class, `this` refers to the current object. It is most commonly used when a constructor parameter has the same name as a field — without `this`, Java cannot tell which one you mean:
 
 ```java title="Example usage of this"
 public class Drivetrain extends SubsystemBase {
     private double topSpeed;
 
     public Drivetrain(double topSpeed) {
-        this.topSpeed = topSpeed;  // field = parameter
+        this.topSpeed = topSpeed;  // "this.topSpeed" is the field; "topSpeed" alone is the parameter
     }
 }
 ```
@@ -128,6 +131,8 @@ public class Drivetrain extends SubsystemBase {
 ## Inheritance
 
 A class can `extend` another class to inherit all of its fields and methods. The class being extended is the **parent** (or superclass); the extending class is the **child** (or subclass).
+
+Think of it like categories in real life: a `Dog` is an `Animal` — it automatically has everything that comes with being an animal (it breathes, it moves), plus its own extras (it barks). In the same way, `Drivetrain extends SubsystemBase` means your drivetrain automatically has everything WPILib built into `SubsystemBase`, plus whatever drive logic you add.
 
 ```java title="Inheritance example"
 public class Drivetrain extends SubsystemBase {

@@ -105,7 +105,7 @@ The three parts of the `for` header:
 |---|---|---|
 | Initializer | `int i = 0` | Runs once before the loop starts |
 | Condition | `i < 5` | Checked before each iteration; loop stops when `false` |
-| Update | `i++` | Runs after each iteration (`i++` adds 1 to `i`) |
+| Update | `i++` | Runs after each iteration — `i++` is shorthand for `i = i + 1` (see [Arithmetic Operators](java_types_variables.md#arithmetic)) |
 
 ### Enhanced for-each loop
 
@@ -126,8 +126,8 @@ for (SparkMax motor : motors) {
 SparkMax[] motors = {leftLeader, leftFollower, rightLeader, rightFollower};
 
 for (SparkMax motor : motors) {
-    motor.setSmartCurrentLimit(40);
-    motor.setIdleMode(IdleMode.kBrake);
+    motor.setSmartCurrentLimit(40);       // REV API: cap current draw to 40 amps
+    motor.setIdleMode(IdleMode.kBrake);   // REV API: hold position when not powered
 }
 ```
 

@@ -5,7 +5,7 @@ Reusable blocks of code
 
 ## Overview
 
-A **method** is a named block of code that performs a specific task. Methods let you write logic once and call (use) it as many times as needed — avoiding copying and pasting the same code in multiple places.
+A **method** is a named block of code that performs a specific task. Methods let you write logic once and call (use) it as many times as needed. This is better than copying and pasting: if you copy the same logic into five places and later find a bug, you have to fix it five times — and if you miss one, the bug remains.
 
 **See table of contents for a breakdown of this section.**
 
@@ -18,6 +18,9 @@ public void setSpeed(double speed) {
     motor.set(speed);
 }
 ```
+
+!!! note
+    In FRC examples, `motor` is a variable that holds a motor controller object (such as a SparkMax — a small electronic device that controls how fast a motor spins). Calling `motor.set(speed)` is itself a method call into the REV library. You will see this pattern throughout FRC code.
 
 Every method declaration has four parts:
 
@@ -34,7 +37,7 @@ Every method declaration has four parts:
 
 A method either returns a value or returns nothing.
 
-- `void` — the method does something but gives nothing back to the caller
+- `void` — the method does something but gives nothing back to the code that called it
 - Any data type — the method computes and returns a value of that type
 
 ```java
@@ -55,7 +58,7 @@ public double getSpeed() {
 ```
 
 !!! tip
-    Use the `return` keyword to send a value back to the caller. The type after `return` must match the declared return type. A `void` method may use `return;` (no value) to exit early.
+    Use the `return` keyword to send a value back to the code that called this method. The type after `return` must match the declared return type. A `void` method may use `return;` (no value) to exit early.
 
 ***
 
@@ -187,9 +190,13 @@ Parameters are local variables declared in the method signature. When the method
 </quiz>
 
 <quiz>
-If a method does not return a value, its return type should be: [[void]]
+If a method does not return a value, its return type should be:
+- [ ] `null`
+- [ ] `int`
+- [x] `void`
+- [ ] `boolean`
 
-`void` is the keyword used when a method performs an action but has no value to hand back to the caller.
+`void` is the keyword used when a method performs an action but has no value to hand back to the code that called it.
 </quiz>
 
 <!-- mkdocs-quiz results -->

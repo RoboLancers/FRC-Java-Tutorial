@@ -98,3 +98,7 @@ plugins:
   # - minify:
   #     minify_html: true
   #     minify_js: true
+  
+extra_javascript:
+  - assets/js/quiz-tracker.js
+
