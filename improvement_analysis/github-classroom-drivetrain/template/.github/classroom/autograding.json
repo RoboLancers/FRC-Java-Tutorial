@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "Unit 1: Field Declarations",
+      "setup": "chmod +x ./gradlew",
+      "run": "./gradlew test --tests 'frc.robot.Unit1FieldDeclarationTest' --info",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 300,
+      "points": 20
+    },
+    {
+      "name": "Unit 2: Constants and Initialization",
+      "setup": "",
+      "run": "./gradlew test --tests 'frc.robot.Unit2ConstantsAndInitTest' --info",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 300,
+      "points": 25
+    },
+    {
+      "name": "Unit 3: Followers and driveArcade()",
+      "setup": "",
+      "run": "./gradlew test --tests 'frc.robot.Unit3FollowerAndDriveTest' --info",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 300,
+      "points": 30
+    },
+    {
+      "name": "Unit 4: RobotContainer Wiring",
+      "setup": "",
+      "run": "./gradlew test --tests 'frc.robot.Unit4RobotContainerTest' --info",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 300,
+      "points": 25
+    }
+  ]
+}
