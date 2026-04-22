@@ -17,14 +17,10 @@ Connect the `CANDriveSubsystem` to the driver's Xbox controller by setting `driv
 
 **1)** Open `RobotContainer.java`. The `driveSubsystem` and `driverController` fields are already declared for you. Find the `configureBindings()` method — it is currently empty.
 
-**2)** Inside `configureBindings()`, add the default command:
+**2)** Inside `configureBindings()`, call `driveSubsystem.setDefaultCommand(...)` and pass it the result of `driveSubsystem.driveArcade(...)`. The `driveArcade` method expects two `DoubleSupplier` arguments — provide them as lambdas using `() ->` syntax:
 
-```java
-driveSubsystem.setDefaultCommand(
-    driveSubsystem.driveArcade(
-        () -> -driverController.getLeftY() * DRIVE_SCALING,
-        () -> -driverController.getRightX() * ROTATION_SCALING));
-```
+- The first argument (speed) should negate the controller's left Y axis and multiply by `DRIVE_SCALING`.
+- The second argument (rotation) should negate the controller's right X axis and multiply by `ROTATION_SCALING`.
 
 > [!NOTE]
 > **Why negate the axes?**
@@ -51,37 +47,15 @@ If another command needs the drivetrain (such as an autonomous command), it will
 
 ## Expected Result
 
-Your `configureBindings()` method should look like this:
-
-```java
-private void configureBindings() {
-    driveSubsystem.setDefaultCommand(
-        driveSubsystem.driveArcade(
-            () -> -driverController.getLeftY() * DRIVE_SCALING,
-            () -> -driverController.getRightX() * ROTATION_SCALING));
-}
-```
-
-The project should now compile cleanly. Run `./gradlew build` (macOS/Linux) or `gradlew build` (Windows) to verify before deploying.
+After this unit, `configureBindings()` should contain a single `setDefaultCommand` call that binds the negated, scaled left Y and right X axes to `driveArcade`. The project should compile cleanly — verify with **Ctrl+Shift+P → WPILib: Build Robot Code** before deploying.
 
 ***
 
 ## Commit, Push, and Deploy
 
-```bash
-git add src/main/java/frc/robot/RobotContainer.java
-git commit -m "Unit 4: set driveArcade as default command in RobotContainer"
-git push
-```
+Stage `RobotContainer.java`, commit with a message like `"Unit 4: set driveArcade as default command in RobotContainer"`, and push to trigger the auto-grader.
 
-To deploy to the robot (connected via USB or radio):
-
-```bash
-./gradlew deploy        # macOS/Linux
-gradlew deploy          # Windows
-```
-
-Or use the WPILib button in the VSCode status bar.
+To deploy to the robot (connected via USB or radio), use **Ctrl+Shift+P → WPILib: Deploy Robot Code** or the WPILib button in the VSCode status bar.
 
 > [!IMPORTANT]
 > Before deploying, confirm your team number is set correctly in `.wpilib/wpilib_preferences.json`.

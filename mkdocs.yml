@@ -33,6 +33,7 @@ nav:
   - 'programming/using_sensors.md'
   - 'programming/pneumatics.md'
   - 'programming/Elastic.md'
+  - 'programming/SmartDashboard.md'
   - 'programming/robotpreferences.md'
   - 'programming/autonomous.md'
   - 'programming/pid.md'

@@ -19,7 +19,10 @@
       "Bash(python3 -c \"import pkgutil; import mkdocs_quiz; print\\(mkdocs_quiz.__doc__\\)\")",
       "Bash(curl -sL \"https://raw.githubusercontent.com/RoboLancers/management/main/templates/gradle/wrapper/gradle-wrapper.jar\" -o /workspaces/FRC-Java-Tutorial/improvement_analysis/github-classroom-drivetrain/template/gradle/wrapper/gradle-wrapper.jar)",
       "Bash(curl -sL \"https://github.com/gradle/gradle/raw/v8.11.0/gradle/wrapper/gradle-wrapper.jar\" -o /tmp/gradle-wrapper.jar)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "WebFetch(domain:docs.wpilib.org)",
+      "WebFetch(domain:v6.docs.ctr-electronics.com)",
+      "Bash(xargs cat *)"
     ]
   }
 }

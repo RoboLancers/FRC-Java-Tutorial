@@ -16,21 +16,12 @@ Define CAN IDs in `Constants.java`, then initialize the four SparkMax motor cont
 
 ## Part A — Define Drive Constants
 
-**1)** Open `Constants.java`. A `DriveConstants` inner class has been started for you with placeholder comments. Fill in the four CAN ID constants and the current limit:
+**1)** Open `Constants.java`. A `DriveConstants` inner class has been started for you with placeholder comments. Fill in four `public static final int` CAN ID constants — `LEFT_LEADER_ID`, `LEFT_FOLLOWER_ID`, `RIGHT_LEADER_ID`, `RIGHT_FOLLOWER_ID` — and one `public static final int` current limit constant named `DRIVE_MOTOR_CURRENT_LIMIT`.
 
-```java
-public static final class DriveConstants {
-    public static final int LEFT_LEADER_ID   = 1;  // replace with your robot's actual CAN IDs
-    public static final int LEFT_FOLLOWER_ID = 2;
-    public static final int RIGHT_LEADER_ID  = 3;
-    public static final int RIGHT_FOLLOWER_ID = 4;
-
-    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
-}
-```
+The CAN IDs must match your specific robot's wiring. IDs 1–4 are common kitbot defaults, but verify them using the REV Hardware Client. A current limit of 60 (amps) is a safe starting point to protect breakers.
 
 > [!WARNING]
-> The CAN IDs above are examples. You **must** set them to match your specific robot's wiring. Check the wiring diagram or use the REV Hardware Client / Phoenix Tuner to find the actual IDs. Using wrong IDs can cause unexpected motor movement.
+> The CAN IDs must match your specific robot's wiring. Check the wiring diagram or use the REV Hardware Client to find the actual IDs. Using wrong IDs can cause unexpected motor movement.
 
 > [!TIP]
 > Constants are written in `ALL_CAPS_UNDERSCORES` and declared `public static final` so they are readable from anywhere in the project without creating an object. See [Variables and Data Types — Constants](https://robolancers.github.io/FRC-Java-Tutorial/basics/java_types_variables.html#constants).
@@ -39,69 +30,22 @@ public static final class DriveConstants {
 
 ## Part B — Initialize Motors in the Constructor
 
-**2)** Open `CANDriveSubsystem.java`. Add a static import at the top of the file so you can use constant names directly:
+**2)** Open `CANDriveSubsystem.java`. Add a static import for `DriveConstants` at the top of the file (alongside the other imports, not inside any method) so you can use constant names directly without the class prefix.
 
-```java
-import static frc.robot.Constants.DriveConstants.*;
-```
-
-**3)** Inside the constructor `CANDriveSubsystem()`, initialize the four motors using the constants you just defined. The KitBot uses brushed CIM motors:
-
-```java
-leftLeader   = new SparkMax(LEFT_LEADER_ID,   MotorType.kBrushed);
-leftFollower  = new SparkMax(LEFT_FOLLOWER_ID,  MotorType.kBrushed);
-rightLeader  = new SparkMax(RIGHT_LEADER_ID,  MotorType.kBrushed);
-rightFollower = new SparkMax(RIGHT_FOLLOWER_ID, MotorType.kBrushed);
-```
+**3)** Inside the constructor, initialize each of the four `SparkMax` fields using the corresponding CAN ID constant. The KitBot uses brushed CIM motors, so pass `MotorType.kBrushed` as the second argument. Add the import for `MotorType` via 💡 quick-fix if needed.
 
 > [!NOTE]
-> Use `MotorType.kBrushless` instead if your robot uses NEO motors. Add the import for `MotorType` via the 💡 quick-fix: `com.revrobotics.spark.SparkLowLevel.MotorType`.
+> Use `MotorType.kBrushless` instead if your robot uses NEO motors.
 
-**4)** After the motor declarations, set a CAN timeout on each motor so configuration calls do not block robot operation indefinitely:
+**4)** After the motor initializations, call `setCANTimeout(250)` on each of the four motors. This sets a 250 ms timeout so configuration calls do not block robot operation indefinitely if a motor is unreachable.
 
-```java
-leftLeader.setCANTimeout(250);
-leftFollower.setCANTimeout(250);
-rightLeader.setCANTimeout(250);
-rightFollower.setCANTimeout(250);
-```
-
-**5)** Create a `SparkMaxConfig` and apply voltage compensation and a current limit. This helps the robot behave consistently across different battery charge levels and protects the breakers:
-
-```java
-SparkMaxConfig config = new SparkMaxConfig();
-config.voltageCompensation(12);
-config.smartCurrentLimit(DRIVE_MOTOR_CURRENT_LIMIT);
-```
-
-> [!NOTE]
-> Add the `SparkMaxConfig` import via 💡 quick-fix: `com.revrobotics.spark.config.SparkMaxConfig`.
+**5)** Create a local `SparkMaxConfig` variable, call `voltageCompensation(12)` on it to normalize output across different battery charge levels, and call `smartCurrentLimit(DRIVE_MOTOR_CURRENT_LIMIT)` to protect the breakers. Add the `SparkMaxConfig` import via 💡 quick-fix if needed. Do not apply the config to any motor yet — that happens in Unit 3.
 
 ***
 
 ## Expected Result
 
-Your constructor should now look like this (follower config and DifferentialDrive initialization come in Unit 3):
-
-```java
-public CANDriveSubsystem() {
-    leftLeader   = new SparkMax(LEFT_LEADER_ID,   MotorType.kBrushed);
-    leftFollower  = new SparkMax(LEFT_FOLLOWER_ID,  MotorType.kBrushed);
-    rightLeader  = new SparkMax(RIGHT_LEADER_ID,  MotorType.kBrushed);
-    rightFollower = new SparkMax(RIGHT_FOLLOWER_ID, MotorType.kBrushed);
-
-    leftLeader.setCANTimeout(250);
-    leftFollower.setCANTimeout(250);
-    rightLeader.setCANTimeout(250);
-    rightFollower.setCANTimeout(250);
-
-    SparkMaxConfig config = new SparkMaxConfig();
-    config.voltageCompensation(12);
-    config.smartCurrentLimit(DRIVE_MOTOR_CURRENT_LIMIT);
-
-    // (follower config and drive initialization added in Unit 3)
-}
-```
+After this unit, the constructor should create all four `SparkMax` objects, set a CAN timeout on each, and build a `SparkMaxConfig` with voltage compensation and a current limit. The `drive` field is still unassigned — it will be assigned in Unit 3.
 
 > [!IMPORTANT]
 > The code still will not compile at this point — `drive` has not been assigned yet. That happens in Unit 3.
@@ -110,12 +54,7 @@ public CANDriveSubsystem() {
 
 ## Commit and Push
 
-```bash
-git add src/main/java/frc/robot/Constants.java
-git add src/main/java/frc/robot/subsystems/CANDriveSubsystem.java
-git commit -m "Unit 2: define DriveConstants and initialize motors in constructor"
-git push
-```
+Stage both `Constants.java` and `CANDriveSubsystem.java`, commit with a message like `"Unit 2: define DriveConstants and initialize motors in constructor"`, and push to trigger the auto-grader.
 
 ## Reference
 

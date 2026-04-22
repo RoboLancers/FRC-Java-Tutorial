@@ -15,77 +15,38 @@ Complete the constructor by configuring leader/follower relationships and initia
 
 ## Part A — Configure Leader/Follower Relationships
 
-The KitBot has two motors per side. One motor on each side is the **leader** — it runs directly. The other is the **follower** — it mirrors the leader. This is configured through `SparkMaxConfig`.
+The KitBot has two motors per side. One motor on each side is the **leader** — it runs directly. The other is the **follower** — it mirrors the leader. This is configured by applying a `SparkMaxConfig` to each motor using `configure()`.
 
-**1)** Add the imports for `PersistMode` and `ResetMode` at the top of the file (use 💡 quick-fix):
+**1)** Add imports for `PersistMode` and `ResetMode` at the top of the file using 💡 quick-fix. Both come from `com.revrobotics.spark.SparkBase`.
 
-```java
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-```
+**2)** Inside the constructor, continuing after the `SparkMaxConfig` lines from Unit 2, configure the followers. Reuse the same `config` object:
 
-**2)** Inside the constructor, continuing after the `SparkMaxConfig` lines from Unit 2, configure the follower motors. The `config` object you already created will be reused:
+- Call `config.follow(leftLeader)` to set the config to follower mode targeting the left leader, then call `leftFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters)` to apply it.
+- Repeat the same pattern for the right side: call `config.follow(rightLeader)`, then apply the config to `rightFollower`.
 
-```java
-config.follow(leftLeader);
-leftFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+**3)** After both followers are configured, call `config.disableFollowerMode()` to clear the follower setting, then apply the config to `rightLeader`. This ensures the right leader runs independently.
 
-config.follow(rightLeader);
-rightFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-```
-
-**3)** Remove following mode from the config, then apply it to the right leader:
-
-```java
-config.disableFollowerMode();
-rightLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-```
-
-**4)** Invert the left side. On a differential drive, one side's motors spin opposite the other for both sides to drive forward together:
-
-```java
-config.inverted(true);
-leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-```
+**4)** Finally, call `config.inverted(true)` and apply the config to `leftLeader`. This inverts the left side so both sides drive the robot forward when positive power is applied.
 
 > [!WARNING]
-> Only invert one side — not both. If both sides are inverted (or neither is), the robot will spin in circles or fight itself. If the robot drives backwards, swap the inversion to the other side.
+> Only invert one side — not both. If both sides are inverted (or neither is), the robot will spin in circles or fight itself. If the robot drives backwards, swap the inversion to the right leader instead of the left.
 
 ***
 
 ## Part B — Initialize DifferentialDrive
 
-**5)** After the motor configuration, assign the `drive` field. Place this line near the top of the constructor, right after creating the four `SparkMax` objects:
-
-```java
-drive = new DifferentialDrive(leftLeader, rightLeader);
-```
+**5)** After the four `SparkMax` fields are initialized (and before the `setCANTimeout` calls), assign the `drive` field by constructing a new `DifferentialDrive` and passing it the left leader and right leader as arguments. Add the import via 💡 quick-fix if not already present.
 
 > [!NOTE]
 > `DifferentialDrive` takes the two **leader** motors only — the followers mirror them automatically through the configuration applied above.
-
-Add the import via 💡 quick-fix if not already present:
-- `DifferentialDrive` → `edu.wpi.first.wpilibj.drive.DifferentialDrive`
 
 ***
 
 ## Part C — Add the driveArcade Command Factory
 
-**6)** Below the `periodic()` method, add the `driveArcade` factory method. Add the imports it needs via 💡 quick-fix:
+**6)** Below the `periodic()` method, add a public method named `driveArcade` that returns a `Command`. It should accept two `DoubleSupplier` parameters — one for forward/backward speed (e.g., `xSpeed`) and one for rotation (e.g., `zRotation`). Add imports for `DoubleSupplier` (from `java.util.function`) and `Command` (from `edu.wpi.first.wpilibj2.command`) via 💡 quick-fix.
 
-```java
-import java.util.function.DoubleSupplier;
-import edu.wpi.first.wpilibj2.command.Command;
-```
-
-Then add the method:
-
-```java
-public Command driveArcade(DoubleSupplier xSpeed, DoubleSupplier zRotation) {
-    return this.run(
-        () -> drive.arcadeDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()));
-}
-```
+Inside the method, return `this.run(...)` with a lambda that calls `drive.arcadeDrive(...)`, passing the current double values from each supplier via `getAsDouble()`.
 
 > [!TIP]
 > `this.run(...)` creates a command that calls the lambda on every scheduler loop while the command is scheduled. The subsystem is automatically registered as a requirement, so no other command can interrupt it without going through the scheduler.
@@ -99,48 +60,15 @@ public Command driveArcade(DoubleSupplier xSpeed, DoubleSupplier zRotation) {
 
 ## Expected Result
 
-The class should now compile cleanly. The complete constructor:
+After this unit, the constructor should be complete: all four motors initialized, CAN timeouts set, a `SparkMaxConfig` applied to configure both followers (each following their respective leader), the right leader configured without follower mode, the left leader inverted, and `drive` assigned. The `driveArcade` method should be present below `periodic()` and return a `Command`.
 
-```java
-public CANDriveSubsystem() {
-    leftLeader   = new SparkMax(LEFT_LEADER_ID,   MotorType.kBrushed);
-    leftFollower  = new SparkMax(LEFT_FOLLOWER_ID,  MotorType.kBrushed);
-    rightLeader  = new SparkMax(RIGHT_LEADER_ID,  MotorType.kBrushed);
-    rightFollower = new SparkMax(RIGHT_FOLLOWER_ID, MotorType.kBrushed);
-
-    drive = new DifferentialDrive(leftLeader, rightLeader);
-
-    leftLeader.setCANTimeout(250);
-    leftFollower.setCANTimeout(250);
-    rightLeader.setCANTimeout(250);
-    rightFollower.setCANTimeout(250);
-
-    SparkMaxConfig config = new SparkMaxConfig();
-    config.voltageCompensation(12);
-    config.smartCurrentLimit(DRIVE_MOTOR_CURRENT_LIMIT);
-
-    config.follow(leftLeader);
-    leftFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    config.follow(rightLeader);
-    rightFollower.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    config.disableFollowerMode();
-    rightLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    config.inverted(true);
-    leftLeader.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-}
-```
+The project should now compile cleanly. Build with **Ctrl+Shift+P → WPILib: Build Robot Code** to verify.
 
 ***
 
 ## Commit and Push
 
-```bash
-git add src/main/java/frc/robot/subsystems/CANDriveSubsystem.java
-git commit -m "Unit 3: configure followers, invert, and add driveArcade factory"
-git push
-```
+Stage `CANDriveSubsystem.java`, commit with a message like `"Unit 3: configure followers, invert, and add driveArcade factory"`, and push to trigger the auto-grader.
 
 ## Reference
 

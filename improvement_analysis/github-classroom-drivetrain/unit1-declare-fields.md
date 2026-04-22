@@ -17,20 +17,9 @@ Declare the five member variables the `CANDriveSubsystem` class needs: four `Spa
 
 **1)** Open `CANDriveSubsystem.java`. You will see the class body with an empty constructor and a `periodic()` method. All your changes in this unit go between the class opening brace and the constructor.
 
-**2)** Add the four `SparkMax` field declarations inside the class body, before the constructor:
+**2)** Declare four `private final SparkMax` fields inside the class body, before the constructor. Name them `leftLeader`, `leftFollower`, `rightLeader`, and `rightFollower`. Each declaration ends with a semicolon and has no assigned value — initialization happens in the constructor.
 
-```java
-private final SparkMax leftLeader;
-private final SparkMax leftFollower;
-private final SparkMax rightLeader;
-private final SparkMax rightFollower;
-```
-
-**3)** Below the SparkMax fields, add the `DifferentialDrive` field:
-
-```java
-private final DifferentialDrive drive;
-```
+**3)** Below the `SparkMax` fields, declare a `private final DifferentialDrive` field named `drive`. Again, leave it unassigned for now.
 
 **4)** VSCode will underline `SparkMax` and `DifferentialDrive` in red because the imports are missing. Fix each one using the 💡 quick-fix (click the light bulb or press `Ctrl+.`) and select the correct import:
 
@@ -44,26 +33,7 @@ private final DifferentialDrive drive;
 
 ## Expected Result
 
-After this unit, your class should look like this (imports and constructor omitted for brevity):
-
-```java
-public class CANDriveSubsystem extends SubsystemBase {
-
-    private final SparkMax leftLeader;
-    private final SparkMax leftFollower;
-    private final SparkMax rightLeader;
-    private final SparkMax rightFollower;
-
-    private final DifferentialDrive drive;
-
-    public CANDriveSubsystem() {
-        // empty for now — you will fill this in Units 2 and 3
-    }
-
-    @Override
-    public void periodic() {}
-}
-```
+After this unit, the class body should contain five field declarations — four `SparkMax` fields and one `DifferentialDrive` field — all `private final`, all unassigned, placed above the constructor. The constructor itself should remain empty for now.
 
 > [!IMPORTANT]
 > The code will not compile yet — `final` fields that are declared but not assigned cause a compiler error. This is expected. They will be assigned in the constructor in Unit 2.
@@ -72,13 +42,7 @@ public class CANDriveSubsystem extends SubsystemBase {
 
 ## Commit and Push
 
-```bash
-git add src/main/java/frc/robot/subsystems/CANDriveSubsystem.java
-git commit -m "Unit 1: declare SparkMax and DifferentialDrive fields"
-git push
-```
-
-Check the **Actions** tab on GitHub to see the auto-grader results.
+Stage `CANDriveSubsystem.java`, commit with a message like `"Unit 1: declare SparkMax and DifferentialDrive fields"`, and push to trigger the auto-grader. Check the **Actions** tab on GitHub to see the results.
 
 ## Reference
 
