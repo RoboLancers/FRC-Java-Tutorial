@@ -11,7 +11,8 @@
 	},				
 	"postCreateCommand": {
 		"install-deps": "pip install --break-system-packages -r requirements.txt",
-		"install-claude": "npm install -g @anthropic-ai/claude-code"
+		"install-claude": "npm install -g @anthropic-ai/claude-code",
+		"install-uv": "pip install --break-system-packages uv"
 	},
 	"remoteEnv": {
 		"PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"

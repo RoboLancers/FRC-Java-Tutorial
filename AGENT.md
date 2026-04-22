@@ -46,19 +46,49 @@ New pages must be added to the `nav:` section of [mkdocs.yml](mkdocs.yml) to app
 
 ### FRC-specific content policy
 
-Before writing or editing any FRC programming content (WPILib APIs, vendor libraries, motor controllers, sensors), use the documentation defined in .claude/wpilib-vendor-libraries.md. This file defines a set of commands for searching and fetching documentation from WPILib and major FRC vendors (REV, CTRE, Redux). Always search the links found there to find the most up-to-date information, and include citations in your answers. Do not rely solely on training data for vendor APIs, as they change frequently.
+Before writing or editing any FRC programming content (WPILib APIs, vendor libraries, motor controllers, sensors), query the `frc-docs` MCP server. Do not rely solely on training data for vendor APIs — they change frequently. Always base answers on MCP results and include citations.
 
-Always base FRC answers on these results and include citations. Do not rely solely on training data for vendor APIs (REV, CTRE, Redux, etc.).
+The `frc-docs` MCP server exposes four tools:
 
-Vendor-to-hardware mapping:
-| Hardware | Vendor param |
+**`search_frc_docs`** — search across WPILib, REV, CTRE, Redux, and PhotonVision documentation.
+```
+search_frc_docs(query="<topic>")
+search_frc_docs(query="<topic>", vendors=["wpilib", "rev"], language="Java")
+search_frc_docs(query="<topic>", vendors=["ctre"], version="2025", max_results=5)
+```
+- `vendors`: `["all"]` (default), or any of `"wpilib"`, `"rev"`, `"ctre"`, `"redux"`, `"photonvision"`
+- `language`: `"Java"` (default), `"Python"`, or `"C++"`
+- `version`: `"2025"` (default) or `"2026"` — default to **2026** for this project
+- `max_results`: 1–25, default 10
+- `auto_detect`: `true` (default) — auto-infers language and vendors from project files
+
+**`detect_project_context`** — scan project files to identify language and vendor libraries in use.
+```
+detect_project_context()
+detect_project_context(project_path="/workspaces/FRC-Java-Tutorial/improvement_analysis/github-classroom-drivetrain/template")
+```
+
+**`fetch_frc_doc_page`** — fetch full content of a specific documentation page by URL.
+```
+fetch_frc_doc_page(url="https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/spark-max.html")
+fetch_frc_doc_page(url="https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/configuration.html")
+```
+
+**`list_frc_doc_sections`** — browse available documentation sections by vendor.
+```
+list_frc_doc_sections()
+list_frc_doc_sections(vendors=["rev", "ctre"], language="Java")
+```
+
+Vendor-to-hardware mapping (use for the `vendors` parameter):
+| Hardware | `vendors` value |
 |---|---|
 | SparkMax, SparkFlex, NEO | `"rev"` |
 | TalonFX, Falcon 500, Kraken, CANcoder, Pigeon | `"ctre"` |
 | Canandcoder, Canandmag | `"redux"` |
 | NavX, Limelight, PhotonVision | `"wpilib"` / `"photonvision"` |
 
-Default to the **2026 season** unless otherwise specified.
+Default to the **2026 season** unless otherwise specified. For static vendor library reference (vendordep URLs, import packages, hardware overviews), see [.claude/wpilib-vendor-libraries-reference.md](.claude/wpilib-vendor-libraries-reference.md).
 
 ### New page template
 
