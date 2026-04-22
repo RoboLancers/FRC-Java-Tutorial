@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENT.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI agents when working with code in this repository.
 
 ## What This Repo Is
 
@@ -102,3 +102,8 @@ Use [template_page.md](template_page.md) as the starting point for new pages. Ke
 ### Improvement planning docs
 
 [improvement_analysis/](improvement_analysis/) contains research and planning documents (not part of the tutorial content). These are not deployed to the site and do not appear in `nav:`.
+
+### Project Structure
+[docs](docs/) contains all the documentation files for the tutorial.
+[code_examples](code_examples/) contains all the code examples for the tutorial.
+[improvement_analysis](improvement_analysis/) contains research and planning documents (not part of the tutorial content). These are not deployed to the site and do not appear in `nav:`.

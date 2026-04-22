@@ -29,6 +29,8 @@ nav:
 - FRC Programming:
   - 'programming/new_project.md'
   - 'programming/driving_robot.md'
+  - 'programming/SwerveDriveIntro.md'
+  - 'programming/yagsl_swerve_tutorial.md'
   - 'programming/deploying.md'
   - 'programming/using_sensors.md'
   - 'programming/pneumatics.md'

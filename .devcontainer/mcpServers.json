@@ -1,0 +1,7 @@
+{
+  "first-agentic-csa": {
+    "command": "uv",
+    "args": ["run", "first-agentic-csa"],
+    "cwd": "/opt/agentic-csa"
+  }
+}
