@@ -1,7 +1,7 @@
 # Introduction to Swerve Drive
 
 Swerve drive is one of the most powerful and versatile drivetrain designs available in FRC. This page explains the core concepts behind swerve drives and provides code examples to help you understand how they work.
-
+For the purposes of this document and the YAGSL swerve tutorial, we will focus on using the YAGSL library to implement a swerve drive. 
 If you're looking for detailed setup and configuration instructions, see the [full YAGSL tutorial](yagsl_swerve_tutorial.md).
 
 ***
@@ -66,6 +66,7 @@ Most FRC swerve drives use 4 modules arranged in a rectangle:
 ```
 
 ***
+[Swerve Diagram](https://docs.yagsl.com/~gitbook/image?url=https%3A%2F%2F567506766-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F754c0Fpq8fBi6k4ByS1k%252Fuploads%252FP8kIHNspDzTMqBiHw1U1%252Fimage.png%3Falt%3Dmedia%26token%3D9923865e-47c7-4b1e-90a5-9da9610c0764&width=768&dpr=3&quality=100&sign=6a519e95&sv=2 target="_blank")
 
 ## Holonomic Drive and Kinematics
 
@@ -147,20 +148,7 @@ deploy/swerve/
 This file defines the robot's IMU (gyroscope) and references the individual module configurations.
 
 ```json title="swervedrive.json Example - Pigeon2 IMU"
-{
-  "imu": {
-    "type": "pigeon2",
-    "id": 13,
-    "canbus": "canivore"
-  },
-  "invertedIMU": true,
-  "modules": [
-    "frontleft.json",
-    "frontright.json",
-    "backleft.json",
-    "backright.json"
-  ]
-}
+--8<-- "docs/code_examples/swerve/neo/swervedrive.json"
 ```
 
 !!! tip "IMU Selection"
@@ -178,64 +166,17 @@ Each swerve module has its own JSON file that defines:
 - Physical location relative to the robot center
 
 ```json title="Module Configuration Example - SparkMax with CANCoder"
-{
-  "drive": {
-    "type": "sparkmax_neo",
-    "id": 4,
-    "canbus": null
-  },
-  "angle": {
-    "type": "sparkmax_neo",
-    "id": 3,
-    "canbus": null
-  },
-  "encoder": {
-    "type": "cancoder",
-    "id": 9,
-    "canbus": null
-  },
-  "inverted": {
-    "drive": false,
-    "angle": false
-  },
-  "absoluteEncoderOffset": -114.609,
-  "location": {
-    "front": 12,
-    "left": 12
-  }
-}
+--8<-- "docs/code_examples/swerve/neo/modules/frontleft.json"
 ```
 
-The `absoluteEncoderOffset` tells YAGSL how to interpret the encoder reading. It's the encoder value (in degrees) when the wheel is pointing "forward" (0°). You'll measure this during robot setup by pointing all wheels forward and recording the encoder values, then adjusting the offsets as needed.
+The `absoluteEncoderOffset` tells YAGSL how to interpret the encoder reading. It's the encoder value (in degrees) when the wheel is pointing "forward" (0°). You'll measure this during robot setup by pointing all wheels forward and recording the encoder values, then adjusting the offsets as needed. 
 
 ### Physical Properties
 
 This file defines your robot's physical parameters used in kinematics calculations:
 
 ```json title="physicalproperties.json Example"
-{
-  "conversionFactors": {
-    "angle": {
-      "gearRatio": 12.8,
-      "factor": 0
-    },
-    "drive": {
-      "gearRatio": 8.14,
-      "diameter": 4,
-      "factor": 0
-    }
-  },
-  "currentLimit": {
-    "drive": 40,
-    "angle": 20
-  },
-  "rampRate": {
-    "drive": 0.25,
-    "angle": 0.25
-  },
-  "wheelGripCoefficientOfFriction": 1.19,
-  "optimalVoltage": 12
-}
+--8<-- "docs/code_examples/swerve/neo/physicalproperties.json"
 ```
 
 !!! info "Physical Parameters"
@@ -249,22 +190,7 @@ This file defines your robot's physical parameters used in kinematics calculatio
 The `pidfproperties.json` file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning values for closed-loop motor control:
 
 ```json title="pidfproperties.json Example"
-{
-  "drive": {
-    "p": 0.00023,
-    "i": 0.0000002,
-    "d": 1,
-    "f": 0,
-    "iz": 0
-  },
-  "angle": {
-    "p": 0.01,
-    "i": 0,
-    "d": 0,
-    "f": 0,
-    "iz": 0
-  }
-}
+--8<-- "docs/code_examples/swerve/neo/pidfproperties.json"
 ```
 
 !!! warning "PIDF Tuning is Important"
@@ -482,3 +408,57 @@ Now that you understand swerve drive concepts, check out these resources:
 - **YAGSL** abstracts hardware complexity with JSON configuration files
 - **Kinematics** converts between chassis velocity (what you want) and individual module states (what each wheel should do)
 - **Configuration and tuning** are critical for smooth, reliable operation
+
+---
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+A swerve drive can move forward, strafe sideways, and rotate simultaneously — all as independent motions.
+- [x] True
+- [ ] False
+
+This is what makes swerve a holonomic drivetrain. Each of the three motions (vx, vy, and omega in ChassisSpeeds) can be commanded independently and at the same time, unlike a differential drive where forward motion and rotation are coupled.
+</quiz>
+
+<quiz>
+What are the three main hardware components inside a single swerve module?
+- [ ] Drive motor, battery, and CAN bus
+- [ ] Steering servo, IMU, and relative encoder
+- [x] Drive motor, steering (angle) motor, and absolute encoder
+- [ ] Drive motor, solenoid, and limit switch
+
+Every swerve module has a drive motor (moves the robot), a steering motor (rotates the wheel to point in any direction), and an absolute encoder (measures the wheel's current angle so the steering motor knows its position at startup).
+</quiz>
+
+<quiz>
+According to this page, if the robot is facing the alliance wall and the driver pushes forward on the joystick in field-oriented mode, what does the robot do?
+- [ ] Drives forward into the alliance wall, because that is the direction the robot is facing
+- [ ] Stops and waits for the robot to rotate before moving
+- [x] Strafe backward (away from the wall), because field-oriented "forward" is away from the alliance wall
+- [ ] Rotates in place to face the field-forward direction
+
+The page states: "If the robot is facing the alliance wall but you push forward on the joystick, the robot will strafe backward (away from the wall) because that's the 'forward' direction in the field coordinate system." The joystick is always relative to the field, not the robot's facing direction.
+</quiz>
+
+<quiz>
+A `ChassisSpeeds` object describes robot motion using three values. Which set is correct?
+- [ ] Left speed, right speed, and elevator speed
+- [ ] X position, Y position, and heading
+- [x] vx (forward/back velocity), vy (left/right velocity), and omega (rotation rate)
+- [ ] Drive motor RPM, steering angle, and gear ratio
+
+ChassisSpeeds encodes the robot's desired velocity in three independent dimensions: forward/backward (vx), sideways (vy), and rotational (omega). SwerveDriveKinematics converts these three numbers into per-module drive speeds and steering angles.
+</quiz>
+
+<quiz>
+The `absoluteEncoderOffset` in a YAGSL module JSON file should be set to zero for all modules as a starting point, and YAGSL will calibrate the rest automatically.
+- [ ] True
+- [x] False
+
+The offset must be measured and set manually for each module. It is the encoder reading (in degrees) when that wheel is physically pointing straight forward. You measure this during robot setup by pointing all wheels forward and recording the encoder values. YAGSL does not auto-calibrate this value.
+</quiz>
+
+<!-- mkdocs-quiz results -->

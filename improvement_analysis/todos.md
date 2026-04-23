@@ -9,6 +9,7 @@
 - review The smartdashboard.md page and add more examples and explanations as needed.
 - review the basic_shooter.md page and add more examples and explanations as needed.
 - The encoder reset example code is incorrect and needs to be fixed. 
+- expand sensors.md page.
 - test out Classroom lessons.
     - load into Github.
     - complete tasks.

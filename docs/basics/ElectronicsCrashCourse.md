@@ -314,3 +314,55 @@ The cameras plug into the USB ports on the Orange Pi.
 The Orange Pi connects to the radio over Ethernet,
 It's powered off the PDH with a buck/step down converter (which decreases voltage and increases current, since the Orange Pi only takes 5V and not 12).
 If you're having issues, check the PhotonVision docs pages on [networking](https://docs.photonvision.org/en/latest/docs/quick-start/networking.html) and [wiring](https://docs.photonvision.org/en/latest/docs/quick-start/wiring.html).
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+When the robot is enabled and motors are running, the battery voltage will drop lower than when the robot is just powered on.
+- [x] True
+- [ ] False
+
+This is called voltage sag. Powering motors draws current (I), and V = IR means that current through the battery's internal resistance causes a voltage drop. Severe sag can cause a brownout, where motors begin shutting off automatically.
+</quiz>
+
+<quiz>
+What is the rated current limit of the main breaker, and what should you do before working hands-on with the robot?
+- [ ] 40 amps; make sure the PDH is disconnected
+- [ ] 120 amps; make sure the radio is off
+- [x] 120 amps; make sure the main breaker is off
+- [ ] 40 amps; make sure the RoboRIO is rebooted
+
+The main breaker is rated at 120 A and is the robot's master power switch. Before going hands-on with any mechanism, the breaker must be off. The 40 A limit applies to individual motor breakers on the PDH, not the main breaker.
+</quiz>
+
+<quiz>
+What tool would you use to set the CAN ID on a REV SparkMax motor controller?
+- [ ] WPILib Driver Station
+- [ ] Phoenix Tuner X
+- [x] REV Hardware Client
+- [ ] RoboRIO Imaging Tool
+
+REV devices like the SparkMax are configured with the REV Hardware Client. Phoenix Tuner X is the equivalent tool for CTRE devices (TalonFX, CANcoder, Pigeon 2). Using the wrong tool won't detect the device.
+</quiz>
+
+<quiz>
+Why are absolute encoders preferred over relative encoders for tracking the angle of a swerve module's steering?
+- [ ] Absolute encoders are cheaper and easier to wire
+- [ ] Relative encoders can't measure angles greater than 180°
+- [x] Absolute encoders always report the true angular position, while relative encoders only measure change from power-on
+- [ ] Absolute encoders communicate faster over CAN
+
+A relative encoder measures change from the position it had when power was applied — so at startup the robot has no idea which way the wheels are pointing. An absolute encoder reports its actual angular position regardless of power cycles, which is critical for swerve module steering.
+</quiz>
+
+<quiz>
+The Pigeon 2.0 IMU is primarily used to track the robot's position (X/Y coordinates) on the field.
+- [ ] True
+- [x] False
+
+The Pigeon 2.0 measures rotation and acceleration, so it is used to track the robot's heading (which direction it is facing), not its absolute X/Y position. Odometry combines IMU heading with wheel encoder data, but the IMU alone only gives orientation.
+</quiz>
+
+<!-- mkdocs-quiz results -->
