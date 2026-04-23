@@ -168,22 +168,22 @@ Each swerve module (wheel) has its own configuration file defining the drive mot
       - `left`: Distance left from center (inches, negative for right side)
 
 **Example - SparkMax NEO with CANCoder (Front-Left):**
-```json title="frontleft.json - SparkMax NEO with CANCoder from swerve/neo"
+```json title="frontleft.json - SparkMax NEO with CANCoder"
 --8<-- "docs/code_examples/swerve/neo/modules/frontleft.json"
 ```
 
 **Example - Front-Right Module (frontright.json):**
-```json title="frontright.json from swerve/neo"
+```json title="frontright.json"
 --8<-- "docs/code_examples/swerve/neo/modules/frontright.json"
 ```
 
 **Example - Back-Right Module (backright.json):**
-```json title="backright.json from swerve/neo"
+```json title="backright.json"
 --8<-- "docs/code_examples/swerve/neo/modules/backright.json"
 ```
 
 **Example - Back-Left Module (backleft.json):**
-```json title="backleft.json from swerve/neo"
+```json title="backleft.json"
 --8<-- "docs/code_examples/swerve/neo/modules/backleft.json"
 ```
 
@@ -237,22 +237,7 @@ This file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning
 
 **Example - SparkMax tuning values:**
 ```json title="pidfproperties.json - SparkMax Tuning"
-{
-  "drive": {
-    "p": 0.0020645,
-    "i": 0.0,
-    "d": 0.0,
-    "f": 0.0,
-    "iz": 0.0
-  },
-  "angle": {
-    "p": 0.01,
-    "i": 0.0,
-    "d": 0.0,
-    "f": 0.0,
-    "iz": 0.0
-  }
-}
+--8<-- "docs/code_examples/swerve/neo/modules/pidfproperties.json"
 ```
 
 **Example - TalonFX tuning values:**
@@ -293,30 +278,9 @@ This file configures advanced control parameters for heading correction and velo
       - `x`: PID for X-axis velocity control
       - `y`: PID for Y-axis velocity control
 
-**Example - Default controller settings:**
-```json title="controllerproperties.json - Default Settings"
-{
-  "heading": {
-    "p": 0.4,
-    "i": 0.0,
-    "d": 0.0
-  },
-  "velocity": {
-    "x": {
-      "p": 2.0,
-      "i": 0.0,
-      "d": 0.0
-    },
-    "y": {
-      "p": 2.0,
-      "i": 0.0,
-      "d": 0.0
-    }
-  }
-}
-```
 
-**Complete controllerproperties.json Example:**
+
+**Controllerproperties.json Example:**
 ```json title="controllerproperties.json - Complete Example from swerve/neo"
 --8<-- "docs/code_examples/swerve/neo/controllerproperties.json"
 ```
@@ -406,14 +370,18 @@ For more code setup details, see [Code Setup Documentation](https://docs.yagsl.c
 ### Joystick Integration
 
 !!! tip
-    Joystick integration shows how to connect driver inputs to the drive commands. The default command runs continuously while no other command is active. Note the axis inversions (-driverController.getLeftY()) which account for typical joystick orientations where pushing forward gives negative Y values.
+    `SwerveInputStream` chains joystick reads, deadband filtering, scaling, and alliance-relative control into a single reusable supplier of `ChassisSpeeds`. Pass it directly to `driveFieldOriented()` as the subsystem's default command. Axes are negated because standard joysticks return negative Y when pushed forward.
 
-```java title="RobotContainer.java - Joystick Integration"
---8<-- "docs/code_examples/swerve/RobotContainer.java:joystick-integration"
+```java title="RobotContainer.java - SwerveInputStream"
+--8<-- "docs/code_examples/swerve/RobotContainer.java:swerve-input-stream"
+```
+
+```java title="RobotContainer.java - Binding to Default Command"
+--8<-- "docs/code_examples/swerve/RobotContainer.java:configure-bindings"
 ```
 
 !!! note "Why are axes inverted?"
-    Standard game controller joysticks return negative values when pushed forward (Y-axis inverted convention). The negation signs correct this so that pushing forward on the joystick actually moves the robot forward.
+    Standard game controller joysticks return negative values when pushed forward (Y-axis inverted convention). Multiplying by `-1` corrects this so that pushing forward on the joystick actually moves the robot forward.
 
 ### Odometry and Pose Reset
 

@@ -22,7 +22,8 @@
       "Bash(python3 -c ' *)",
       "WebFetch(domain:docs.wpilib.org)",
       "WebFetch(domain:v6.docs.ctr-electronics.com)",
-      "Bash(xargs cat *)"
+      "Bash(xargs cat *)",
+      "Bash(java\" /workspaces/FRC-Java-Tutorial/docs/programming/SwerveDriveIntro.md)"
     ]
   }
 }

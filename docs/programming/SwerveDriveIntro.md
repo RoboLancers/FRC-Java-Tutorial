@@ -106,20 +106,7 @@ In **field-oriented drive**, the robot's movement is relative to the **field coo
 From the `SwerveSubsystem` example:
 
 ```java title="Field-Oriented Drive Command"
-public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
-{
-  return run(() -> {
-    // Scale inputs for smoother control
-    swerveDrive.drive(
-      SwerveMath.scaleTranslation(new Translation2d(
-        translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-        translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()), 0.8),
-      Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
-      true,  // fieldRelative = true
-      false
-    );
-  });
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:drive-command"
 ```
 
 ### Robot-Oriented Drive
@@ -131,15 +118,7 @@ In **robot-oriented drive**, the robot's movement is relative to **the robot's c
 - Can be confusing for drivers during matches since the joystick behavior changes as the robot rotates
 
 ```java title="Robot-Oriented Drive"
-public void drive(Translation2d translation, double rotation, boolean fieldRelative)
-{
-  swerveDrive.drive(
-    translation,
-    rotation,
-    false,  // fieldRelative = false
-    false   // openLoop
-  );
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:drive"
 ```
 
 ---
@@ -307,34 +286,7 @@ The `SwerveSubsystem` is the command-based subsystem that encapsulates all swerv
 The YAGSL library handles most of the complexity. In your subsystem constructor, you simply point it to your configuration files:
 
 ```java title="SwerveSubsystem.java - Initialization"
-public class SwerveSubsystem extends SubsystemBase {
-  private final SwerveDrive swerveDrive;
-
-  public SwerveSubsystem(File directory) {
-    // Determine starting pose based on alliance color
-    boolean blueAlliance = DriverStation.getAlliance().isPresent() && 
-                           DriverStation.getAlliance().get() == Alliance.Blue;
-    Pose2d startingPose = blueAlliance ? 
-      new Pose2d(new Translation2d(Meter.of(1), Meter.of(4)), Rotation2d.fromDegrees(0)) :
-      new Pose2d(new Translation2d(Meter.of(16), Meter.of(4)), Rotation2d.fromDegrees(180));
-
-    // Configure telemetry verbosity
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
-
-    try {
-      // Create the swerve drive from JSON configuration files
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, startingPose);
-
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
-    // Configure advanced swerve drive settings
-    swerveDrive.setHeadingCorrection(false);      // Disable heading correction for angular velocity control
-    swerveDrive.setCosineCompensator(false);      // Disable cosine compensation (it causes sim discrepancies)
-    swerveDrive.setAngularVelocityCompensation(true, true, 0.1);  // Correct for angular velocity skew
-  }
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:constructor"
 ```
 
 !!! tip "What does the SwerveParser do?"
@@ -349,19 +301,7 @@ public class SwerveSubsystem extends SubsystemBase {
 The most common way to control a swerve drive during teleop is field-oriented drive with joystick input:
 
 ```java title="Field-Oriented Joystick Drive"
-public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
-  return run(() -> {
-    // Scale inputs for smoother, more controllable movement
-    swerveDrive.drive(
-      SwerveMath.scaleTranslation(new Translation2d(
-        translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-        translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()), 0.8),
-      Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
-      true,   // fieldRelative = true
-      false   // openLoop = false
-    );
-  });
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:drive-command"
 ```
 
 !!! note "Input Scaling"
@@ -369,20 +309,29 @@ public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translat
     - `Math.pow(..., 3)` cubes the rotation input for smoother rotation control
     - Both techniques make the joystick feel more responsive at small movements and less twitchy at large ones
 
+### Integrating with a Controller
+
+In `RobotContainer`, use `SwerveInputStream` to build a reusable stream of driver inputs, then pass it to `driveFieldOriented` as the default command:
+
+```java title="RobotContainer.java - SwerveInputStream"
+--8<-- "docs/code_examples/swerve/RobotContainer.java:swerve-input-stream"
+```
+
+```java title="RobotContainer.java - Binding to Default Command"
+--8<-- "docs/code_examples/swerve/RobotContainer.java:configure-bindings"
+```
+
+!!! note "SwerveInputStream"
+    `SwerveInputStream` is a YAGSL utility that chains joystick axis reads, deadband, scaling, and alliance-relative control into a single `Supplier<ChassisSpeeds>`. Passing it directly to `driveFieldOriented()` keeps `RobotContainer` clean and makes it easy to swap control schemes.
+
 ### Using ChassisSpeeds for Advanced Control
 
 For autonomous routines or when you have calculated velocities (e.g., from path planning), use `ChassisSpeeds`:
 
 ```java title="ChassisSpeeds Drive"
-public void driveFieldOriented(ChassisSpeeds velocity) {
-  swerveDrive.driveFieldOriented(velocity);
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:drive-field-oriented-void"
 
-public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity) {
-  return run(() -> {
-    swerveDrive.driveFieldOriented(velocity.get());
-  });
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:drive-field-oriented-command"
 ```
 
 `ChassisSpeeds` contains three velocity components:
@@ -399,15 +348,9 @@ One of the great features of swerve drives is accurate odometry tracking. The ro
 ### Getting the Robot's Current Pose
 
 ```java title="Odometry Example"
-// Get the robot's current position and rotation
-public Pose2d getPose() {
-  return swerveDrive.getPose();
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:get-pose"
 
-// Get just the heading
-public Rotation2d getHeading() {
-  return getPose().getRotation();
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:get-heading"
 ```
 
 ### Resetting Odometry
@@ -415,24 +358,15 @@ public Rotation2d getHeading() {
 Reset the robot's position estimate when you know its actual position (e.g., at the start of autonomous):
 
 ```java title="Odometry Reset"
-public void resetOdometry(Pose2d initialPose) {
-  swerveDrive.resetOdometry(initialPose);
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:reset-odometry"
+```
 
-// Reset heading to 0 degrees
-public void zeroGyro() {
-  swerveDrive.zeroGyro();
-}
+```java title="Zero Gyro"
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:zero-gyro"
+```
 
-// Align heading to alliance (blue = 0°, red = 180°)
-public void zeroGyroWithAlliance() {
-  if (isRedAlliance()) {
-    zeroGyro();
-    resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
-  } else {
-    zeroGyro();
-  }
-}
+```java title="Zero Gyro with Alliance"
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:zero-gyro-with-alliance"
 ```
 
 ---
@@ -444,10 +378,7 @@ public void zeroGyroWithAlliance() {
 Point all wheels forward for a symmetric appearance (useful for demonstrations or diagnostics):
 
 ```java title="Center Modules"
-public Command centerModulesCommand() {
-  return run(() -> Arrays.asList(swerveDrive.getModules())
-    .forEach(it -> it.setAngle(0.0)));
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:center-modules"
 ```
 
 ### Lock Pose
@@ -455,9 +386,7 @@ public Command centerModulesCommand() {
 Prevent the robot from moving by pointing all wheels to form an "X" pattern, locking the robot in place:
 
 ```java title="Lock Pose"
-public void lock() {
-  swerveDrive.lockPose();
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:lock"
 ```
 
 ### Get Velocity
@@ -465,13 +394,7 @@ public void lock() {
 Monitor the robot's current velocity for diagnostics or control logic:
 
 ```java title="Get Current Velocity"
-public ChassisSpeeds getFieldVelocity() {
-  return swerveDrive.getFieldVelocity();
-}
-
-public ChassisSpeeds getRobotVelocity() {
-  return swerveDrive.getRobotVelocity();
-}
+--8<-- "docs/code_examples/swerve/SwerveSubsystem.java:get-velocity"
 ```
 
 ---

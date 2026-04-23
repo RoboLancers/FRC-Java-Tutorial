@@ -137,11 +137,13 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return a Command that centers the modules of the SwerveDrive subsystem
    */
+  // --8<-- [start:center-modules]
   public Command centerModulesCommand()
   {
     return run(() -> Arrays.asList(swerveDrive.getModules())
                            .forEach(it -> it.setAngle(0.0)));
   }
+  // --8<-- [end:center-modules]
 
   /**
    * Returns a Command that tells the robot to drive forward until the command ends.
@@ -446,6 +448,7 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return A ChassisSpeeds object of the current field-relative velocity
    */
+  // --8<-- [start:get-velocity]
   public ChassisSpeeds getFieldVelocity()
   {
     return swerveDrive.getFieldVelocity();
@@ -460,6 +463,7 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return swerveDrive.getRobotVelocity();
   }
+  // --8<-- [end:get-velocity]
 
   /**
    * Get the {@link SwerveController} in the swerve drive.
@@ -484,10 +488,12 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Lock the swerve drive to prevent it from moving.
    */
+  // --8<-- [start:lock]
   public void lock()
   {
     swerveDrive.lockPose();
   }
+  // --8<-- [end:lock]
 
   /**
    * Gets the current pitch angle of the robot, as reported by the imu.
