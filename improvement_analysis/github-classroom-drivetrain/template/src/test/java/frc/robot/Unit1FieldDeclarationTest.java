@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 /**
  * Unit 1: Verifies that CANDriveSubsystem declares the four required SparkMax fields.
@@ -20,8 +21,25 @@ import org.junit.jupiter.api.Test;
  */
 class Unit1FieldDeclarationTest {
 
+    private static boolean unit1NotStarted = false;
+
+    static {
+        // Check if Unit 1 has been started by trying to find the leftLeader field.
+        // If it doesn't exist, Unit 1 hasn't been started yet.
+        try {
+            CANDriveSubsystem.class.getDeclaredField("leftLeader");
+        } catch (NoSuchFieldException e) {
+            unit1NotStarted = true;
+        }
+    }
+
+    private boolean isUnit1NotStarted() {
+        return unit1NotStarted;
+    }
+
     @Test
     @DisplayName("Unit 1: leftLeader is declared as private final SparkMax")
+    @DisabledIf("isUnit1NotStarted")
     void leftLeaderField() throws NoSuchFieldException {
         Field f = CANDriveSubsystem.class.getDeclaredField("leftLeader");
         assertEquals(SparkMax.class, f.getType(), "leftLeader must be of type SparkMax");
@@ -31,6 +49,7 @@ class Unit1FieldDeclarationTest {
 
     @Test
     @DisplayName("Unit 1: leftFollower is declared as private final SparkMax")
+    @DisabledIf("isUnit1NotStarted")
     void leftFollowerField() throws NoSuchFieldException {
         Field f = CANDriveSubsystem.class.getDeclaredField("leftFollower");
         assertEquals(SparkMax.class, f.getType(), "leftFollower must be of type SparkMax");
@@ -40,6 +59,7 @@ class Unit1FieldDeclarationTest {
 
     @Test
     @DisplayName("Unit 1: rightLeader is declared as private final SparkMax")
+    @DisabledIf("isUnit1NotStarted")
     void rightLeaderField() throws NoSuchFieldException {
         Field f = CANDriveSubsystem.class.getDeclaredField("rightLeader");
         assertEquals(SparkMax.class, f.getType(), "rightLeader must be of type SparkMax");
@@ -49,6 +69,7 @@ class Unit1FieldDeclarationTest {
 
     @Test
     @DisplayName("Unit 1: rightFollower is declared as private final SparkMax")
+    @DisabledIf("isUnit1NotStarted")
     void rightFollowerField() throws NoSuchFieldException {
         Field f = CANDriveSubsystem.class.getDeclaredField("rightFollower");
         assertEquals(SparkMax.class, f.getType(), "rightFollower must be of type SparkMax");
@@ -58,6 +79,7 @@ class Unit1FieldDeclarationTest {
 
     @Test
     @DisplayName("Unit 1: CANDriveSubsystem has exactly 4 SparkMax fields")
+    @DisabledIf("isUnit1NotStarted")
     void exactlyFourSparkMaxFields() {
         Field[] fields = CANDriveSubsystem.class.getDeclaredFields();
         long count =

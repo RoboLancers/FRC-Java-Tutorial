@@ -11,3 +11,8 @@ site/
 *.jar
 improvement_analysis/github-classroom-drivetrain/template/bin/*
 .claude/settings.local.json
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/RobotContainer.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/Robot.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/Constants$DriveConstants.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/Constants$OperatorConstants.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/subsystems/CANDriveSubsystem.class

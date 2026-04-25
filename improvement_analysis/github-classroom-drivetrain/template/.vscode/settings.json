@@ -1,6 +1,7 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
+  "editor.renderValidationDecorations": "on",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -59,13 +60,24 @@
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*"
   ],
-  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
-  "java.jdt.ls.java.home": "/usr/local/sdkman/candidates/java/current",
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -Xlog:disable -Djdt.ls.lombok.disabled=true -Duser.home=/home/carl",
+  "java.jdt.ls.java.home": "/home/carl/wpilib/2026/jdk",
+  "terminal.integrated.env.linux": {
+    "JAVA_HOME": "/home/carl/wpilib/2026/jdk",
+    "PATH": "/home/carl/wpilib/2026/jdk/bin:${env:PATH}"
+  },
   "java.configuration.runtimes": [
     {
       "name": "JavaSE-17",
-      "path": "/usr/local/sdkman/candidates/java/current",
+      "path": "/home/carl/wpilib/2026/jdk",
       "default": true
     }
-  ]
+  ],
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false,
+    "java": true
+  }
 }

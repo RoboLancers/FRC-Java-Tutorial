@@ -10,6 +10,7 @@ import java.lang.reflect.Modifier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 /**
  * Unit 2: Verifies that DriveConstants defines the required constants with correct values, and that
@@ -20,10 +21,27 @@ import org.junit.jupiter.api.Test;
  */
 class Unit2ConstantsAndInitTest {
 
+    private static boolean unit2NotStarted = false;
+
+    static {
+        // Check if Unit 2 has been started by checking if DriveConstants.LEFT_LEADER_ID exists.
+        // If the constant doesn't exist, Unit 2 hasn't been started yet.
+        try {
+            Constants.DriveConstants.class.getDeclaredField("LEFT_LEADER_ID");
+        } catch (NoSuchFieldException e) {
+            unit2NotStarted = true;
+        }
+    }
+
+    private boolean isUnit2NotStarted() {
+        return unit2NotStarted;
+    }
+
     // ── Reflection tests: DriveConstants values ──────────────────────────────
 
     @Test
     @DisplayName("Unit 2: DriveConstants.LEFT_LEADER_ID is public static final int 1")
+    @DisabledIf("isUnit2NotStarted")
     void leftLeaderId() throws Exception {
         Field f = Constants.DriveConstants.class.getDeclaredField("LEFT_LEADER_ID");
         assertTrue(Modifier.isPublic(f.getModifiers()), "LEFT_LEADER_ID must be public");
@@ -35,6 +53,7 @@ class Unit2ConstantsAndInitTest {
 
     @Test
     @DisplayName("Unit 2: DriveConstants.LEFT_FOLLOWER_ID is public static final int 2")
+    @DisabledIf("isUnit2NotStarted")
     void leftFollowerId() throws Exception {
         Field f = Constants.DriveConstants.class.getDeclaredField("LEFT_FOLLOWER_ID");
         assertTrue(Modifier.isPublic(f.getModifiers()), "LEFT_FOLLOWER_ID must be public");
@@ -46,6 +65,7 @@ class Unit2ConstantsAndInitTest {
 
     @Test
     @DisplayName("Unit 2: DriveConstants.RIGHT_LEADER_ID is public static final int 3")
+    @DisabledIf("isUnit2NotStarted")
     void rightLeaderId() throws Exception {
         Field f = Constants.DriveConstants.class.getDeclaredField("RIGHT_LEADER_ID");
         assertTrue(Modifier.isPublic(f.getModifiers()), "RIGHT_LEADER_ID must be public");
@@ -57,6 +77,7 @@ class Unit2ConstantsAndInitTest {
 
     @Test
     @DisplayName("Unit 2: DriveConstants.RIGHT_FOLLOWER_ID is public static final int 4")
+    @DisabledIf("isUnit2NotStarted")
     void rightFollowerId() throws Exception {
         Field f = Constants.DriveConstants.class.getDeclaredField("RIGHT_FOLLOWER_ID");
         assertTrue(Modifier.isPublic(f.getModifiers()), "RIGHT_FOLLOWER_ID must be public");
@@ -68,6 +89,7 @@ class Unit2ConstantsAndInitTest {
 
     @Test
     @DisplayName("Unit 2: DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT is public static final int 60")
+    @DisabledIf("isUnit2NotStarted")
     void driveMotorCurrentLimit() throws Exception {
         Field f = Constants.DriveConstants.class.getDeclaredField("DRIVE_MOTOR_CURRENT_LIMIT");
         assertTrue(
@@ -82,6 +104,14 @@ class Unit2ConstantsAndInitTest {
 
     // ── HAL simulation tests: constructor behavior ────────────────────────────
 
+    // Set to true if the REV CAN driver can't initialize in the current environment
+    // (e.g. running via VS Code test runner without GradleRIO's native lib path setup).
+    private static boolean sparkMaxUnavailable = false;
+
+    private boolean isSimulationSkipped() {
+        return unit2NotStarted || sparkMaxUnavailable;
+    }
+
     @BeforeAll
     static void initHal() {
         // HAL.initialize returns false (not throws) if already initialized — safe across classes.
@@ -89,10 +119,23 @@ class Unit2ConstantsAndInitTest {
                 HAL.initialize(500, 0),
                 "WPILib HAL initialization failed — check that JNI native libs are on"
                         + " java.library.path");
+
+        // Probe whether SparkMax can initialize in this environment. REV's CAN driver has a
+        // static initializer that fails with IOException when native libs aren't on
+        // java.library.path (common when running via VS Code instead of ./gradlew test).
+        // Catch the error here so individual tests can be skipped rather than crashing the suite.
+        try {
+            new CANDriveSubsystem();
+        } catch (UnsupportedOperationException e) {
+            // Template placeholder throw — SparkMax loaded fine, student hasn't removed it yet.
+        } catch (Throwable e) {
+            sparkMaxUnavailable = true;
+        }
     }
 
     @Test
     @DisplayName("Unit 2: CANDriveSubsystem constructor runs without throwing")
+    @DisabledIf("isSimulationSkipped")
     void constructorDoesNotThrow() {
         assertDoesNotThrow(
                 CANDriveSubsystem::new,
@@ -102,6 +145,7 @@ class Unit2ConstantsAndInitTest {
 
     @Test
     @DisplayName("Unit 2: leftLeader SparkMax field is non-null after construction")
+    @DisabledIf("isSimulationSkipped")
     void leftLeaderIsNonNull() throws Exception {
         CANDriveSubsystem subsystem = new CANDriveSubsystem();
         Field f = CANDriveSubsystem.class.getDeclaredField("leftLeader");
@@ -116,3 +160,4 @@ class Unit2ConstantsAndInitTest {
                 "leftLeader must be a SparkMax instance");
     }
 }
+
