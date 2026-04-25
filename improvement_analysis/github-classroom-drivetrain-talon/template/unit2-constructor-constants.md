@@ -24,7 +24,7 @@ Use [Phoenix Tuner X](https://docs.ctr-electronics.com/en/stable/docs/tuner/inde
 
 ## Part 2: Initialize Motors in the Constructor
 
-In `CANDriveSubsystem.java`, the constructor should do the following in order:
+In `CANDriveSubsystem.java`, **delete the placeholder `throw` statement** and replace it with real initialization. The constructor should do the following in order:
 
 1. **Create the four TalonFX motor objects**, one for each field declared in Unit 1. Each takes the corresponding CAN ID constant from `DriveConstants` as its only constructor argument. Unlike SparkMax, TalonFX does not require a motor type parameter.
 
@@ -32,7 +32,7 @@ In `CANDriveSubsystem.java`, the constructor should do the following in order:
 
 3. **Apply that configuration to all four motors** using each motor's `getConfigurator().apply(config)` method.
 
-4. **Create the `DifferentialDrive`** by passing the left leader and right leader motors to its constructor. Only the leaders are passed — followers are wired up in Unit 3.
+4. **Declare and initialize the `DifferentialDrive` field.** First, add `private final DifferentialDrive drive;` to the class body (above the constructor, alongside the TalonFX fields from Unit 1). Then, inside the constructor, assign `drive = new DifferentialDrive(leftLeader, rightLeader)`. Only the leaders are passed — followers are wired up in Unit 3.
 
 > **Why only leader motors in DifferentialDrive?** `DifferentialDrive` only needs the leader motors. The followers are controlled separately via the `Follower` control class (set up in Unit 3). This keeps `DifferentialDrive` simple and lets you manage follower logic explicitly.
 
@@ -41,7 +41,7 @@ In `CANDriveSubsystem.java`, the constructor should do the following in order:
 You will need imports for the following classes at the top of `CANDriveSubsystem.java` (use VSCode Quick Fix to add them, or type them manually):
 
 - `TalonFXConfiguration` — from `com.ctre.phoenix6.configs`
-- `TalonFX` — from `com.ctre.phoenix6.hardware`
+- `TalonFX` — from `com.ctre.phoenix6.hardware` (if not already added in Unit 1)
 - `DifferentialDrive` — from `edu.wpi.first.wpilibj.drive`
 - `SubsystemBase` — from `edu.wpi.first.wpilibj2.command`
 

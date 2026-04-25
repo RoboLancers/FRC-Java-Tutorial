@@ -5,7 +5,7 @@
 
 ## Objective
 
-Declare the five member variables the `CANDriveSubsystem` class needs: four `SparkMax` motor controllers and one `DifferentialDrive` object. You are not initializing them yet — that happens in Unit 2.
+Declare the four `SparkMax` motor controller fields that `CANDriveSubsystem` needs. You are not initializing them yet — that happens in Unit 2. The `DifferentialDrive` field will be declared in Unit 3, once the motors are ready to pass to it.
 
 ## File to Edit
 
@@ -19,12 +19,15 @@ Declare the five member variables the `CANDriveSubsystem` class needs: four `Spa
 
 **2)** Declare four `private final SparkMax` fields inside the class body, before the constructor. Name them `leftLeader`, `leftFollower`, `rightLeader`, and `rightFollower`. Each declaration ends with a semicolon and has no assigned value — initialization happens in the constructor.
 
-**3)** Below the `SparkMax` fields, declare a `private final DifferentialDrive` field named `drive`. Again, leave it unassigned for now.
-
-**4)** VSCode will underline `SparkMax` and `DifferentialDrive` in red because the imports are missing. Fix each one using the 💡 quick-fix (click the light bulb or press `Ctrl+.`) and select the correct import:
+**3)** VSCode will underline `SparkMax` in red because the import is missing. Fix it using the 💡 quick-fix (click the light bulb or press `Ctrl+.`) and select:
 
 - `SparkMax` → `com.revrobotics.spark.SparkMax`
-- `DifferentialDrive` → `edu.wpi.first.wpilibj.drive.DifferentialDrive`
+
+> [!NOTE]
+> You will also need `MotorType` later (Unit 2). You can add it now via quick-fix, or wait until you need it.
+
+> [!NOTE]
+> The `DifferentialDrive` field (`drive`) will be added in Unit 3, once the motors exist to pass to it.
 
 > [!TIP]
 > `private final` means only this class can access these objects, and they will be assigned exactly once (in the constructor) and never reassigned. This prevents other classes from swapping out your motor controllers accidentally. See [Variables and Data Types — Constants](https://robolancers.github.io/FRC-Java-Tutorial/basics/java_types_variables.html#constants).
@@ -33,10 +36,10 @@ Declare the five member variables the `CANDriveSubsystem` class needs: four `Spa
 
 ## Expected Result
 
-After this unit, the class body should contain five field declarations — four `SparkMax` fields and one `DifferentialDrive` field — all `private final`, all unassigned, placed above the constructor. The constructor itself should remain empty for now.
+After this unit, the class body should contain four field declarations — all `SparkMax`, all `private final`, all unassigned — placed above the constructor. The constructor placeholder (a `throw` statement) remains unchanged for now; you will replace it in Unit 2.
 
-> [!IMPORTANT]
-> The code will not compile yet — `final` fields that are declared but not assigned cause a compiler error. This is expected. They will be assigned in the constructor in Unit 2.
+> [!TIP]
+> The `throw` in the constructor is intentional — it lets the class compile even though the `final` fields aren't assigned yet. You will replace the entire constructor body in Unit 2.
 
 ***
 

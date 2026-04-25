@@ -33,9 +33,11 @@ The KitBot has two motors per side. One motor on each side is the **leader** —
 
 ***
 
-## Part B — Initialize DifferentialDrive
+## Part B — Declare and Initialize DifferentialDrive
 
-**5)** After the four `SparkMax` fields are initialized (and before the `setCANTimeout` calls), assign the `drive` field by constructing a new `DifferentialDrive` and passing it the left leader and right leader as arguments. Add the import via 💡 quick-fix if not already present.
+**5)** In the class body (above the constructor, alongside the `SparkMax` fields from Unit 1), add a `private final DifferentialDrive drive;` field declaration. Add the import for `DifferentialDrive` via 💡 quick-fix if needed.
+
+**6)** In the constructor, after the four `SparkMax` fields are initialized and before the `setCANTimeout` calls, assign the `drive` field: `drive = new DifferentialDrive(leftLeader, rightLeader);`.
 
 > [!NOTE]
 > `DifferentialDrive` takes the two **leader** motors only — the followers mirror them automatically through the configuration applied above.
@@ -44,7 +46,7 @@ The KitBot has two motors per side. One motor on each side is the **leader** —
 
 ## Part C — Add the driveArcade Command Factory
 
-**6)** Below the `periodic()` method, add a public method named `driveArcade` that returns a `Command`. It should accept two `DoubleSupplier` parameters — one for forward/backward speed (e.g., `xSpeed`) and one for rotation (e.g., `zRotation`). Add imports for `DoubleSupplier` (from `java.util.function`) and `Command` (from `edu.wpi.first.wpilibj2.command`) via 💡 quick-fix.
+**7)** Below the `periodic()` method, add a public method named `driveArcade` that returns a `Command`. It should accept two `DoubleSupplier` parameters — one for forward/backward speed (e.g., `xSpeed`) and one for rotation (e.g., `zRotation`). Add imports for `DoubleSupplier` (from `java.util.function`) and `Command` (from `edu.wpi.first.wpilibj2.command`) via 💡 quick-fix.
 
 Inside the method, return `this.run(...)` with a lambda that calls `drive.arcadeDrive(...)`, passing the current double values from each supplier via `getAsDouble()`.
 

@@ -17,9 +17,6 @@ import org.junit.jupiter.api.Test;
  *
  * <p>Reflection tests check constants without needing hardware. HAL simulation tests instantiate
  * the subsystem in WPILib's desktop simulation mode (no physical robot required).
- *
- * <p>Note: the constructor only fully compiles once Unit 3 assigns the {@code drive} final field,
- * so the HAL tests below earn points after both Unit 2 and Unit 3 work are committed.
  */
 class Unit2ConstantsAndInitTest {
 

@@ -22,8 +22,15 @@
 				"Anthropic.claude-code"
 			],
 			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python3"
-			}
+				"python.defaultInterpreterPath": "/usr/local/bin/python3",
+				"mcp.servers": {
+					"frc-docs": {
+						"command": "/home/vscode/.local/bin/uvx",
+						"args": ["first-agentic-csa"]
+					}
+				},
+        		"claudeCode.allowDangerouslySkipPermissions": true
+      		}
 		}
 	},
 	"containerEnv": {

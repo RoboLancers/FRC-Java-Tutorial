@@ -6,17 +6,17 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-// TODO Unit 1: Add imports for SparkMax, MotorType, and DifferentialDrive using VSCode quick-fix (Ctrl+.)
+// TODO Unit 1: Add imports for SparkMax and MotorType using VSCode quick-fix (Ctrl+.)
 // TODO Unit 2: Add import for SparkMaxConfig
 // TODO Unit 2: Add static import for DriveConstants: import static frc.robot.Constants.DriveConstants.*;
-// TODO Unit 3: Add imports for PersistMode, ResetMode, Command, and DoubleSupplier
+// TODO Unit 3: Add imports for DifferentialDrive, PersistMode, ResetMode, Command, and DoubleSupplier
 
 public class CANDriveSubsystem extends SubsystemBase {
 
     // TODO Unit 1: Declare four private final SparkMax fields:
     //   leftLeader, leftFollower, rightLeader, rightFollower
 
-    // TODO Unit 1: Declare a private final DifferentialDrive field named drive
+    // TODO Unit 3: Declare a private final DifferentialDrive field named drive (above the constructor)
 
     public CANDriveSubsystem() {
         // TODO Unit 2: Initialize the four SparkMax objects using DriveConstants CAN IDs
@@ -36,14 +36,24 @@ public class CANDriveSubsystem extends SubsystemBase {
         //              drive = new DifferentialDrive(leftLeader, rightLeader);
         //              Place this line right after creating the SparkMax objects,
         //              before the setCANTimeout calls.
+
+        // Placeholder — remove this throw when you start Unit 2.
+        // It allows the class to compile while the final fields are unassigned.
+        // See unit2-constructor-constants.md and unit3-arcade-drive-factory.md for instructions.
+        throw new UnsupportedOperationException("CANDriveSubsystem not yet implemented — complete Units 2 and 3");
     }
 
-    // TODO Unit 3: Add the driveArcade command factory method below periodic().
+    // TODO Unit 3: Replace this stub with the real driveArcade implementation.
     //
     // Signature: public Command driveArcade(DoubleSupplier xSpeed, DoubleSupplier zRotation)
     // Body:      return this.run(() -> drive.arcadeDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()));
     //
     // Reference: https://robolancers.github.io/FRC-Java-Tutorial/programming/driving_robot.html#creating-the-drivearcade-command-factory
+    public edu.wpi.first.wpilibj2.command.Command driveArcade(
+            java.util.function.DoubleSupplier xSpeed,
+            java.util.function.DoubleSupplier zRotation) {
+        throw new UnsupportedOperationException("driveArcade not yet implemented — complete Unit 3");
+    }
 
     @Override
     public void periodic() {

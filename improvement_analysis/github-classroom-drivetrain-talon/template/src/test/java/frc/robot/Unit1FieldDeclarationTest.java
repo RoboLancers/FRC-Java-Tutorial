@@ -3,7 +3,6 @@ package frc.robot;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.subsystems.CANDriveSubsystem;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -12,10 +11,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit 1: Verifies that CANDriveSubsystem declares the required motor controller fields.
+ * Unit 1: Verifies that CANDriveSubsystem declares the four required TalonFX fields.
  *
  * <p>These tests use Java reflection to inspect the class structure without instantiating the
  * subsystem, so they work even before Unit 2 (constructor setup) is complete.
+ *
+ * <p>The DifferentialDrive {@code drive} field is declared and verified in Unit 2.
  */
 class Unit1FieldDeclarationTest {
 
@@ -56,15 +57,6 @@ class Unit1FieldDeclarationTest {
     }
 
     @Test
-    @DisplayName("Unit 1: drive is declared as private final DifferentialDrive")
-    void driveField() throws NoSuchFieldException {
-        Field f = CANDriveSubsystem.class.getDeclaredField("drive");
-        assertEquals(DifferentialDrive.class, f.getType(), "drive must be of type DifferentialDrive");
-        assertTrue(Modifier.isPrivate(f.getModifiers()), "drive must be private");
-        assertTrue(Modifier.isFinal(f.getModifiers()), "drive must be final");
-    }
-
-    @Test
     @DisplayName("Unit 1: CANDriveSubsystem has exactly 4 TalonFX fields")
     void exactlyFourTalonFXFields() {
         Field[] fields = CANDriveSubsystem.class.getDeclaredFields();
@@ -74,13 +66,4 @@ class Unit1FieldDeclarationTest {
         assertEquals(4, count, "CANDriveSubsystem must have exactly 4 TalonFX fields (leftLeader, leftFollower, rightLeader, rightFollower)");
     }
 
-    @Test
-    @DisplayName("Unit 1: CANDriveSubsystem has exactly 1 DifferentialDrive field")
-    void exactlyOneDifferentialDriveField() {
-        Field[] fields = CANDriveSubsystem.class.getDeclaredFields();
-        long count = Arrays.stream(fields)
-                .filter(f -> f.getType().equals(DifferentialDrive.class))
-                .count();
-        assertEquals(1, count, "CANDriveSubsystem must have exactly 1 DifferentialDrive field named 'drive'");
-    }
 }

@@ -9,19 +9,47 @@ import frc.robot.subsystems.CANDriveSubsystem;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit 3: Verifies the driveArcade command factory method signature and runtime behavior,
- * including follower configuration and DifferentialDrive initialization.
+ * Unit 3: Verifies that the {@code drive} field is declared, that the driveArcade command factory
+ * method has the correct signature, and that follower configuration and DifferentialDrive
+ * initialization work correctly at runtime.
  *
  * <p>The subsystem is created once per test class (static @BeforeAll) to avoid exhausting the
  * HAL's simulated CAN device table — each new SparkMax registers a device.
  */
 class Unit3FollowerAndDriveTest {
+
+    // ── Reflection tests: drive field declaration and driveArcade method signature ────────────────
+
+    @Test
+    @DisplayName("Unit 3: drive is declared as private final DifferentialDrive")
+    void driveFieldDeclared() throws NoSuchFieldException {
+        Field f = CANDriveSubsystem.class.getDeclaredField("drive");
+        assertEquals(
+                DifferentialDrive.class, f.getType(), "drive must be of type DifferentialDrive");
+        assertTrue(Modifier.isPrivate(f.getModifiers()), "drive must be private");
+        assertTrue(Modifier.isFinal(f.getModifiers()), "drive must be final");
+    }
+
+    @Test
+    @DisplayName("Unit 3: CANDriveSubsystem has exactly 1 DifferentialDrive field")
+    void exactlyOneDifferentialDriveField() {
+        Field[] fields = CANDriveSubsystem.class.getDeclaredFields();
+        long count =
+                Arrays.stream(fields)
+                        .filter(f -> f.getType().equals(DifferentialDrive.class))
+                        .count();
+        assertEquals(
+                1,
+                count,
+                "CANDriveSubsystem must have exactly 1 DifferentialDrive field named 'drive'");
+    }
 
     // ── Reflection test: driveArcade method signature ────────────────────────
 

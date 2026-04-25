@@ -3,19 +3,21 @@ package frc.robot;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.subsystems.CANDriveSubsystem;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit 2: Verifies that DriveConstants defines the required constants with correct values, and
- * that the CANDriveSubsystem constructor initializes the drive field.
+ * Unit 2: Verifies that DriveConstants defines the required constants with correct values, that the
+ * {@code drive} field is declared, and that the CANDriveSubsystem constructor initializes it.
  *
- * <p>Reflection tests check constants without needing hardware. HAL simulation tests instantiate
- * the subsystem in WPILib's desktop simulation mode (no physical robot required).
+ * <p>Reflection tests check constants and field declarations without needing hardware. HAL
+ * simulation tests instantiate the subsystem in WPILib's desktop simulation mode.
  */
 class Unit2ConstantsAndInitTest {
 
@@ -74,6 +76,32 @@ class Unit2ConstantsAndInitTest {
         assertTrue(Modifier.isFinal(f.getModifiers()), "DRIVE_MOTOR_CURRENT_LIMIT must be final");
         assertEquals(int.class, f.getType(), "DRIVE_MOTOR_CURRENT_LIMIT must be type int");
         assertEquals(60, (int) f.get(null), "DRIVE_MOTOR_CURRENT_LIMIT must equal 60 (amps)");
+    }
+
+    // ── Reflection tests: drive field declaration ────────────────────────────
+
+    @Test
+    @DisplayName("Unit 2: drive is declared as private final DifferentialDrive")
+    void driveFieldDeclared() throws NoSuchFieldException {
+        Field f = CANDriveSubsystem.class.getDeclaredField("drive");
+        assertEquals(
+                DifferentialDrive.class, f.getType(), "drive must be of type DifferentialDrive");
+        assertTrue(Modifier.isPrivate(f.getModifiers()), "drive must be private");
+        assertTrue(Modifier.isFinal(f.getModifiers()), "drive must be final");
+    }
+
+    @Test
+    @DisplayName("Unit 2: CANDriveSubsystem has exactly 1 DifferentialDrive field")
+    void exactlyOneDifferentialDriveField() {
+        Field[] fields = CANDriveSubsystem.class.getDeclaredFields();
+        long count =
+                Arrays.stream(fields)
+                        .filter(f -> f.getType().equals(DifferentialDrive.class))
+                        .count();
+        assertEquals(
+                1,
+                count,
+                "CANDriveSubsystem must have exactly 1 DifferentialDrive field named 'drive'");
     }
 
     // ── HAL simulation tests: constructor behavior ────────────────────────────

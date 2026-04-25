@@ -32,7 +32,7 @@ The CAN IDs must match your specific robot's wiring. IDs 1–4 are common kitbot
 
 **2)** Open `CANDriveSubsystem.java`. Add a static import for `DriveConstants` at the top of the file (alongside the other imports, not inside any method) so you can use constant names directly without the class prefix.
 
-**3)** Inside the constructor, initialize each of the four `SparkMax` fields using the corresponding CAN ID constant. The KitBot uses brushed CIM motors, so pass `MotorType.kBrushed` as the second argument. Add the import for `MotorType` via 💡 quick-fix if needed.
+**3)** Inside the constructor, **delete the placeholder `throw` statement** and replace it with real initialization. Initialize each of the four `SparkMax` fields using the corresponding CAN ID constant. The KitBot uses brushed CIM motors, so pass `MotorType.kBrushed` as the second argument. Add the import for `MotorType` via 💡 quick-fix if needed.
 
 > [!NOTE]
 > Use `MotorType.kBrushless` instead if your robot uses NEO motors.
@@ -45,10 +45,9 @@ The CAN IDs must match your specific robot's wiring. IDs 1–4 are common kitbot
 
 ## Expected Result
 
-After this unit, the constructor should create all four `SparkMax` objects, set a CAN timeout on each, and build a `SparkMaxConfig` with voltage compensation and a current limit. The `drive` field is still unassigned — it will be assigned in Unit 3.
+After this unit, the constructor should create all four `SparkMax` objects, set a CAN timeout on each, and build a `SparkMaxConfig` with voltage compensation and a current limit. The `drive` field will be declared and assigned in Unit 3.
 
-> [!IMPORTANT]
-> The code still will not compile at this point — `drive` has not been assigned yet. That happens in Unit 3.
+The project should compile at this point — build with **Ctrl+Shift+P → WPILib: Build Robot Code** to verify.
 
 ***
 
