@@ -107,3 +107,15 @@ Use [template_page.md](template_page.md) as the starting point for new pages. Ke
 [docs](docs/) contains all the documentation files for the tutorial.
 [code_examples](code_examples/) contains all the code examples for the tutorial.
 [improvement_analysis](improvement_analysis/) contains research and planning documents (not part of the tutorial content). These are not deployed to the site and do not appear in `nav:`.
+
+## Agent Descriptions
+
+Additional agent descriptions for specialized tasks can be found in the `.claude/` folder:
+
+| Agent | File | Purpose |
+|-------|------|---------|
+| Documentation Writer | [documentation-writer-agent.md](documentation-writer-agent.md) | Write MkDocs tutorial pages in the exact same style as docs/ folder |
+
+### Documentation Writer Agent
+
+Use the `Task` tool with subagent_type `general` and prompt referencing `[documentation-writer-agent.md](documentation-writer-agent.md)` for writing new documentation pages. This agent follows all MkDocs conventions, uses the same libraries/plugins, and implements the Content → Code separation pattern.
