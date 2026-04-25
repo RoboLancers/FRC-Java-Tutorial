@@ -32,10 +32,10 @@ The CAN IDs must match your specific robot's wiring. IDs 1–4 are common kitbot
 
 **2)** Open `CANDriveSubsystem.java`. Add a static import for `DriveConstants` at the top of the file (alongside the other imports, not inside any method) so you can use constant names directly without the class prefix.
 
-**3)** Inside the constructor, **delete the placeholder `throw` statement** and replace it with real initialization. Initialize each of the four `SparkMax` fields using the corresponding CAN ID constant. The KitBot uses brushed CIM motors, so pass `MotorType.kBrushed` as the second argument. Add the import for `MotorType` via 💡 quick-fix if needed.
+**3)** Inside the constructor, **delete the placeholder `throw` statement** and replace it with real initialization. Initialize each of the four `SparkMax` fields using the corresponding CAN ID constant. The KitBot uses brushless NEO motors so pass `MotorType.kBrushless` as the second argument. Add the import for `MotorType` via 💡 quick-fix if needed.
 
 > [!NOTE]
-> Use `MotorType.kBrushless` instead if your robot uses NEO motors.
+> Use `MotorType.kBrushed` instead if your robot uses brushed motors.
 
 **4)** After the motor initializations, call `setCANTimeout(250)` on each of the four motors. This sets a 250 ms timeout so configuration calls do not block robot operation indefinitely if a motor is unreachable.
 

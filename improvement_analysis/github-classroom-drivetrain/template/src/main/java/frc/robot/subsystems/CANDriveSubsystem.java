@@ -61,7 +61,7 @@ public class CANDriveSubsystem extends SubsystemBase {
         // Placeholder — remove this throw when you start Unit 2.
         // It allows the class to compile while the final fields are unassigned.
         // See unit2-constructor-constants.md and unit3-arcade-drive-factory.md for instructions.
-       throw new UnsupportedOperationException("CANDriveSubsystem not yet implemented — complete Units 2 and 3");
+       //throw new UnsupportedOperationException("CANDriveSubsystem not yet implemented — complete Units 2 and 3");
     }
 
     // TODO Unit 3: Replace this stub with the real driveArcade implementation.

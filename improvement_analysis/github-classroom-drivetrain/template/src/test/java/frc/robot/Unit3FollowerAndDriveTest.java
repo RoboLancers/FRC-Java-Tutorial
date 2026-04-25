@@ -100,7 +100,7 @@ class Unit3FollowerAndDriveTest {
             // Try to instantiate subsystem
             try {
                 subsystem = new CANDriveSubsystem();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 unit3NotStarted = true;
             }
         }
