@@ -108,6 +108,8 @@ class Unit2ConstantsAndInitTest {
     // (e.g. running via VS Code test runner without GradleRIO's native lib path setup).
     private static boolean sparkMaxUnavailable = false;
 
+    private static CANDriveSubsystem subsystem;
+
     private boolean isSimulationSkipped() {
         return unit2NotStarted || sparkMaxUnavailable;
     }
@@ -125,9 +127,10 @@ class Unit2ConstantsAndInitTest {
         // java.library.path (common when running via VS Code instead of ./gradlew test).
         // Catch the error here so individual tests can be skipped rather than crashing the suite.
         try {
-            new CANDriveSubsystem();
+            subsystem = new CANDriveSubsystem();
         } catch (UnsupportedOperationException e) {
             // Template placeholder throw — SparkMax loaded fine, student hasn't removed it yet.
+            subsystem = null;
         } catch (Throwable e) {
             sparkMaxUnavailable = true;
         }
@@ -137,17 +140,13 @@ class Unit2ConstantsAndInitTest {
     @DisplayName("Unit 2: CANDriveSubsystem constructor runs without throwing")
     @DisabledIf("isSimulationSkipped")
     void constructorDoesNotThrow() {
-        assertDoesNotThrow(
-                CANDriveSubsystem::new,
-                "CANDriveSubsystem constructor threw an exception — check that all SparkMax"
-                        + " objects are created and SparkMaxConfig is applied");
+        assertNotNull(subsystem, "subsystem should be initialized in @BeforeAll");
     }
 
     @Test
     @DisplayName("Unit 2: leftLeader SparkMax field is non-null after construction")
     @DisabledIf("isSimulationSkipped")
     void leftLeaderIsNonNull() throws Exception {
-        CANDriveSubsystem subsystem = new CANDriveSubsystem();
         Field f = CANDriveSubsystem.class.getDeclaredField("leftLeader");
         f.setAccessible(true);
         assertNotNull(

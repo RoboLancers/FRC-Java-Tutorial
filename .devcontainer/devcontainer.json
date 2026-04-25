@@ -39,7 +39,7 @@
 	"mounts": [
 		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
 		"source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached",
-	 	"source=/var/home/carl/cloud_files/programming/agentic-csa,target=/opt/agentic-csa,type=bind"
+	 	"source=${localEnv:HOME}/GitHub/agentic-csa,target=/opt/agentic-csa,type=bind"
 	]
 	
 

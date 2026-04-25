@@ -21,10 +21,11 @@ class Unit4RobotContainerTest {
     private static boolean unit4NotStarted = false;
 
     static {
-        // Check if Unit 4 has been started by trying to find the driveSubsystem field.
-        // If it doesn't exist, Unit 4 hasn't been started yet.
+        // Check if Unit 4 has been started by verifying prerequisites are met.
+        // Unit 4 requires Units 1, 2, and 3 to be complete.
+        // If the drive field doesn't exist in CANDriveSubsystem, prerequisites aren't met.
         try {
-            RobotContainer.class.getDeclaredField("driveSubsystem");
+            CANDriveSubsystem.class.getDeclaredField("drive");
         } catch (NoSuchFieldException e) {
             unit4NotStarted = true;
         }
@@ -33,8 +34,6 @@ class Unit4RobotContainerTest {
     private boolean isUnit4NotStarted() {
         return unit4NotStarted;
     }
-
-    private static boolean prerequisitesNotMet = false;
 
     // ── Reflection test: driveSubsystem field ────────────────────────────────
 
@@ -55,29 +54,14 @@ class Unit4RobotContainerTest {
 
     @BeforeAll
     static void initHal() {
-        // Only initialize HAL if Unit 4 has been started
-        if (!unit4NotStarted) {
-            HAL.initialize(500, 0);
-            
-            // Check if prerequisites (Unit 2 and Unit 3) have been completed.
-            // If CANDriveSubsystem constructor or RobotContainer constructor throws,
-            // prerequisites are not met and Unit 4 tests should be skipped.
-            try {
-                new CANDriveSubsystem();
-                new RobotContainer();
-            } catch (Throwable e) {
-                prerequisitesNotMet = true;
-            }
-        }
+        HAL.initialize(500, 0);
     }
 
-    private static boolean arePrerequisitesNotMet() {
-        return prerequisitesNotMet;
-    }
+    // ── Reflection test: driveSubsystem field ────────────────────────────────
 
     @Test
     @DisplayName("Unit 4: RobotContainer constructor completes without throwing")
-    @DisabledIf("arePrerequisitesNotMet")
+    @DisabledIf("isUnit4NotStarted")
     void robotContainerConstructsWithoutError() {
         assertDoesNotThrow(
                 RobotContainer::new,
@@ -87,7 +71,7 @@ class Unit4RobotContainerTest {
 
     @Test
     @DisplayName("Unit 4: CANDriveSubsystem has a default command set after RobotContainer construction")
-    @DisabledIf("arePrerequisitesNotMet")
+    @DisabledIf("isUnit4NotStarted")
     void defaultCommandIsSet() throws Exception {
         RobotContainer container = new RobotContainer();
         Field f = RobotContainer.class.getDeclaredField("driveSubsystem");
