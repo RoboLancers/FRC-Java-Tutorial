@@ -4,12 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
 
 // TODO Unit 1: Add imports for SparkMax and MotorType using VSCode quick-fix (Ctrl+.)
 // TODO Unit 2: Add import for SparkMaxConfig
@@ -20,25 +15,10 @@ public class CANDriveSubsystem extends SubsystemBase {
 
     // TODO Unit 1: Declare four private final SparkMax fields:
     //   leftLeader, leftFollower, rightLeader, rightFollower
-    private final SparkMax leftLeader;
-    private final SparkMax leftFollower;
-    private final SparkMax rightLeader;
-    private final SparkMax rightFollower;
-
     // TODO Unit 3: Declare a private final DifferentialDrive field named drive (above the constructor)
 
     public CANDriveSubsystem() {
-        leftLeader = new SparkMax(DriveConstants.LEFT_LEADER_ID, MotorType.kBrushed);
-        leftFollower = new SparkMax(DriveConstants.LEFT_FOLLOWER_ID, MotorType.kBrushed);
-        rightLeader = new SparkMax(DriveConstants.RIGHT_LEADER_ID, MotorType.kBrushed);
-        rightFollower = new SparkMax(DriveConstants.RIGHT_FOLLOWER_ID, MotorType.kBrushed);
-        leftLeader.setCANTimeout(250);
-        leftFollower.setCANTimeout(250);
-        rightLeader.setCANTimeout(250);
-        rightFollower.setCANTimeout(250);
-        SparkMaxConfig config = new SparkMaxConfig();
-        config.voltageCompensation(12);
-        config.smartCurrentLimit(DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT);
+        
         
         // TODO Unit 2: Initialize the four SparkMax objects using DriveConstants CAN IDs
         //              and MotorType.kBrushed (or kBrushless for NEO motors)
