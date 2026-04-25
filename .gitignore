@@ -10,3 +10,4 @@ site/
 *.class
 *.jar
 improvement_analysis/github-classroom-drivetrain/template/bin/*
+.claude/settings.local.json
