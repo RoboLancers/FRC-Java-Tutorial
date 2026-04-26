@@ -7,7 +7,6 @@ nav:
   - 'setup/3rd_party_libs.md'
 - Version Control:
   - 'version_control/BasicGit.md'
-  - 'version_control/GitWorkflow.md'
   - 'version_control/github.md'
 - Java Fundamentals:
   - 'basics/java_basics.md'

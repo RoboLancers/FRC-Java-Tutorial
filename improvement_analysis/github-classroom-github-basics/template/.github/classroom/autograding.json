@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "Student notes: all questions answered",
+      "setup": "chmod +x ./grading/check_student_notes.sh",
+      "run": "./grading/check_student_notes.sh",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 30,
+      "points": 40
+    },
+    {
+      "name": ".gitignore: all three errors corrected",
+      "setup": "chmod +x ./grading/check_gitignore.sh",
+      "run": "./grading/check_gitignore.sh",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 30,
+      "points": 35
+    },
+    {
+      "name": "Commit message references a Question",
+      "setup": "chmod +x ./grading/check_commit_message.sh",
+      "run": "./grading/check_commit_message.sh",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 30,
+      "points": 25
+    }
+  ]
+}

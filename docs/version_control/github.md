@@ -1,10 +1,20 @@
 # Using GitHub
 <!-- This page was contributed by: Carl Stanton -->
 
-GitHub is where your team's code lives in the cloud. If Git is the engine that tracks your changes, GitHub is the garage where everyone parks, shares, and reviews those changes. This page will walk you through the GitHub-specific skills you need to collaborate on an FRC robot project.
+GitHub is the platform where your team's code lives in the cloud. Before going further, it helps to understand the difference between two things people often conflate:
 
-!!! note
-    This page assumes you are comfortable with the core Git commands (`add`, `commit`, `push`, `pull`, `branch`) covered in [Basic Git](BasicGit.md). If those feel unfamiliar, start there first.
+!!! note "Git vs. GitHub"
+    **Git** is the version control tool that runs on your computer. It tracks changes, creates commits, and manages branches — all locally, with no internet connection needed. The core Git commands (`add`, `commit`, `push`, `pull`, `branch`) are covered in [Basic Git](BasicGit.md).
+
+    **GitHub** is a cloud platform *built on top of* Git. It hosts your repository so teammates can access it, and adds collaboration features that don't exist in Git itself: pull requests, code review, issues, project boards, and organization management.
+
+    Everything on this page is a **GitHub feature**. When a section requires a Git command (like `git clone` or `git fetch`), it is labeled as such.
+
+!!! tip "Start with the GitHub Classroom assignment"
+    Before reading further, accept the [GitHub Classroom assignment](https://classroom.github.com/a/na6cj1j4){target=_blank}, read the information in it, and complete the optional steps. It introduces the core concepts — repositories, branches, pull requests, and issues — that this page builds on.
+
+!!! note "Prerequisite"
+    This page assumes you are comfortable with the core Git commands covered in [Basic Git](BasicGit.md). If those feel unfamiliar, start there first.
 
 ***
 
@@ -23,11 +33,37 @@ Once your account is ready, ask your team lead or mentor to add you to your team
 
 ***
 
-## Creating a Repository
+## GitHub Organizations
 
-A repository (repo) is a project folder tracked by Git. For most FRC work you will be cloning an existing repository — but knowing how to create one is useful for personal projects and new robot seasons.
+Your team's code should live under a **GitHub Organization**, not under any one person's personal account. An organization is a shared workspace on GitHub where your team can:
 
-### Creating a repo on GitHub
+- Own repositories that belong to the team, not any single person
+- Add and remove members without losing access to repos
+- Set different permission levels for different roles
+- Keep all repos in one place across seasons
+
+Ask a mentor or coach to create the organization (e.g., `github.com/RoboLancers`) if your team does not already have one, then ask them to add your account to it.
+
+### Repository permissions
+
+GitHub has several permission levels. Here is how most FRC teams set them up:
+
+| Role | Typical Members | What They Can Do |
+|---|---|---|
+| **Owner** | Mentors / Coaches | Full admin control |
+| **Maintainer / Lead** | Software leads | Merge PRs, manage branches, edit settings |
+| **Write** | Active programmers | Push branches, open PRs |
+| **Read** | Other team members | View and clone code |
+
+As a student programmer, you will usually have **Write** access — enough to push your branches and open PRs, but not enough to accidentally break protected branches.
+
+***
+
+## Repositories
+
+A repository (repo) is a project folder tracked by Git and hosted on GitHub. For FRC work, your team typically has one repo per robot season (e.g., `2026-Robot-Code`).
+
+### Creating a repository on GitHub
 
 1. Click the **+** icon in the top-right corner of GitHub and choose **New repository**.
 2. Give the repository a name (e.g., `2026-Robot-Code`).
@@ -37,38 +73,24 @@ A repository (repo) is a project folder tracked by Git. For most FRC work you wi
 6. Click **Create repository**.
 
 !!! tip
-    Your team's organization should own the repository, not your personal account. That way, the code stays with the team even if you graduate. Ask a lead or mentor to create the repo under the organization.
+    The repository should be owned by your team's GitHub Organization, not your personal account. That way, the code stays with the team even if you graduate.
 
-***
+### Cloning a repository
 
-## Cloning a Repository
-
-Cloning downloads a copy of a remote repository to your computer and sets up the connection so you can push and pull changes.
-
-### How to clone
+Cloning is a **Git operation** that downloads a repository to your computer and sets up the remote connection automatically. You clone once; after that, `git push` and `git pull` keep your local copy in sync.
 
 1. On the GitHub repository page, click the green **Code** button.
 2. Copy the HTTPS URL (e.g., `https://github.com/RoboLancers/2026-Robot-Code.git`).
-3. Open a terminal (or Git Bash on Windows) and run:
+3. Open a terminal and run:
 
 ```bash
 git clone https://github.com/RoboLancers/2026-Robot-Code.git
 ```
 
-This creates a folder with the repository contents in your current directory. Inside that folder, Git is already initialized and the remote (`origin`) is set to the GitHub URL — you can `push` and `pull` right away.
-
-### Cloning in GitHub Desktop
-
-If you prefer a graphical interface, open GitHub Desktop, click **File → Clone repository**, and paste the URL. GitHub Desktop will handle the rest.
-
 !!! note
     In VS Code, you can also use **File → New Window**, then click **Clone Git Repository** on the welcome screen and paste the URL directly.
 
-***
-
-## Fork vs. Clone — What Is the Difference?
-
-These two words are easy to confuse, but they describe different things:
+### Fork vs. Clone — what is the difference?
 
 | | Clone | Fork |
 |---|---|---|
@@ -79,7 +101,7 @@ These two words are easy to confuse, but they describe different things:
 
 **For FRC team work:** you almost always want to **clone** the team's repository directly. Everyone clones the same repo and uses branches to work in parallel.
 
-**Forks are for open-source contributions.** If you wanted to contribute to the WPILib project itself, you would fork it to your own GitHub account, make changes, and then open a pull request back to the original. Your team's robot repo is not open source in that way — just clone it.
+**Forks are for open-source contributions.** If you wanted to contribute to the WPILib project itself, you would fork it to your own GitHub account, make changes, and then open a pull request back to the original.
 
 !!! tip
     If you ever see instructions online that say "fork this repo," read carefully. For your team's robot code, you probably want to clone, not fork.
@@ -88,15 +110,9 @@ These two words are easy to confuse, but they describe different things:
 
 ## Pull Requests
 
-A pull request (PR) is the official way to propose that your branch's changes be merged into another branch (usually `main`). It is also where code review happens.
+A pull request (PR) is a **GitHub feature** — it does not exist in Git itself. A PR is the official way to propose that your branch's changes be merged into another branch (usually `main`). It is also where code review happens.
 
-The [Git Workflow page](GitWorkflow.md) covers how PRs fit into the overall development flow. This section goes deeper on the mechanics.
-
-### Why pull requests matter
-
-- They prevent unreviewed code from breaking `main`.
-- They give your teammates a chance to catch bugs before they end up on the robot.
-- They create a permanent record of what changed and why.
+PRs ensure that `main` always contains reviewed, working code. On FRC repositories, `main` is often protected so that only leads or mentors can click the merge button.
 
 ### Opening a pull request
 
@@ -121,31 +137,47 @@ Your reviewer will look at the **Files changed** tab to see exactly what lines y
 
 Once approved, click **Merge pull request** on GitHub. Choose **Squash and merge** if you want to combine all your commits into one clean commit on `main`. After merging, delete the feature branch — it has served its purpose.
 
-!!! note
-    On FRC repositories, the `main` branch is often protected, meaning only leads or mentors can actually click the merge button. That is by design — it keeps `main` stable.
+***
+
+## Issues
+
+GitHub Issues are the team's task tracker — they live on GitHub, not in your local repository. Use them to record bugs, planned features, and questions.
+
+Before you start coding a new feature, check whether there is already an open Issue for it. If there is not, create one.
+
+A good issue includes:
+- A clear title (e.g., "Intake rollers spin backwards on deploy")
+- Steps to reproduce the problem (for bugs) or a description of the desired behavior (for features)
+- Any relevant context (match video, sensor readings, etc.)
+
+### Linking PRs to Issues
+
+Write `Closes #42` in a PR description — GitHub will automatically close Issue #42 when the PR merges. This also works with `Fixes #42` and `Resolves #42`.
+
+***
+
+## GitHub Projects
+
+GitHub Projects is a Kanban-style board built into GitHub for tracking work across your team. Tasks are organized into status columns (e.g., To Do, In Progress, Done) and can be assigned to team members.
+
+Key practices for FRC teams:
+
+- If a task is explicitly tied to a PR, convert it to an Issue and link the PR. GitHub will automatically move it to Done when the PR merges.
+- Add major milestones (competition dates, handoff day, feature deadlines) to the board as soon as they are set — it is easy to lose track of what needs to be done, who is doing it, and by when.
+- Check what has been assigned to you regularly. If you are unsure what to work on next, ask a lead or mentor.
+
+!!! tip
+    You can access your team's Project board from the **Projects** tab at the top of the repository or organization page.
 
 ***
 
 ## Branch Management
 
-Branches let multiple people work simultaneously without stepping on each other's code. Here is a quick reference for the most common branch tasks.
+Branches are a **Git concept** — they let multiple people work in parallel without interfering with each other's code. GitHub adds visibility on top: you can see all branches, compare them, and open pull requests between them.
 
-### Creating and switching branches
+### Branch naming
 
-```bash
-# Create a new branch and switch to it
-git checkout -b your-name/feature-description
-
-# Switch to an existing branch
-git checkout branch-name
-
-# See all branches (local and remote)
-git branch -a
-```
-
-### Naming your branches
-
-Good branch names are short, lowercase, and descriptive. Many teams use a `name/feature` format:
+Good branch names are short, lowercase, and descriptive. Most teams use a `name/feature` format:
 
 ```
 mar-liu/auto-balance
@@ -155,9 +187,28 @@ add-vision-subsystem
 
 Avoid generic names like `my-branch` or `test` — after a few weeks of build season there will be dozens of branches and nobody will know what is in them.
 
+### Branch strategies
+
+**Personal branches — your workbench**
+
+For any new feature or bug fix, create a branch from `main` with your name and a short description. Work there, then open a pull request when you are ready.
+
+```bash
+# Git command — creates and switches to a new branch
+git checkout -b carl-stanton/fix-intake-pid
+```
+
+**Release branches (optional — mainly for competitions)**
+
+Created right before a major competition. Used for final testing and small bug fixes only — no new features. Think of it as the "loading the robot on the trailer" phase.
+
+**Hotfix branches — emergency repairs**
+
+For critical bugs discovered during a competition that need an immediate fix to `main`. Keep them small, get them reviewed fast, and merge them as quickly as possible.
+
 ### Keeping your branch up to date
 
-If `main` has received new commits while you were working on your branch, you should pull those changes in before you open your PR:
+If `main` has received new commits while you were working on your branch, pull those changes in before opening your PR. These are **Git commands**:
 
 ```bash
 # While on your feature branch:
@@ -170,61 +221,9 @@ This reduces the chance of merge conflicts when your PR is reviewed.
 !!! warning
     If you and a teammate both edit the same lines of the same file, Git cannot automatically merge the changes — this is a merge conflict. VS Code highlights conflicts and gives you options to accept one side or combine both. Resolve conflicts carefully, then commit the result. When in doubt, ask a teammate.
 
-### Deleting stale branches
+### Protecting `main`
 
-After a branch is merged, delete it to keep the repo tidy:
-
-```bash
-# Delete a local branch (after it is merged)
-git branch -d branch-name
-
-# Delete the remote branch on GitHub
-git push origin --delete branch-name
-```
-
-GitHub also offers a **Delete branch** button directly on a merged PR page.
-
-***
-
-## GitHub for FRC Team Collaboration
-
-### Team organization structure
-
-Your team's code should live under a **GitHub Organization**, not under any one person's personal account. An organization lets you:
-
-- Add and remove members without losing access to repos.
-- Set different permission levels for different members.
-- Keep all repos in one place across seasons.
-
-Ask a mentor or lead to create the organization (e.g., `github.com/RoboLancers`) if your team does not already have one.
-
-### Repository permissions
-
-GitHub has several permission levels. Here is how most FRC teams set them up:
-
-| Role | Typical Members | What They Can Do |
-|---|---|---|
-| **Owner** | Mentors | Full admin control |
-| **Maintainer / Lead** | Software leads | Merge PRs, manage branches, edit settings |
-| **Write** | Active programmers | Push branches, open PRs |
-| **Read** | Other team members | View and clone code |
-
-As a student programmer, you will usually have **Write** access — enough to push your branches and open PRs, but not enough to accidentally break protected branches.
-
-### Using Issues to track work
-
-GitHub Issues are how your team keeps track of what needs to be built, fixed, or investigated. Before you start coding a new feature, check if there is already an open Issue for it. If there is not, create one.
-
-A good issue includes:
-- A clear title (e.g., "Intake rollers spin backwards on deploy")
-- Steps to reproduce the problem (for bugs) or a description of the desired behavior (for features)
-- Any relevant context (match video clip, sensor readings, etc.)
-
-Link your PR to an issue by writing `Closes #<issue number>` in the PR description — GitHub will automatically close the issue when the PR merges.
-
-### Protecting the `main` branch
-
-In your repository settings, you can require pull request reviews before merging. To set this up (owners and maintainers only):
+Branch protection is a **GitHub setting** that makes it impossible to push directly to `main` without a reviewed PR. To enable it (owners and maintainers only):
 
 1. Go to **Settings → Branches**.
 2. Click **Add branch protection rule**.
@@ -232,15 +231,25 @@ In your repository settings, you can require pull request reviews before merging
 4. Check **Require a pull request before merging** and set the required number of approvals to 1.
 5. Click **Create**.
 
-This makes it impossible to push directly to `main` by accident, which keeps your production robot code stable.
+### Deleting stale branches
+
+After a branch is merged, delete it to keep the repo tidy.
+
+```bash
+# Git commands:
+git branch -d branch-name            # delete local copy (safe — blocked if unmerged)
+git push origin --delete branch-name # delete the branch on GitHub
+```
+
+GitHub also offers a **Delete branch** button directly on a merged PR page, which handles the remote deletion for you.
 
 ***
 
 ## `.gitignore` for WPILib Projects
 
-A `.gitignore` file tells Git which files and folders to leave out of version control. You do not want to commit auto-generated build output, local configuration, or binary files — they are large, change constantly, and can be regenerated from the source code.
+A `.gitignore` file tells Git which files and folders to exclude from version control. You do not want to commit auto-generated build output, local configuration, or binary files — they are large, change constantly, and can be regenerated from source.
 
-When you create a new WPILib project, it will generate a `.gitignore` for you. A typical FRC `.gitignore` should exclude at least these entries:
+When you create a new WPILib project, it generates a `.gitignore` automatically. A typical FRC `.gitignore` should exclude at least:
 
 ```
 # WPILib build output
@@ -253,8 +262,7 @@ build/
 # Gradle wrapper native binaries
 gradle/
 
-# VS Code local settings (some teams commit .vscode/, but workspace-specific
-# files like launch.json are usually excluded)
+# VS Code local settings
 .vscode/
 
 # macOS filesystem metadata
@@ -278,7 +286,7 @@ Commit everything that defines your robot's behavior:
     Do not commit the `build/` directory. It contains compiled bytecode and native binaries that are regenerated every time you build. Committing it wastes space, causes unnecessary merge conflicts, and can hide real source changes in the diff noise.
 
 !!! tip
-    If a file you want to ignore is already tracked by Git (because it was committed before you added it to `.gitignore`), you need to un-track it first:
+    If a file you want to ignore is already tracked by Git (because it was committed before you added it to `.gitignore`), un-track it first:
     ```bash
     git rm --cached path/to/file
     ```
@@ -286,7 +294,7 @@ Commit everything that defines your robot's behavior:
 
 ***
 
-## Quick Reference: Common GitHub Workflows
+## Quick Reference: Common Workflows
 
 ### Starting work on a new feature
 
@@ -319,15 +327,108 @@ git pull                          # get the latest commits on that branch
 
 ***
 
+## Exercises
+
+### Exercise 1 — Simple commit
+
+1. Clone this repository from GitHub.
+2. Create a branch from `main` named `[your_name]_git_practice` (e.g., `mar_liu_git_practice`).
+3. Add your name to the practice list at the bottom of [GitWorkflow.md](GitWorkflow.md).
+4. Commit and push your changes.
+
+### Exercise 2 — Opening a pull request
+
+1. After completing Exercise 1, go to the repository on GitHub.
+2. Open a pull request from your branch into the `git_practice` branch (not `main`).
+3. Set your team lead or mentor as a reviewer.
+
+![Creating a pull request on GitHub](../assets/images/git/github_pull_requests.png)
+
+!!! tip
+    To select the base branch, use the **base** dropdown on the pull request creation page and choose `git_practice` instead of `main`.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+Your team's robot code should be stored in a GitHub repository owned by:
+- [ ] Your personal GitHub account
+- [x] Your team's GitHub Organization
+- [ ] The WPILib GitHub account
+- [ ] A mentor's personal account
+
+Storing the repo under the organization keeps it accessible to the whole team across seasons. If it lives under a personal account and that person graduates, the team loses easy access to its own code.
+</quiz>
+
+<quiz>
+What is the difference between cloning and forking a repository?
+- [ ] Cloning creates a copy on GitHub; forking downloads it to your computer
+- [ ] They are the same thing — both download the repo to your computer
+- [x] Cloning downloads a repo to your computer; forking creates your own copy of it on GitHub
+- [ ] Forking is only for private repositories
+
+Cloning gives you a local working copy linked to the original repo. Forking creates a separate cloud copy under your GitHub account — used when you want to contribute to a project you do not have push access to.
+</quiz>
+
+<quiz>
+Which of the following files should NOT be committed to your FRC robot repository?
+- [ ] `src/main/java/frc/robot/Robot.java`
+- [ ] `vendordeps/REVLib.json`
+- [x] The `build/` directory
+- [ ] `build.gradle`
+
+The `build/` directory contains compiled output that is regenerated every time you build. Committing it wastes space, causes unnecessary merge conflicts, and clutters diffs with binary noise.
+</quiz>
+
+<quiz>
+You write `Closes #42` in a pull request description. What happens when the PR is merged?
+- [ ] Nothing — it is just a comment
+- [ ] GitHub opens Issue #42
+- [x] GitHub automatically closes Issue #42
+- [ ] GitHub assigns Issue #42 to you
+
+GitHub parses `Closes #N` (and `Fixes #N`, `Resolves #N`) in PR descriptions and closes the linked issue as soon as the PR merges into the default branch.
+</quiz>
+
+<quiz>
+A file was accidentally committed before it was added to `.gitignore`. What command un-tracks it without deleting it from your computer?
+- [ ] `git ignore path/to/file`
+- [ ] `git reset path/to/file`
+- [x] `git rm --cached path/to/file`
+- [ ] `git delete --tracked path/to/file`
+
+`git rm --cached` removes the file from Git's index (stops tracking it) but leaves the actual file on disk. After that, add the path to `.gitignore` and commit the removal so it stays un-tracked.
+</quiz>
+
+<quiz>
+When a reviewer clicks **Request changes** on your pull request, what should you do?
+- [ ] Close the PR and open a new one with the fixes
+- [ ] Delete your branch and start over
+- [x] Address the feedback, push new commits to the same branch, and the PR updates automatically
+- [ ] Ask a lead to merge it anyway
+
+Pushing additional commits to your branch automatically updates the open PR. The reviewer will see the new changes and can re-review without you needing to open anything new.
+</quiz>
+
+<!-- mkdocs-quiz results -->
+
+***
+
 ## Summary
 
 | Concept | What to remember |
 |---|---|
-| **Clone** | Download a repo you have access to. |
-| **Fork** | Copy a repo you do not own, to contribute back via PR. |
-| **Pull Request** | The official way to propose and review changes before merging. |
-| **Branch protection** | Prevents direct pushes to `main`; enforces PR review. |
+| **Git** | The version control tool — runs locally, no GitHub needed. |
+| **GitHub** | The cloud platform — adds PRs, Issues, Projects, and org management. |
+| **Clone** | Download a repo you have access to (`git clone` — a Git command). |
+| **Fork** | Copy a repo you do not own, to contribute back via PR (GitHub feature). |
+| **Pull Request** | GitHub's way to propose and review changes before merging into `main`. |
+| **Issues** | GitHub's task tracker — link to PRs with `Closes #N`. |
+| **GitHub Projects** | Kanban board for team-wide task tracking across Issues and PRs. |
+| **Branch protection** | GitHub setting that prevents direct pushes to `main`. |
 | **`.gitignore`** | Exclude `build/`, `.wpilib/`, `.gradle/` from commits. |
-| **Issues** | Track bugs and features; link them to PRs with `Closes #N`. |
 
-For the overall day-to-day branching and PR workflow your team uses, see [Git Workflow](GitWorkflow.md). For a refresher on Git commands themselves, see [Basic Git](BasicGit.md).
+For a refresher on Git commands themselves, see [Basic Git](BasicGit.md).

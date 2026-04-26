@@ -23,7 +23,13 @@
       "WebFetch(domain:docs.wpilib.org)",
       "WebFetch(domain:v6.docs.ctr-electronics.com)",
       "Bash(xargs cat *)",
-      "Bash(java\" /workspaces/FRC-Java-Tutorial/docs/programming/SwerveDriveIntro.md)"
+      "Bash(java\" /workspaces/FRC-Java-Tutorial/docs/programming/SwerveDriveIntro.md)",
+      "Bash(curl *)",
+      "Bash(git checkout *)",
+      "Bash(sed -e 's|# WPILib build output  <-- MISSING: add the correct entry here|# WPILib build output\\\\nbuild/|' -e 's|\\\\.idea/.*|.vscode/|' -e '/^vendordeps\\\\//d' wpilib.gitignore)",
+      "Bash(cp /tmp/gitignore-fixed wpilib.gitignore)",
+      "Bash(bash grading/check_gitignore.sh)",
+      "Bash(echo \"exit $?\")"
     ]
   }
 }

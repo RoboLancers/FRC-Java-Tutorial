@@ -98,7 +98,7 @@ Accessed by clicking on the branch name at the bottom left
 
 - We use GitHub's pull request (PR) feature to manage branches and merges.
 Always make sure to merge to main using a PR.
-PR's will be explained further in the [Git Workflow docs](GitWorkflow.md).
+PR's will be explained further in the [Using GitHub](github.md) docs.
 - Always commit code that at the very least compiles (you can check this by running the "Build robot code" option in WPILib's command bar)
 - Commit messages should be short (~10 words), simple, and descriptive.
   If it's too long, use multiple lines in the commit message

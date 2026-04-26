@@ -1,0 +1,16 @@
+{
+  "name": "GitHub Basics Assignment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "eamodio.gitlens",
+        "mhutchie.git-graph"
+      ]
+    }
+  }
+}

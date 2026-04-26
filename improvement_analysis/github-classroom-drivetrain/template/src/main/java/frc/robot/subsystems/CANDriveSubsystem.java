@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+//import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 // TODO Unit 1: Add imports for SparkMax and MotorType using VSCode quick-fix (Ctrl+.)
@@ -16,6 +18,7 @@ public class CANDriveSubsystem extends SubsystemBase {
     // TODO Unit 1: Declare four private final SparkMax fields:
     //   leftLeader, leftFollower, rightLeader, rightFollower
     // TODO Unit 3: Declare a private final DifferentialDrive field named drive (above the constructor)
+    private final SparkMax leftLeader;
 
     public CANDriveSubsystem() {
         

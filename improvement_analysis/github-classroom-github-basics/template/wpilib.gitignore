@@ -1,0 +1,36 @@
+# WPILib .gitignore exercise
+#
+# This file has some entries missing and some that are WRONG.
+# Fix it so that it correctly ignores the right files for a WPILib project.
+#
+# Hints:
+#   - A WPILib build generates compiled output in a folder called "build"
+#   - Gradle stores its own cache in a hidden folder that starts with ".gradle"
+#   - WPILib stores machine-specific deploy configuration in ".wpilib"
+#   - VS Code local settings are in ".vscode"
+#   - macOS creates hidden metadata files called ".DS_Store"
+#   - Windows creates thumbnail cache files called "Thumbs.db"
+#   - vendordeps/ should NOT be ignored — it contains important JSON config files
+#   - src/ should NOT be ignored — it contains your Java source code
+#
+# There are 3 problems in this file. Find and fix them all.
+
+# WPILib build output  <-- MISSING: add the correct entry here
+
+# Gradle cache
+.gradle/
+
+# WPILib local configuration
+.wpilib
+
+# Editor settings
+.idea/        # <-- WRONG: this is for IntelliJ, not VS Code. Replace with the correct folder.
+
+# macOS filesystem metadata
+.DS_Store
+
+# vendordeps  <-- WRONG: this line is incorrectly blocking vendordeps. Remove it.
+vendordeps/
+
+# Windows thumbnail cache
+Thumbs.db

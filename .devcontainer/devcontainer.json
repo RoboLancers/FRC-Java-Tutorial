@@ -22,10 +22,18 @@
 				"main-branch.mkdocs-snippet-lens",
 				"aikebang.mkdocs-syntax-highlight",
 				"ytianle.mkdocs-material-linter",
-				"Anthropic.claude-code"
+				"Anthropic.claude-code",
+				"dbaeumer.vscode-eslint",
+				"github.copilot-chat",
+				"ms-python.autopep8",
+				"ms-python.debugpy",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.vscode-python-envs",
+				"sst-dev.opencode"
 			],
 			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python3",
+				"python.defaultInterpreterPath": "/usr/local/python/current/bin/python3",
 				"mcp.servers": {
 					"frc-docs": {
 						"command": "/home/vscode/.local/bin/uvx",
@@ -43,7 +51,7 @@
 		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
 		"source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached",
 	 	"source=${localEnv:HOME}/GitHub/agentic-csa,target=/opt/agentic-csa,type=bind"
-	]
+	],
 	
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

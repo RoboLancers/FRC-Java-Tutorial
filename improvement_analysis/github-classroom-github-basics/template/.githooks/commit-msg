@@ -1,0 +1,27 @@
+#!/bin/bash
+# commit-msg hook: commit messages must reference at least one question.
+# Example of a valid message: "Answer Question 1 and Question 3 -- clone vs fork and branch naming"
+
+COMMIT_MSG_FILE="$1"
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Skip check for merge commits
+if echo "$COMMIT_MSG" | grep -q "^Merge"; then
+  exit 0
+fi
+
+# Require "Question N" where N is 1–5 (case-insensitive)
+if echo "$COMMIT_MSG" | grep -qiE "question [1-5]"; then
+  exit 0
+fi
+
+echo ""
+echo "ERROR: Commit rejected."
+echo "Your commit message must reference at least one question by number."
+echo ""
+echo "  Good: \"Answer Question 1 and Question 3 -- clone vs fork and branch naming\""
+echo "  Bad:  \"updated files\""
+echo ""
+echo "  Your message: \"$COMMIT_MSG\""
+echo ""
+exit 1
