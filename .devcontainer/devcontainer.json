@@ -10,6 +10,9 @@
 		"ghcr.io/devcontainers/features/node:1": {}
 	},				
 	"postCreateCommand": "bash .devcontainer/post-create.sh && python3 .devcontainer/start_mcp_servers.py",
+	"postAttachCommand": {
+		"mkdocs-serve": "mkdocs serve"
+	},
 	"remoteEnv": {
 		"PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
 	},
@@ -47,7 +50,7 @@
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	//"forwardPorts": [3000, 5173, 8000, 8080, 9000],
+	"forwardPorts": [8000],
 
 
 	// Configure tool-specific properties.

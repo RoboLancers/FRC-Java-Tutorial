@@ -71,6 +71,17 @@ Parameters are inputs you pass to a method when calling it. You can have zero or
 
 ***
 
+## Method Overloading
+You can have multiple methods with the same name but different parameters. This is called **method overloading**. The compiler determines which method to call based on the number and types of arguments you provide.
+
+!!! example "Method Overloading"
+    In this example, the `setSpeed` method is overloaded to accept either a single `double`, which tells the motor what speed to run at, or a `double` and a `boolean`, which controls whether to reverse the direction of the speed. 
+    ```java title="Method overloading"
+    --8<-- "docs/code_examples/basics/methods/Drivetrain.java:overloaded_methods"
+    ``` 
+Method overloading can make your code more flexible and easier to read, as you can provide different ways to call the same logical operation without needing to come up with different method names for each variation. in FRC, method overloading is often used for drivetrain control, allowing you to set speed with different levels of detail (e.g., just speed, or speed plus direction).
+
+***
 ## Calling a Method
 
 To run a method, write its name followed by parentheses containing any required arguments:

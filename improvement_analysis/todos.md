@@ -1,5 +1,5 @@
  current todos:
- - Add a section on method overloading (multiple methods with the same name but different parameters)
+
  - Review java_ files created in the basics section and add more examples and explanations as needed.
  - review Github Classroom lesson in improvement_analysis and add more examples and explanations as needed.
  - add page on logging telemetry.

@@ -64,4 +64,15 @@ public class Drivetrain extends SubsystemBase {
         // and runs every robot loop cycle
     }
     // --8<-- [end:override_periodic]
+    // --8<-- [start:overloaded_methods]
+    // Method overloading — same name, different parameters
+    public void setSpeed(double speed ) {
+        motor.set(speed);
+       
+    }
+
+    public void setSpeed(double speed, boolean isReversed) {
+        motor.set(isReversed ? -speed : speed);
+    }
+    // --8<-- [end:overloaded_methods]
 }
