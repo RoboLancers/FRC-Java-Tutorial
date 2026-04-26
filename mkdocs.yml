@@ -9,11 +9,16 @@ nav:
   - 'version_control/BasicGit.md'
   - 'version_control/GitWorkflow.md'
   - 'version_control/github.md'
-- Programming Basics:
+- Java Fundamentals:
+  - 'basics/java_basics.md'
+  - 'basics/java_types_variables.md'
+  - 'basics/java_methods.md'
+  - 'basics/java_classes.md'
+  - 'basics/java_control_flow.md'
+- FRC Background:
   - 'basics/roboRIO.md'
   - 'basics/sensors.md'
   - 'basics/wpilib.md'
-  - 'basics/java_basics.md'
   - 'basics/ElectronicsCrashCourse.md'
   - 'basics/vscode_tips.md'
   # - 'basics/driverstation_tips.md'
@@ -24,10 +29,13 @@ nav:
 - FRC Programming:
   - 'programming/new_project.md'
   - 'programming/driving_robot.md'
+  - 'programming/SwerveDriveIntro.md'
+  - 'programming/yagsl_swerve_tutorial.md'
   - 'programming/deploying.md'
   - 'programming/using_sensors.md'
   - 'programming/pneumatics.md'
   - 'programming/Elastic.md'
+  - 'programming/SmartDashboard.md'
   - 'programming/robotpreferences.md'
   - 'programming/autonomous.md'
   - 'programming/pid.md'
@@ -59,6 +67,7 @@ theme:
   features:
     - content.tabs.link
     - content.code.copy
+    - navigation.footer
 use_directory_urls: false
 
 # Extensions
@@ -66,7 +75,7 @@ markdown_extensions:
   - admonition
   - pymdownx.critic
   - pymdownx.details
-  - pymdownx.blocks.tab
+  #- pymdownx.blocks.tab
   - pymdownx.betterem
   - pymdownx.tasklist
   - attr_list
@@ -82,6 +91,8 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.snippets:
       base_path: ["."]
+  - pymdownx.tabbed:
+      alternate_style: true
   - toc:
       permalink: "#"
 
@@ -92,3 +103,7 @@ plugins:
   # - minify:
   #     minify_html: true
   #     minify_js: true
+  
+extra_javascript:
+  - assets/js/quiz-tracker.js
+

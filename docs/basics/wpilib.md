@@ -26,7 +26,11 @@ Making FRC Programming Easy
 
 ### Subsystems
 
-- A **subsystem** is a special template class made by FRC. 
+- A **subsystem** is a special template class made by FRC.
+
+!!! note "Java concept: Inheritance with `extends`"
+    "Template class" means a **parent class** your subsystem extends. When you write `public class Drivetrain extends SubsystemBase`, your class automatically gains all the built-in FRC plumbing that `SubsystemBase` provides — you only add your robot's specific hardware and behavior on top. You'll see this in action in [Creating a Basic Driving Robot](../programming/driving_robot.md). Learn the details in [Java Classes](java_classes.md#inheritance).
+
 - In robotics, subsystems are sections of the whole robot.
     - For example every FRC robot has a **Drivetrain** subsystem which is what controls the robot’s driving both physically and programmatically.
         - To avoid confusion between software and mechanical teams, subsystems should be called the same thing. If we have a ball intake system, we will both call it **Intake** or **Collector**.

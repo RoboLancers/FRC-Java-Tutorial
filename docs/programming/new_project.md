@@ -133,6 +133,15 @@ Newly created subsystems are empty with the exception of the periodic.
     - Useful for adding/updating data to Driverstation dashboard
     - Useful updating variables that need to always up to date
 
+!!! note "Java concepts: Package, Import, and Inheritance"
+    The generated code introduces three Java concepts at once:
+
+    - **`package`** — declares which namespace this file belongs to, matching its folder location (`subsystems/` → `frc.robot.subsystems`).
+    - **`import`** — pulls in a class from another package so you can use it by its short name. VSCode adds these automatically via the 💡 light bulb.
+    - **`extends SubsystemBase`** — your class inherits all the built-in FRC subsystem behavior from `SubsystemBase`; you only add what is specific to your robot.
+
+    See [Java Classes](../basics/java_classes.md) for a full explanation of all three.
+
 ??? Example  
     ```java
     package frc.robot.subsystems;

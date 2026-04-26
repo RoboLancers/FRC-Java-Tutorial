@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Progress — Teacher Dashboard</title>
+  <style>
+    body { font-family: sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+    th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+    th { background: #f4f4f4; }
+    tr:nth-child(even) { background: #fafafa; }
+    select, input { padding: 6px; margin: 0 8px 1rem 0; }
+    #auth-bar { margin-bottom: 1.5rem; }
+    #message { color: #666; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Quiz Progress Dashboard</h1>
+
+  <div id="auth-bar">
+    <button id="sign-in-btn" onclick="signIn()" style="display:none">Sign in with GitHub</button>
+    <span id="user-label"></span>
+  </div>
+
+  <div id="controls" style="display:none">
+    <label>Filter by student:
+      <input id="filter-student" type="text" placeholder="github login">
+    </label>
+    <label>Filter by quiz:
+      <input id="filter-quiz" type="text" placeholder="quiz id">
+    </label>
+    <button onclick="loadResults()">Refresh</button>
+  </div>
+
+  <p id="message"></p>
+
+  <table id="results-table" style="display:none">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>GitHub Login</th>
+        <th>Quiz ID</th>
+        <th>Page</th>
+        <th>Score</th>
+        <th>Pct</th>
+        <th>Submitted</th>
+      </tr>
+    </thead>
+    <tbody id="results-body"></tbody>
+  </table>
+
+  <script>
+    const SUPABASE_URL = 'https://wltmawdleuvcjxqtzkmj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsdG1hd2RsZXV2Y2p4cXR6a21qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDI5MDEsImV4cCI6MjA5MjM3ODkwMX0.MGZavTM0z6n1RjOJaxR1jj1Emr0zsKCPt38L4k_CO5U';
+
+    const projectId = new URL(SUPABASE_URL).hostname.split('.')[0];
+    const SESSION_KEY = `sb-${projectId}-auth-token`;
+
+    function handleOAuthCallback() {
+      const hash = window.location.hash;
+      if (!hash.includes('access_token=')) return;
+
+      const params = new URLSearchParams(hash.slice(1));
+      const accessToken  = params.get('access_token');
+      const refreshToken = params.get('refresh_token');
+      const expiresIn    = parseInt(params.get('expires_in') || '3600', 10);
+
+      if (!accessToken) return;
+
+      fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      })
+        .then(r => r.json())
+        .then(user => {
+          const session = {
+            access_token:  accessToken,
+            refresh_token: refreshToken,
+            expires_at:    Math.floor(Date.now() / 1000) + expiresIn,
+            user,
+          };
+          localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+          init(); // re-run now that session is stored
+        });
+    }
+
+    function getSession() {
+      try {
+        return JSON.parse(localStorage.getItem(SESSION_KEY));
+      } catch (_) { return null; }
+    }
+
+    function isSessionValid(session) {
+      if (!session?.access_token) return false;
+      if (!session.expires_at) return false;
+      const nowInSeconds = Math.floor(Date.now() / 1000);
+      return session.expires_at > nowInSeconds;
+    }
+
+    async function refreshSession(session) {
+      if (!session?.refresh_token) return null;
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({
+            refresh_token: session.refresh_token,
+          }),
+        });
+
+        if (!res.ok) return null;
+
+        const newSession = await res.json();
+        const updated = {
+          access_token: newSession.access_token,
+          refresh_token: newSession.refresh_token || session.refresh_token,
+          expires_at: Math.floor(Date.now() / 1000) + (newSession.expires_in || 3600),
+          user: session.user,
+        };
+        localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+        return updated;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function signIn() {
+      const redirectTo = window.location.origin + window.location.pathname + window.location.search;
+      const url = `${SUPABASE_URL}/auth/v1/authorize?provider=github&redirect_to=${encodeURIComponent(redirectTo)}`;
+      window.location.href = url;
+    }
+
+    function signOut() {
+      localStorage.removeItem(SESSION_KEY);
+      init();
+    }
+
+    async function loadResults() {
+      const session = getSession();
+      if (!session?.access_token) return;
+
+      const student = document.getElementById('filter-student').value.trim();
+      const quiz    = document.getElementById('filter-quiz').value.trim();
+
+      let url = `${SUPABASE_URL}/rest/v1/quiz_results?order=submitted_at.desc&limit=500`;
+      if (student) url += `&github_login=eq.${encodeURIComponent(student)}`;
+      if (quiz)    url += `&quiz_id=eq.${encodeURIComponent(quiz)}`;
+
+      const res = await fetch(url, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${session.access_token}`,
+        }
+      });
+
+      // If token expired during the API call, handle it
+      if (res.status === 401) {
+        localStorage.removeItem(SESSION_KEY);
+        document.getElementById('message').textContent = 'Session expired. Please sign in again.';
+        document.getElementById('sign-in-btn').style.display = '';
+        document.getElementById('user-label').innerHTML = '<button onclick="signIn()" style="padding:4px 8px;cursor:pointer;">Sign in</button>';
+        document.getElementById('controls').style.display = 'none';
+        document.getElementById('results-table').style.display = 'none';
+        return;
+      }
+
+      const rows = await res.json();
+      const msg = document.getElementById('message');
+
+      if (!Array.isArray(rows) || rows.length === 0) {
+        msg.textContent = rows.length === 0
+          ? 'No results found.'
+          : 'No results returned — your GitHub account may not be in the teachers table.';
+        document.getElementById('results-table').style.display = 'none';
+        return;
+      }
+
+      msg.textContent = '';
+      const table = document.getElementById('results-table');
+      table.style.display = '';
+      document.getElementById('results-body').innerHTML = rows.map(r => `
+        <tr>
+          <td>${r.student_name}</td>
+          <td><a href="https://github.com/${r.github_login}" target="_blank">${r.github_login}</a></td>
+          <td>${r.quiz_id}</td>
+          <td>${r.page_url}</td>
+          <td>${r.score} / ${r.total}</td>
+          <td>${r.pct}%</td>
+          <td>${new Date(r.submitted_at).toLocaleString()}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function init() {
+      let session = getSession();
+      const msg = document.getElementById('message');
+
+      // Check if session exists and is valid
+      if (session && !isSessionValid(session)) {
+        // Try to refresh the token
+        session = await refreshSession(session);
+        if (!session) {
+          localStorage.removeItem(SESSION_KEY);
+        }
+      }
+
+      if (!session?.access_token) {
+        document.getElementById('sign-in-btn').style.display = '';
+        document.getElementById('user-label').innerHTML = '<button onclick="signIn()" style="padding:4px 8px;cursor:pointer;">Sign in</button>';
+        msg.textContent = 'Sign in with your GitHub account to view results.';
+        document.getElementById('controls').style.display = 'none';
+        document.getElementById('results-table').style.display = 'none';
+        return;
+      }
+
+      const login = session.user?.user_metadata?.user_name || session.user?.email;
+      document.getElementById('user-label').innerHTML = `Signed in as <strong>${login}</strong> <button onclick="signOut()" style="padding:4px 8px;margin-left:1rem;cursor:pointer;">Sign out</button>`;
+      document.getElementById('controls').style.display = '';
+      await loadResults();
+    }
+
+    if (window.location.hash.includes('access_token=')) {
+      handleOAuthCallback(); // calls init() when the session is stored
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>

@@ -35,7 +35,7 @@ In this section we will be going over:
     
 !!! abstract ""
     **2)** Before the constructor create a **double** called **distance**
-	```java
+	```java title="distance field"
 		private Double distance;
 	```
     
@@ -43,7 +43,7 @@ In this section we will be going over:
 
 	**3)** Also create a **Timer** called `runtime`. 
 	 
-	```java
+	```java title="runTime field"
 		private Time runTime;
 	```
 	
@@ -55,7 +55,7 @@ In this section we will be going over:
 !!! abstract ""
     **4)** Inside type:
     
-	```java
+	```java title="Constructor body"
 	distance = inches;
 	```
         
@@ -72,7 +72,7 @@ In this section we will be going over:
 !!! abstract ""
     **7)** In **isFinished** type:
     
-	```java
+	```java title="isFinished() body"
 	return Robot.m_drivetrain.getDriveEncoderDistance() == distance;
 	```
 !!! abstract ""
@@ -82,7 +82,7 @@ In this section we will be going over:
     
 	Your full **DriveDistance.java** should look like this
 	
-	```java
+	```java title="DriveDistance.java"
 	package frc.robot.commands;
 
 	import edu.wpi.first.wpilibj2.command.Command;
@@ -127,7 +127,7 @@ In this section we will be going over:
 		   
 	The code you typed in **RobotPreferences.java** should be this
 	
-	```java
+	```java title="RobotPreferences.java"
 	public static final double driveDistanceSpeed() {
 		return Preferences.getInstance().getDouble("driveDistanceSpeed", 0.5);
 	}
@@ -143,7 +143,7 @@ In this section we will be going over:
 !!! abstract ""
  	**2)** In the constructor type
 	
-	```java
+	```java title="Autonomous constructor"
 	addSequential(new DriveDistance(RobotPreferences.autoDriveDistance()));
 	addSequential(new ShooterUp());
 	```
@@ -185,7 +185,7 @@ In this section we will be going over:
 
 	Your full **DoDelay.java** should look like this
 	
-	```java
+	```java title="DoDelay.java"
 	package frc.robot.commands;
 
 	import edu.wpi.first.wpilibj.command.Command;
@@ -244,7 +244,7 @@ In this section we will be going over:
 
 	Your full **Autonomous.java** should look like this
 	
-	```java
+	```java title="Autonomous.java"
 	package frc.robot.commands;
 
 	import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -264,7 +264,7 @@ In this section we will be going over:
 		
 	The code you typed in **RobotPreferences.java** should look like this
 	
-	```java
+	```java title="RobotPreferences.java (delay)"
 	public static double autoDelay() {
 		return Preferences.getInstance().getDouble("autoDelay", 5.0);
 	}
@@ -283,7 +283,7 @@ In this section we will be going over:
 	!!! note "Why not use the chooser?"
 		`SendableChooser` allows selecting between multiple autonomous routines from the dashboard at match start, which is useful when you have several autonomous options. For this tutorial we only have one autonomous routine, so using the chooser would add boilerplate (creating options, registering them, fetching the selection) without any benefit. Once you have multiple routines worth choosing from, replacing this line with a `SendableChooser` is a natural next step.
 
-	```java
+	```java title="Robot.java"
 	public void autonomousInit() {
 	m_autonomousCommand = new Autonomous();
 	...

@@ -5,13 +5,17 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:debian",
 	"features": {
-		"ghcr.io/devcontainers-extra/features/mkdocs:2": {},
 		"ghcr.io/devcontainers/features/python:1":{},
-  		"ghcr.io/devcontainers/features/git:1": {}
+  		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/node:1": {}
 	},				
-	"postCreateCommand": [
-		"pip install -r requirements.txt && curl -fsSL https://claude.ai/install.sh | bash"
-	],
+	"postCreateCommand": "bash .devcontainer/post-create.sh && python3 .devcontainer/start_mcp_servers.py",
+	"postAttachCommand": {
+		"mkdocs-serve": "mkdocs serve"
+	},
+	"remoteEnv": {
+		"PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
+	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -19,18 +23,35 @@
 				"aikebang.mkdocs-syntax-highlight",
 				"ytianle.mkdocs-material-linter",
 				"Anthropic.claude-code"
-			]
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python3",
+				"mcp.servers": {
+					"frc-docs": {
+						"command": "/home/vscode/.local/bin/uvx",
+						"args": ["first-agentic-csa"]
+					}
+				},
+        		"claudeCode.allowDangerouslySkipPermissions": true
+      		}
 		}
 	},
+	"containerEnv": {
+    	"NODE_OPTIONS": "--dns-result-order=ipv4first"
+  	},
 	"mounts": [
-		"source=${localWorkspaceFolder}/../../../.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
-		"source=${localWorkspaceFolder}/../../../.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
+		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached",
+	 	"source=${localEnv:HOME}/GitHub/agentic-csa,target=/opt/agentic-csa,type=bind"
 	]
+	
+
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [8000],
+
 
 	// Configure tool-specific properties.
 	

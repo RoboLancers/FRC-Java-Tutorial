@@ -3,4 +3,17 @@ FRC Programming Tutorial VSC.pdf
 *.key
 .DS_Store
 site/
+.venv/
 .unotes/templates/title_date.hbs
+*.gradle
+.gradle/
+*.class
+*.jar
+improvement_analysis/github-classroom-drivetrain/template/bin/*
+.claude/settings.local.json
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/RobotContainer.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/Robot.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/Constants$DriveConstants.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/Constants$OperatorConstants.class
+improvement_analysis/github-classroom-drivetrain/template/bin/main/frc/robot/subsystems/CANDriveSubsystem.class
+.claude/settings.local.json

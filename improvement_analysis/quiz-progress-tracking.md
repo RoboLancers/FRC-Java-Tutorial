@@ -154,22 +154,26 @@ async function initAuth() {
 
 // ── mkdocs-quiz result interception ──────────────────────────────────────────
 //
-// mkdocs-quiz writes to localStorage whenever a quiz is submitted.
-// We watch for those writes using a StorageEvent listener (cross-tab)
-// and a MutationObserver on the quiz result elements (same-tab).
+// mkdocs-quiz (v1.6.3) actual localStorage format (differs from earlier assumption):
+//
+//   Key:   "quiz_progress_<page-url>"   e.g. "quiz_progress_/basics/java_basics.html"
+//   Value: { "quiz-0": { answered: bool, correct: bool, selectedValues: [...] },
+//             "quiz-1": { ... }, ... }
+//
+// There is no top-level "submitted", "score", or "total" field.
+// Score and total are derived by counting entries where correct === true / length.
 
 function extractQuizResults() {
-  // mkdocs-quiz stores keys like "quiz-<quizId>-answers" in localStorage
   const results = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (!key?.startsWith('quiz-')) continue;
+    if (!key?.startsWith('quiz_progress_')) continue;
 
     try {
       const data = JSON.parse(localStorage.getItem(key));
-      // mkdocs-quiz data shape: { answers: [...], score: N, total: N, submitted: true }
-      if (data?.submitted) {
-        results.push({ key, ...data });
+      const entries = Object.values(data);
+      if (entries.some(e => e.answered)) {
+        results.push({ key, data });
       }
     } catch (_) {}
   }
@@ -177,8 +181,8 @@ function extractQuizResults() {
 }
 
 function getQuizIdFromKey(key) {
-  // key format: "quiz-<quizId>-answers"
-  return key.replace(/^quiz-/, '').replace(/-answers$/, '');
+  // key format: "quiz_progress_/basics/java_basics.html"
+  return key.replace(/^quiz_progress_/, '');
 }
 
 async function syncResult(quizKey, session) {
@@ -189,12 +193,15 @@ async function syncResult(quizKey, session) {
     data = JSON.parse(localStorage.getItem(quizKey));
   } catch (_) { return; }
 
-  if (!data?.submitted) return;
+  const entries = Object.values(data);
+  if (!entries.some(e => e.answered)) return;
 
   // Check if already synced to avoid duplicate submissions
   const syncedKey = `synced-${quizKey}`;
   if (localStorage.getItem(syncedKey) === 'true') return;
 
+  const score = entries.filter(e => e.correct).length;
+  const total = entries.length;
   const quizId = getQuizIdFromKey(quizKey);
   const user = session.user;
 
@@ -204,10 +211,10 @@ async function syncResult(quizKey, session) {
     github_login: user.user_metadata?.user_name || null,
     quiz_id:      quizId,
     page_url:     window.location.pathname,
-    score:        data.score ?? 0,
-    total:        data.total ?? 0,
-    pct:          data.total > 0 ? ((data.score / data.total) * 100).toFixed(2) : 0,
-    answers:      data.answers ?? null,
+    score,
+    total,
+    pct:          total > 0 ? ((score / total) * 100).toFixed(2) : 0,
+    answers:      data,
   };
 
   await supabase.insertResult(row, session.access_token);

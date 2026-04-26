@@ -1,0 +1,18 @@
+{
+  "fileName": "WPILib-2026.1.json",
+  "name": "WPILib-2026.1",
+  "version": "2026.1.1",
+  "frcYear": 2026,
+  "uuid": "0820e0f7-f23e-40a2-8291-5154fe29ba82",
+  "mavenUrls": [],
+  "jsonUrl": "",
+  "javaDependencies": [
+    {
+      "groupId": "edu.wpi.first",
+      "artifactId": "FRC2026_ipc",
+      "version": "1.0.0"
+    }
+  ],
+  "jniDependencies": [],
+  "cppDependencies": []
+}
