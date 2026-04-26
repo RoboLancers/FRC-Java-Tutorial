@@ -205,4 +205,14 @@ What must always be true about the condition inside an `if` statement?
 Java `if` statements require a `boolean` condition. Comparison operators (`<`, `>`, `==`) and logical operators (`&&`, `||`, `!`) all produce `boolean` results and are the typical building blocks of conditions.
 </quiz>
 
+<quiz>
+When using `if`/`else` to set a motor value, why should you always include an `else` case?
+- [ ] The compiler requires it
+- [x] To prevent the motor from potentially continuing its previous action (dangerous runaway behavior)
+- [ ] `if` without `else` causes a compilation error
+- [ ] It improves performance
+
+Without an else, if the condition is false the motor keeps doing whatever it was doing before. This can cause dangerous runaway behavior.
+</quiz>
+
 <!-- mkdocs-quiz results -->

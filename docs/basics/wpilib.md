@@ -140,3 +140,51 @@ See [Default Project Contents](../programming/new_project.md#default-project-con
     - All **Subsystems** must be added to **RobotContainer.java** 
 - **RobotMap.java** holds port numbers and IDs accessible throughout the program by typing: `RobotMap.NameOfMotor()`
 - **RobotContainer.java** contains our publicly accessible instances of our subsystems. It also connects our commands to physical controllers.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+In the command-based framework, what do subsystems define?
+- [ ] Actions the robot performs
+- [x] What the robot is made of and what it can do
+- [ ] How to drive the robot
+- [ ] The autonomous routine
+
+Subsystems define the robot's hardware and capabilities — what it has and what it can do. Commands define actions — what the robot should do with that hardware.
+</quiz>
+
+<quiz>
+In the command-based framework, what do commands define?
+- [ ] The robot's hardware components
+- [ ] What the robot IS (physical structure)
+- [x] What the robot DOES (actions)
+- [ ] The motor controller types
+
+Commands define the robot's actions — they tell the subsystems what to do. For example, a DriveForward command tells the Drivetrain subsystem to move.
+</quiz>
+
+<quiz>
+Which method in a command is called repeatedly while the command is scheduled?
+- [ ] initialize()
+- [x] execute()
+- [ ] isFinished()
+- [ ] end()
+
+`initialize()` runs once at the start, `execute()` runs repeatedly (this IS the loop), `isFinished()` checks when to stop, and `end()` runs once when done.
+</quiz>
+
+<quiz>
+A default command runs:
+- [ ] Only when the robot is disabled
+- [x] Whenever no other command is using the subsystem
+- [ ] Once at robot startup
+- [ ] Only during autonomous
+
+A default command runs whenever the subsystem is not being used by another command. This is how driver control typically works — the drive command runs by default unless superseded.
+</quiz>
+
+<!-- mkdocs-quiz results -->
