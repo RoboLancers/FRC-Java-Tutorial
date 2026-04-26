@@ -156,3 +156,59 @@ public class MySubsystem extends SubsystemBase {
 
 !!! tip
     Once you've found values you're happy with, copy them back into your `Constants.java` file so they are permanently saved. Dashboard values are not persisted between robot reboots unless you use the `Preferences` API — see [RobotPreferences](robotpreferences.md){target=_blank} for long-term storage.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+What class do you use to publish data to both SmartDashboard and Elastic?
+- [ ] `Dashboard`
+- [ ] `NetworkTables`
+- [x] `SmartDashboard`
+- [ ] `ElasticDashboard`
+
+Both dashboards read from NetworkTables, but SmartDashboard is the API class. Use SmartDashboard.putNumber() and the data appears in both dashboards automatically.
+</quiz>
+
+<quiz>
+What does `putNumber("Key", value)` do?
+- [ ] Reads a number from the dashboard
+- [x] Publishes a number value under the specified key
+- [ ] Creates a new preference
+- [ ] Opens a connection
+
+`put` methods publish data from robot to dashboard. `get` methods read data from dashboard into robot.
+</quiz>
+
+<quiz>
+What is the second parameter of `getNumber("Key", defaultValue)` used for?
+- [ ] Maximum value allowed
+- [ ] The key type
+- [x] Returned when no value has been published yet
+- [ ] The value units
+
+The default Value is what the robot uses if nothing has been published to that key yet. This is important for the first run before any dashboard is connected.
+</quiz>
+
+<quiz>
+The `putData()` method can publish a Command as a clickable button on the dashboard.
+- [x] True
+- [ ] False
+
+`putData(someCommand)` sends the command to the dashboard, where it appears as a button. Clicking it schedules the command on the robot.
+</quiz>
+
+<quiz>
+In the live tuning pattern, where should you call `putNumber()`?
+- [ ] In the periodic method
+- [ ] In the constructor (once)
+- [ ] Every time you read the value
+- [x] In the constructor (once)
+
+The key is call putNumber once in the constructor. Then call getNumber every time you need the value. This lets the dashboard update change the value.
+</quiz>
+
+<!-- mkdocs-quiz results -->

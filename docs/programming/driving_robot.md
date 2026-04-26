@@ -426,6 +426,64 @@ The `RobotContainer` class holds all subsystems, controllers, and command bindin
 
         Lambdas are required here because `driveArcade` expects `DoubleSupplier` parameters. A lambda `() -> driverController.getLeftY()` is a `DoubleSupplier` — it gets called every loop cycle so the robot continuously responds to joystick movement.
 
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+Which motor controller uses CAN and is made by REV Robotics?
+- [ ] TalonFX
+- [x] SparkMax
+- [ ] Victor SP
+- [ ] PWM motor
+
+SparkMax is REV Robotics' CAN motor controller, commonly paired with NEO motors. TalonFX is made by CTRE.
+</quiz>
+
+<quiz>
+What does the `follow()` method do on a follower motor?
+- [ ] Makes the motor follow a joystick
+- [x] Automatically mirrors the leader motor's output
+- [ ] Creates a following command
+- [ ] Tracks the leader motor's position
+
+The follower motor mirrors whatever the leader motor does. This is how you connect two motors to drive the same wheel — one leader, one follower.
+</quiz>
+
+<quiz>
+Which type of drive takes a moveSpeed and rotateSpeed?
+- [ ] Tank drive
+- [ ] Mecanum drive
+- [x] Arcade drive
+- [ ] Holonomic drive
+
+Arcade drive uses two inputs: moveSpeed for forward/back and rotateSpeed for turning. Tank uses left/right speed, mecanum uses three or four inputs.
+</quiz>
+
+<quiz>
+In arcade drive, what does positive rotation typically do?
+- [ ] Move the robot forward
+- [ ] Move the robot backward
+- [ ] Rotate counter-clockwise (left)
+- [x] Rotate clockwise (right)
+
+Positive rotation in WPILib arcade drive usually means clockwise (turning right). This follows standard mathematical convention.
+</quiz>
+
+<quiz>
+What does `setDefaultCommand` do?
+- [x] Sets a command that runs all the time when no other command needs the subsystem
+- [ ] Creates a new command
+- [ ] Runs a command only once
+- [ ] Saves a command to preferences
+
+`setDefaultCommand` makes a command run whenever its subsystem is idle. This is how driver control works — the drive command runs by default.
+</quiz>
+
+<!-- mkdocs-quiz results -->
+
 ??? example “Full RobotContainer Example”
     === “SparkMax”
         See [RobotContainer.java](../code_examples/2026KitBotInline/RobotContainer.java) for the complete `RobotContainer` implementation.

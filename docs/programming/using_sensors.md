@@ -144,3 +144,31 @@ new JoystickButton(controller, Button.kStart.value)
 ```
 
 The `resetEncodersCommand()` command factory is defined in the subsystem and calls the reset logic. Since both SparkMax and TalonFX implementations expose the same interface, the binding code remains unchanged — only the subsystem implementation details differ.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+When should you invert a limit switch reading in code?
+- [ ] Always
+- [x] When using a Normally Open switch (invert so disconnected reads as "not pressed")
+- [ ] When using a Normally Closed switch
+- [ ] Never
+
+Normally Open switches read pressed (true) when connected. Inverting makes disconnected read as "not pressed" (false), which is the safe fail state if wiring fails.
+</quiz>
+
+<quiz>
+What does `setDistancePerPulse()` do on an encoder?
+- [ ] Sets the encoder's CAN ID
+- [x] Converts raw counts to a meaningful unit (feet, meters, inches)
+- [ ] Resets the encoder to zero
+- [ ] Sets the encoder direction
+
+This method scales the raw encoder counts to human-readable units. For example, if a 360-count encoder measures one full rotation, set it to 1.0 for rotations or 360.0 for degrees.
+</quiz>
+
+<!-- mkdocs-quiz results -->

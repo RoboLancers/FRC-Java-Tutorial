@@ -478,3 +478,21 @@ For complete details, see [When to Invert](https://docs.yagsl.com/configuring-ya
 - **Advanced Features**: Check examples for PathPlanner, PhotonVision, and SysId integration
 
 This tutorial covers the essentials for getting started with YAGSL. For advanced features like vision integration or custom control algorithms, explore the examples and documentation further. Remember to test thoroughly on a test bench before field use!
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+What does "holonomic" mean for a drivetrain?
+- [ ] The robot can only move forward and backward
+- [x] The robot can move in any direction at any velocity, independent of orientation
+- [ ] The robot uses holonomic encoders
+- [ ] The robot has four motors
+
+A holonomic drivetrain can move in any direction without first rotating to face that direction. Swerve drives are holonomic; tank drives are not.
+</quiz>
+
+<!-- mkdocs-quiz results -->

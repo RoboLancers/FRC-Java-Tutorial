@@ -176,4 +176,14 @@ If a method does not return a value, its return type should be:
 `void` is the keyword used when a method performs an action but has no value to hand back to the code that called it.
 </quiz>
 
+<quiz>
+Method overloading allows you to:
+- [ ] Override a method from a parent class
+- [x] Have multiple methods with the same name but different parameters
+- [ ] Make a method run automatically at startup
+- [ ] Call a method from another class
+
+Method overloading means multiple methods can share the same name as long as they have different parameter lists (different number or types of parameters).
+</quiz>
+
 <!-- mkdocs-quiz results -->

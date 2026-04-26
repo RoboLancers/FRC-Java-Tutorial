@@ -65,6 +65,16 @@ In Java, a class is best described as:
 Classes are templates. You define the blueprint once, then use `new` to create as many objects from it as you need.
 </quiz>
 
+<quiz>
+Which keyword makes a variable belong to the class itself rather than a specific object?
+- [ ] `public`
+- [ ] `private`
+- [x] `static`
+- [ ] `final`
+
+`static` means the variable or method belongs to the class, not to any instance (object). Access it as `ClassName.variable` without creating an object.
+</quiz>
+
 <!-- mkdocs-quiz results -->
 
 ***

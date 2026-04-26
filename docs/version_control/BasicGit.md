@@ -110,4 +110,32 @@ PR's will be explained further in the [Using GitHub](github.md) docs.
   Uncommitted code also makes it harder to track what is and isn't finished.
 - Run a `git status` at the start of a meeting to make sure you committed your code and that you are on the right branch
 
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+You run `git clone https://github.com/Team/2026-Robot-Code.git`. What does this do?
+- [ ] Creates a fork on your GitHub account
+- [x] Downloads the repository to your computer
+- [ ] Creates a new branch
+- [ ] Opens the repo in GitHub
+
+Clone downloads a copy of the repository to your computer. Fork is a GitHub feature that creates a copy on GitHub.
+</quiz>
+
+<quiz>
+Which branch should always contain working, reviewed code?
+- [ ] develop
+- [x] main
+- [ ] feature
+- [ ] hotfix
+
+The main branch should always have working code. Feature branches are for development, and hotfixes are for emergency patches to main.
+</quiz>
+
+<!-- mkdocs-quiz results -->
+
 ### Names

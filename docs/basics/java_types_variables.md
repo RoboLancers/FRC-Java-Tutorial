@@ -199,4 +199,24 @@ Which is the correct way to declare a motor port constant that any class can rea
 `public` makes it readable by other classes, `static` means it belongs to the class itself (no object needed), and `final` prevents reassignment. Together they form the standard Java constant pattern.
 </quiz>
 
+<quiz>
+What is the result of `7 % 2`?
+- [ ] 3
+- [ ] 3.5
+- [x] 1
+- [ ] 0
+
+7 divided by 2 is 3 with remainder 1. The modulo operator (%) returns just the remainder.
+</quiz>
+
+<quiz>
+Which logical operator returns true only if BOTH conditions are true?
+- [ ] `||`
+- [ ] `!`
+- [x] `&&`
+- [ ] `==`
+
+`&&` (AND) requires both conditions to be true. `||` (OR) is true if either is true, `!` inverts true to false, and `==` checks equality.
+</quiz>
+
 <!-- mkdocs-quiz results -->
