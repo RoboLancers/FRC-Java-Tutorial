@@ -80,9 +80,11 @@
     "scminput": false,
     "java": true
   },
-  "java.project.sourcePaths": [
-  "src/main/java",
-  "src/test/java"
-],
-"java.project.outputPath": "build/classes/java/main",
+"java.project.sourcePaths": [
+    "src/main/java",
+    "src/test/java"
+  ],
+  "java.project.outputPath": "build/classes/java/main",
+  "java.import.gradle.arguments": "--refresh-dependencies",
+  "java.import.gradle.task": "compileJava",
 }

@@ -259,6 +259,7 @@ motor.setVoltage(MathUtil.clamp(pidVolts + ffVolts, -12.0, 12.0));
 
 <quiz>
 What does the Proportional (P) term in a PID controller do?
+
 - [ ] Accumulates past errors to eliminate steady-state error
 - [x] Applies a correction proportional to the current error
 - [ ] Dampens the rate of change to prevent overshoot
@@ -269,6 +270,7 @@ The P term multiplies the current error by kP. Large error → large correction.
 
 <quiz>
 Where should you call `pidController.calculate()` in a subsystem?
+
 - [ ] In the constructor, once during initialization
 - [ ] Inside a command's execute() method
 - [x] In the subsystem's periodic() method, every loop
@@ -279,6 +281,7 @@ Where should you call `pidController.calculate()` in a subsystem?
 
 <quiz>
 Why is kI (integral gain) generally avoided in FRC?
+
 - [ ] It makes the robot move faster than allowed
 - [x] It can cause integral windup, leading to oscillations or runaway output
 - [ ] WPILib's PIDController does not support integral gain
@@ -289,6 +292,7 @@ Integral gain accumulates error over time. If the mechanism is held away from th
 
 <quiz>
 What does `pidController.setTolerance(0.5)` do?
+
 - [ ] Limits the maximum motor output to 0.5 volts
 - [ ] Sets the maximum allowed error before the robot disables
 - [x] Defines that within 0.5 units of the setpoint counts as "at setpoint"
