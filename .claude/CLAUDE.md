@@ -116,6 +116,10 @@ Additional agent descriptions for specialized tasks can be found in the `.claude
 |-------|------|---------|
 | Documentation Writer | [documentation-writer-agent.md](documentation-writer-agent.md) | Write MkDocs tutorial pages in the exact same style as docs/ folder |
 
+## GitHub Classroom resources
+This link includes the relevant documentation for classroom50 the replacement for Github Classroom. Any references given to github classroom should reference the info found here instead of anything else. https://github.com/foundation50/classroom50/wiki/
+Examples can be found here for reference: https://github.com/foundation50/classroom50/tree/preview/examples
+
 ### Documentation Writer Agent
 
 Use the `Task` tool with subagent_type `general` and prompt referencing `[documentation-writer-agent.md](documentation-writer-agent.md)` for writing new documentation pages. This agent follows all MkDocs conventions, uses the same libraries/plugins, and implements the Content → Code separation pattern.
