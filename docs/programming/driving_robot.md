@@ -283,14 +283,26 @@ Create the configuration to apply to motors. The current limit helps prevent tri
 This defines the drive object that we will use to drive the robot.
 
 **Constructor Initialization:**
-```java title="CANDriveSubsystem.java - Drive Initialization"
-drive = new DifferentialDrive(leftLeader, rightLeader);
-```
-This initializes the differential drive object with the left and right leader motors.
 
-- Since DifferentialDrive takes 2 parameters we pass the left and right leader motors.
-- Both SparkMax and TalonFX implement the WPILib `MotorController` interface, so they work directly with `DifferentialDrive`.
-- The follower motors are configured separately (see below) to follow the leaders.
+=== "SparkMax"
+    ```java title="CANDriveSubsystem.java - Drive Initialization"
+    drive = new DifferentialDrive(leftLeader, rightLeader);
+    ```
+    This initializes the differential drive object with the left and right leader motors.
+
+    - Since DifferentialDrive takes 2 parameters we pass the left and right leader motors.
+    - SparkMax implements the WPILib `MotorController` interface, so it can be passed directly to `DifferentialDrive`.
+    - The follower motors are configured separately (see below) to follow the leaders.
+
+=== "TalonFX"
+    ```java title="CANDriveSubsystem.java - Drive Initialization"
+    drive = new DifferentialDrive(leftLeader::set, rightLeader::set);
+    ```
+    This initializes the differential drive object with the left and right leader motors.
+
+    - TalonFX (Phoenix 6) does **not** implement the WPILib `MotorController` interface, so a `TalonFX` object cannot be passed directly to the `MotorController`-based constructor.
+    - TalonFX does expose a `set(double)` method, so we use `DifferentialDrive`'s other constructor, which takes two `DoubleConsumer` method references (`leftLeader::set`, `rightLeader::set`) instead of `MotorController` objects. See CTRE's [MotorController Integration](https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/wpilib-integration/motorcontroller-integration.html){target=_blank} docs.
+    - The follower motors are configured separately (see below) to follow the leaders.
 
 !!! warning
     You should only group motors that are spinning the same direction physically when positive power is being applied otherwise you could damage your robot.

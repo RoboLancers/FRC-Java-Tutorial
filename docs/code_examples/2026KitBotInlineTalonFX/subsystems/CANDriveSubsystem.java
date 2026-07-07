@@ -38,8 +38,11 @@ public class CANDriveSubsystem extends SubsystemBase {
     rightLeader = new TalonFX(RIGHT_LEADER_ID);
     rightFollower = new TalonFX(RIGHT_FOLLOWER_ID);
 
-    // Set up differential drive class
-    drive = new DifferentialDrive(leftLeader, rightLeader);
+    // Set up differential drive class. TalonFX does not implement WPILib's
+    // MotorController interface, so it must be passed as a method reference
+    // (matching DifferentialDrive's DoubleConsumer-based constructor) rather
+    // than as a MotorController object.
+    drive = new DifferentialDrive(leftLeader::set, rightLeader::set);
 
     // TalonFX communicates over CAN via Phoenix 6 — no explicit CAN timeout is needed.
     // --8<-- [start:can-timeout]
