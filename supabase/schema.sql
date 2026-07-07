@@ -65,3 +65,41 @@ CREATE POLICY "Teachers read all results"
 --   SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py remove their-github-username
 --
 -- (See scripts/invite_teacher.py for details.)
+
+-- ── teacher_requests ────────────────────────────────────────────────────────
+-- Self-service "request instructor access" form, submitted from docs/admin.html
+-- by any signed-in user. Rows are only ever written client-side by the
+-- requester themselves (own user_id) — approving a request still requires
+-- scripts/invite_teacher.py and the service-role key, so a compromised anon
+-- key can spam requests but can never grant itself access to quiz_results.
+
+CREATE TABLE teacher_requests (
+  id           BIGSERIAL PRIMARY KEY,
+  user_id      UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  github_login TEXT NOT NULL,
+  full_name    TEXT,
+  reason       TEXT,
+  status       TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'denied')),
+  requested_at TIMESTAMPTZ DEFAULT NOW(),
+  reviewed_at  TIMESTAMPTZ
+);
+
+CREATE INDEX ON teacher_requests (status);
+
+-- Only one outstanding pending request per user, so resubmitting/spamming
+-- the form just surfaces the existing request instead of creating rows.
+CREATE UNIQUE INDEX one_pending_request_per_user
+  ON teacher_requests (user_id) WHERE status = 'pending';
+
+ALTER TABLE teacher_requests ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users insert own request"
+  ON teacher_requests FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users read own request"
+  ON teacher_requests FOR SELECT
+  USING (auth.uid() = user_id);
+
+-- Reviewing/approving requests goes through scripts/invite_teacher.py
+-- (service-role key), which bypasses RLS — no teacher-facing policy needed.

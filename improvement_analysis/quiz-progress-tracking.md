@@ -330,7 +330,7 @@ through the Supabase SQL editor or with the service-role key, which is what
 never appear in `admin.html` or `quiz-tracker.js`; keep it in your shell
 environment only.
 
-**To grant an instructor access:**
+**To grant an instructor access manually:**
 
 1. Have them sign in once at `/admin.html` via "Sign in with GitHub" (this
    just confirms their OAuth login works; they'll see "no results found /
@@ -357,6 +357,48 @@ truth and re-run any diffs in the Supabase SQL editor when it changes.
 
 ---
 
+## Self-Service Requests (teacher_requests)
+
+Rather than manually asking for someone's GitHub username, `/admin.html` also
+shows a **"Request instructor access"** form to any signed-in user. Submitting
+it inserts a row into a `teacher_requests` table:
+
+```sql
+CREATE TABLE teacher_requests (
+  id           BIGSERIAL PRIMARY KEY,
+  user_id      UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  github_login TEXT NOT NULL,
+  full_name    TEXT,
+  reason       TEXT,
+  status       TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'denied')),
+  requested_at TIMESTAMPTZ DEFAULT NOW(),
+  reviewed_at  TIMESTAMPTZ
+);
+```
+
+RLS on this table only lets a user insert/read their *own* request row (a
+partial unique index also blocks more than one pending request per user, so
+resubmitting the form just re-surfaces the existing one instead of spamming).
+Reviewing and approving requests is **not** exposed to the browser at all —
+it goes through the same service-role-key script as manual grants:
+
+```bash
+# List everyone waiting on review
+SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py requests
+
+# Approve request #4 — adds its github_login to `teachers` AND marks the
+# request approved in one step
+SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py approve 4
+
+# Or deny it
+SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py deny 4
+```
+
+Once approved, the requester's `/admin.html` page reflects the new status
+(pending → approved) the next time they load it.
+
+---
+
 ## Configuration Checklist
 
 - [ ] Create Supabase project and run [supabase/schema.sql](../supabase/schema.sql)
@@ -366,7 +408,8 @@ truth and re-run any diffs in the Supabase SQL editor when it changes.
 - [ ] Place `quiz-tracker.js` at `docs/assets/js/quiz-tracker.js`
 - [ ] Add `extra_javascript` entry to `mkdocs.yml`
 - [ ] Test: sign in with GitHub on the site, complete a quiz, verify row appears in Supabase table
-- [ ] Add each instructor's GitHub login to the `teachers` table (see above)
+- [ ] Add each instructor's GitHub login to the `teachers` table (see above),
+      either directly or by approving a submitted request (`invite_teacher.py requests`)
 
 ---
 

@@ -10,6 +10,12 @@ Usage:
     SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py remove octocat
     SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py list
 
+    # Review self-service requests submitted via the "Request instructor
+    # access" form in docs/admin.html:
+    SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py requests
+    SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py approve <request_id>
+    SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py deny <request_id>
+
 The Supabase project URL defaults to the one baked into docs/admin.html; set
 SUPABASE_URL to override it.
 """
@@ -21,6 +27,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone
 
 DEFAULT_SUPABASE_URL = "https://wltmawdleuvcjxqtzkmj.supabase.co"
 
@@ -72,6 +79,57 @@ def list_teachers(base_url, api_key):
         print(f"{row['github_login']}\t(added {row['added_at']})")
 
 
+def list_requests(base_url, api_key):
+    url = (
+        f"{base_url}/rest/v1/teacher_requests"
+        "?select=id,github_login,full_name,reason,requested_at"
+        "&status=eq.pending&order=requested_at.asc"
+    )
+    rows = request("GET", url, api_key) or []
+    if not rows:
+        print("No pending requests.")
+        return
+    for row in rows:
+        reason = row.get("reason") or "(no reason given)"
+        print(
+            f"#{row['id']}\t{row['github_login']}\t{row.get('full_name') or ''}\t"
+            f"requested {row['requested_at']}\t{reason}"
+        )
+
+
+def _get_request(base_url, api_key, request_id):
+    url = f"{base_url}/rest/v1/teacher_requests?id=eq.{request_id}&select=id,github_login,status"
+    rows = request("GET", url, api_key) or []
+    if not rows:
+        sys.exit(f"No request with id {request_id}.")
+    return rows[0]
+
+
+def approve_request(base_url, api_key, request_id):
+    req_row = _get_request(base_url, api_key, request_id)
+    add_teacher(base_url, api_key, req_row["github_login"])
+    request(
+        "PATCH",
+        f"{base_url}/rest/v1/teacher_requests?id=eq.{request_id}",
+        api_key,
+        body={"status": "approved", "reviewed_at": datetime.now(timezone.utc).isoformat()},
+        extra_headers={"Prefer": "return=minimal"},
+    )
+    print(f"Approved request #{request_id} for '{req_row['github_login']}'.")
+
+
+def deny_request(base_url, api_key, request_id):
+    req_row = _get_request(base_url, api_key, request_id)
+    request(
+        "PATCH",
+        f"{base_url}/rest/v1/teacher_requests?id=eq.{request_id}",
+        api_key,
+        body={"status": "denied", "reviewed_at": datetime.now(timezone.utc).isoformat()},
+        extra_headers={"Prefer": "return=minimal"},
+    )
+    print(f"Denied request #{request_id} for '{req_row['github_login']}'.")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -83,6 +141,14 @@ def main():
     remove_p.add_argument("github_login")
 
     sub.add_parser("list", help="List current instructors")
+
+    sub.add_parser("requests", help="List pending 'request instructor access' submissions")
+
+    approve_p = sub.add_parser("approve", help="Approve a pending request and grant access")
+    approve_p.add_argument("request_id", type=int)
+
+    deny_p = sub.add_parser("deny", help="Deny a pending request")
+    deny_p.add_argument("request_id", type=int)
 
     args = parser.parse_args()
 
@@ -97,6 +163,12 @@ def main():
         remove_teacher(base_url, api_key, args.github_login)
     elif args.command == "list":
         list_teachers(base_url, api_key)
+    elif args.command == "requests":
+        list_requests(base_url, api_key)
+    elif args.command == "approve":
+        approve_request(base_url, api_key, args.request_id)
+    elif args.command == "deny":
+        deny_request(base_url, api_key, args.request_id)
 
 
 if __name__ == "__main__":

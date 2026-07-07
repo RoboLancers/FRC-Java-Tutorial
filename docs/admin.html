@@ -9,9 +9,12 @@
     th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
     th { background: #f4f4f4; }
     tr:nth-child(even) { background: #fafafa; }
-    select, input { padding: 6px; margin: 0 8px 1rem 0; }
+    select, input, textarea { padding: 6px; margin: 0 8px 1rem 0; }
     #auth-bar { margin-bottom: 1.5rem; }
     #message { color: #666; font-style: italic; }
+    #request-section { border: 1px solid #ddd; border-radius: 6px; padding: 1rem 1.25rem; max-width: 480px; margin-bottom: 1.5rem; }
+    #request-section textarea { display: block; width: 100%; box-sizing: border-box; min-height: 4.5rem; margin: 0.5rem 0; }
+    #request-status { font-style: italic; color: #666; }
   </style>
 </head>
 <body>
@@ -20,6 +23,15 @@
   <div id="auth-bar">
     <button id="sign-in-btn" onclick="signIn()" style="display:none">Sign in with GitHub</button>
     <span id="user-label"></span>
+  </div>
+
+  <div id="request-section" style="display:none">
+    <h3 style="margin-top:0">Request instructor access</h3>
+    <p id="request-status"></p>
+    <div id="request-form">
+      <textarea id="request-reason" placeholder="Why do you need access to quiz results? (optional)"></textarea>
+      <button onclick="submitTeacherRequest()">Request access</button>
+    </div>
   </div>
 
   <div id="controls" style="display:none">
@@ -168,6 +180,7 @@
         document.getElementById('user-label').innerHTML = '<button onclick="signIn()" style="padding:4px 8px;cursor:pointer;">Sign in</button>';
         document.getElementById('controls').style.display = 'none';
         document.getElementById('results-table').style.display = 'none';
+        document.getElementById('request-section').style.display = 'none';
         return;
       }
 
@@ -198,6 +211,70 @@
       `).join('');
     }
 
+    async function checkTeacherRequestStatus(session) {
+      const section = document.getElementById('request-section');
+      const status = document.getElementById('request-status');
+      const form = document.getElementById('request-form');
+      section.style.display = '';
+
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/teacher_requests?user_id=eq.${session.user.id}&select=status,requested_at&order=requested_at.desc&limit=1`,
+        {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        }
+      );
+      const rows = res.ok ? await res.json() : [];
+      const latest = rows[0];
+
+      if (!latest || latest.status === 'denied') {
+        status.textContent = latest?.status === 'denied'
+          ? 'Your previous request was denied. You can submit a new one below.'
+          : '';
+        form.style.display = '';
+      } else if (latest.status === 'pending') {
+        status.textContent = `Request submitted ${new Date(latest.requested_at).toLocaleString()} — waiting on review.`;
+        form.style.display = 'none';
+      } else if (latest.status === 'approved') {
+        status.textContent = 'Your request was approved — you should already have access above.';
+        form.style.display = 'none';
+      }
+    }
+
+    async function submitTeacherRequest() {
+      const session = getSession();
+      if (!session?.access_token) return;
+
+      const reason = document.getElementById('request-reason').value.trim();
+      const user = session.user;
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/teacher_requests`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${session.access_token}`,
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          github_login: user.user_metadata?.user_name || null,
+          full_name: user.user_metadata?.full_name || null,
+          reason: reason || null,
+        }),
+      });
+
+      if (res.ok) {
+        await checkTeacherRequestStatus(session);
+      } else if (res.status === 409) {
+        document.getElementById('request-status').textContent = 'You already have a pending request.';
+      } else {
+        document.getElementById('request-status').textContent = 'Could not submit request — please try again later.';
+      }
+    }
+
     async function init() {
       let session = getSession();
       const msg = document.getElementById('message');
@@ -223,6 +300,7 @@
       const login = session.user?.user_metadata?.user_name || session.user?.email;
       document.getElementById('user-label').innerHTML = `Signed in as <strong>${login}</strong> <button onclick="signOut()" style="padding:4px 8px;margin-left:1rem;cursor:pointer;">Sign out</button>`;
       document.getElementById('controls').style.display = '';
+      await checkTeacherRequestStatus(session);
       await loadResults();
     }
 

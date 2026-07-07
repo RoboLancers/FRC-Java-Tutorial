@@ -1,4 +1,4 @@
-# [WIP] Creating an Autonomous Command
+# Creating an Autonomous Command
 
 <!-- ![Image Title](imageURL)  -->
 
