@@ -63,9 +63,12 @@ CREATE POLICY "Students read own results"
   ON quiz_results FOR SELECT
   USING (auth.uid() = user_id);
 
--- Teachers (Supabase dashboard / service role key) can read everything
--- No additional policy needed — service role bypasses RLS
+-- Teachers/admins: see the "Instructor Access (teachers table)" section below.
 ```
+
+This full schema (including the `teachers` table) is version-controlled at
+[supabase/schema.sql](../supabase/schema.sql) — run it in the Supabase SQL
+editor and keep it in sync with any future schema changes.
 
 ### Enable GitHub OAuth
 
@@ -284,107 +287,86 @@ No code required for this option.
 
 ---
 
-### Option B — Simple Admin HTML Page
+### Option B — Simple Admin HTML Page (implemented)
 
-Create `docs/admin.html` (excluded from nav) for a basic teacher dashboard. This page uses the Supabase **service role key**, which must never be exposed publicly — either:
+[docs/admin.html](../docs/admin.html) is a basic teacher dashboard, excluded from `nav:`
+so it isn't linked from the site but is still built and reachable at
+`/admin.html`. It signs the visitor in with the same GitHub OAuth flow as
+students (no service role key, ever, client-side) and queries `quiz_results`
+using the visitor's own access token plus the `SUPABASE_ANON_KEY`. Whether
+they see every student's rows or just their own is entirely decided by RLS —
+see "Instructor Access (teachers table)" below.
 
-- Keep this page local (never deployed), or
-- Host it separately behind basic auth (e.g. Netlify password protection)
+---
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Quiz Progress — Teacher Dashboard</title>
-  <style>
-    body { font-family: sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
-    table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
-    th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
-    th { background: #f4f4f4; }
-    tr:nth-child(even) { background: #fafafa; }
-    select, input { padding: 6px; margin: 0 8px 1rem 0; }
-  </style>
-</head>
-<body>
-  <h1>Quiz Progress Dashboard</h1>
+## Instructor Access (teachers table)
 
-  <label>Filter by student:
-    <input id="filter-student" type="text" placeholder="github login">
-  </label>
-  <label>Filter by quiz:
-    <input id="filter-quiz" type="text" placeholder="quiz id">
-  </label>
-  <button onclick="loadResults()">Refresh</button>
+By default RLS only lets a signed-in user read their *own* `quiz_results` rows
+(`auth.uid() = user_id`), so signing in to `admin.html` alone doesn't grant
+class-wide visibility. A `teachers` table plus an additional RLS policy grants
+it to an allowlist of GitHub logins, without ever exposing a service-role key:
 
-  <table id="results-table">
-    <thead>
-      <tr>
-        <th>Student</th>
-        <th>GitHub Login</th>
-        <th>Quiz ID</th>
-        <th>Page</th>
-        <th>Score</th>
-        <th>Pct</th>
-        <th>Submitted</th>
-      </tr>
-    </thead>
-    <tbody id="results-body"></tbody>
-  </table>
+```sql
+CREATE TABLE teachers (
+  github_login TEXT PRIMARY KEY,
+  added_at     TIMESTAMPTZ DEFAULT NOW()
+);
 
-  <script>
-    const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-    // WARNING: service role key — never deploy this page publicly
-    const SERVICE_ROLE_KEY = 'YOUR_SERVICE_ROLE_KEY';
-
-    async function loadResults() {
-      const student = document.getElementById('filter-student').value.trim();
-      const quiz    = document.getElementById('filter-quiz').value.trim();
-
-      let url = `${SUPABASE_URL}/rest/v1/quiz_results?order=submitted_at.desc&limit=500`;
-      if (student) url += `&github_login=eq.${encodeURIComponent(student)}`;
-      if (quiz)    url += `&quiz_id=eq.${encodeURIComponent(quiz)}`;
-
-      const res = await fetch(url, {
-        headers: {
-          'apikey': SERVICE_ROLE_KEY,
-          'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
-        }
-      });
-
-      const rows = await res.json();
-      const tbody = document.getElementById('results-body');
-      tbody.innerHTML = rows.map(r => `
-        <tr>
-          <td>${r.student_name}</td>
-          <td><a href="https://github.com/${r.github_login}" target="_blank">${r.github_login}</a></td>
-          <td>${r.quiz_id}</td>
-          <td>${r.page_url}</td>
-          <td>${r.score} / ${r.total}</td>
-          <td>${r.pct}%</td>
-          <td>${new Date(r.submitted_at).toLocaleString()}</td>
-        </tr>
-      `).join('');
-    }
-
-    loadResults();
-  </script>
-</body>
-</html>
+CREATE POLICY "Teachers read all results"
+  ON quiz_results FOR SELECT
+  USING (
+    (auth.jwt() -> 'user_metadata' ->> 'user_name') IN (SELECT github_login FROM teachers)
+  );
 ```
+
+This checks the GitHub username Supabase embeds in the OAuth JWT
+(`user_metadata.user_name`), which is set by Supabase from the GitHub
+provider and can't be forged by the client.
+
+The `teachers` table itself has RLS enabled with no anon/authenticated
+policies, so it can't be read or written through the public API — only
+through the Supabase SQL editor or with the service-role key, which is what
+[scripts/invite_teacher.py](../scripts/invite_teacher.py) uses. That key must
+never appear in `admin.html` or `quiz-tracker.js`; keep it in your shell
+environment only.
+
+**To grant an instructor access:**
+
+1. Have them sign in once at `/admin.html` via "Sign in with GitHub" (this
+   just confirms their OAuth login works; they'll see "no results found /
+   not in the teachers table" until step 2).
+2. Run:
+   ```bash
+   SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py add their-github-username
+   ```
+3. They refresh `/admin.html` and now see every student's results.
+
+**To revoke access:**
+```bash
+SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py remove their-github-username
+```
+
+**To see current instructors:**
+```bash
+SUPABASE_SERVICE_ROLE_KEY=... python3 scripts/invite_teacher.py list
+```
+
+The full schema, including this table, is tracked in
+[supabase/schema.sql](../supabase/schema.sql) — treat it as the source of
+truth and re-run any diffs in the Supabase SQL editor when it changes.
 
 ---
 
 ## Configuration Checklist
 
-- [ ] Create Supabase project and run schema SQL
+- [ ] Create Supabase project and run [supabase/schema.sql](../supabase/schema.sql)
 - [ ] Enable GitHub OAuth in Supabase → Authentication → Providers
 - [ ] Create GitHub OAuth App, set callback URL
 - [ ] Replace `YOUR_PROJECT_ID` and `YOUR_ANON_PUBLIC_KEY` in `quiz-tracker.js`
 - [ ] Place `quiz-tracker.js` at `docs/assets/js/quiz-tracker.js`
 - [ ] Add `extra_javascript` entry to `mkdocs.yml`
 - [ ] Test: sign in with GitHub on the site, complete a quiz, verify row appears in Supabase table
-- [ ] (Optional) Set up teacher dashboard — either Supabase Table Editor or local `admin.html`
+- [ ] Add each instructor's GitHub login to the `teachers` table (see above)
 
 ---
 
@@ -392,10 +374,13 @@ Create `docs/admin.html` (excluded from nav) for a basic teacher dashboard. This
 
 | Key | Where used | Safe to expose? |
 |---|---|---|
-| `SUPABASE_ANON_KEY` | `quiz-tracker.js` (client-side) | Yes — RLS policies restrict what it can do |
-| `SERVICE_ROLE_KEY` | `admin.html` only | **No — bypasses RLS. Never deploy publicly.** |
+| `SUPABASE_ANON_KEY` | `quiz-tracker.js`, `admin.html` (client-side) | Yes — RLS policies restrict what it can do |
+| `SUPABASE_SERVICE_ROLE_KEY` | `scripts/invite_teacher.py`, run locally only | **No — bypasses RLS. Never put it in a committed file or client-side code.** |
 
-Row-level security ensures students can only insert and read their own rows. The service role key (teacher access) should stay in the local `admin.html` or be accessed only through the Supabase dashboard.
+Row-level security ensures students can only insert/read their own rows, and
+instructors get class-wide read access only if their GitHub login is present
+in the `teachers` table. The service-role key exists solely to manage that
+allowlist from the command line and never ships to the browser.
 
 ---
 
