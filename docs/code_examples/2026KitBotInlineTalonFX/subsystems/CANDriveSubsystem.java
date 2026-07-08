@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,18 +56,22 @@ public class CANDriveSubsystem extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.SupplyCurrentLimit = DRIVE_MOTOR_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     // --8<-- [end:voltage-compensation]
 
     // Set followers to follow their respective leaders using Follower control mode.
-    // The Follower mode persists once set.
+    // Follower mode only mirrors the leader's output - it does not copy the
+    // leader's configuration - so the current limit and neutral mode must be
+    // applied to each follower directly.
     // --8<-- [start:follower-config]
-    leftFollower.setControl(new Follower(LEFT_LEADER_ID, false));
-    rightFollower.setControl(new Follower(RIGHT_LEADER_ID, false));
+    leftFollower.getConfigurator().apply(config);
+    leftFollower.setControl(new Follower(LEFT_LEADER_ID, MotorAlignmentValue.Aligned));
+    rightFollower.getConfigurator().apply(config);
+    rightFollower.setControl(new Follower(RIGHT_LEADER_ID, MotorAlignmentValue.Aligned));
     // --8<-- [end:follower-config]
 
-    // Remove following, then apply config to right leader with neutral mode set to Brake
+    // Apply config to right leader
     // --8<-- [start:right-leader-config]
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     rightLeader.getConfigurator().apply(config);
     // --8<-- [end:right-leader-config]
 

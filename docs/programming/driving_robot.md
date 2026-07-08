@@ -340,6 +340,7 @@ In the constructor we are going to set the follower motors and link them to the 
     import com.ctre.phoenix6.controls.Follower;
     import com.ctre.phoenix6.signals.InvertedValue;
     import com.ctre.phoenix6.signals.NeutralModeValue;
+    import com.ctre.phoenix6.signals.MotorAlignmentValue;
     import com.ctre.phoenix6.configs.TalonFXConfiguration;
     ```
     
@@ -350,7 +351,8 @@ In the constructor we are going to set the follower motors and link them to the 
     --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:follower-config"
     ```
     
-    Note: Phoenix 6 followers are set with a persistent control mode. Once set in the constructor, the follower mirrors its leader automatically.
+    !!! note
+        Follower control mode only mirrors the leader's output — it does **not** copy the leader's configuration. Each TalonFX has its own independent config, so the current limit and neutral mode must be applied to the followers directly (as shown above) in addition to the leaders. Once `setControl(new Follower(...))` is called, the follower mirrors its leader's output automatically from then on.
     
     **Configure right leader:**
     ```java title="CANDriveSubsystem.java - Right Leader Configuration"
@@ -376,14 +378,14 @@ Instead of writing a separate command class, we use the **command factory patter
 !!! abstract
     Below the `periodic` method, add the `driveArcade` factory method:
 
-    === “SparkMax”
-        ```java title=”CANDriveSubsystem.java”
-        --8<-- “docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:drive-arcade-method”
+    === "SparkMax"
+        ```java title="CANDriveSubsystem.java"
+        --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:drive-arcade-method"
         ```
 
-    === “TalonFX”
-        ```java title=”CANDriveSubsystem.java”
-        --8<-- “docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:drive-arcade-method”
+    === "TalonFX"
+        ```java title="CANDriveSubsystem.java"
+        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:drive-arcade-method"
         ```
 
     - `this.run(...)` creates a command that calls the lambda repeatedly while scheduled. The subsystem is automatically added as a requirement.  
@@ -409,7 +411,7 @@ The `RobotContainer` class holds all subsystems, controllers, and command bindin
 
     **2)** Open `RobotContainer.java` and confirm a `CommandXboxController driverController` field is declared at the top of the class that uses that constant.
 
-!!! tip “Finding your joystick port in the Driver Station”
+!!! tip "Finding your joystick port in the Driver Station"
     Open the **Driver Station** application and click the **USB** tab (the plug icon on the left). The number next to your controller is its port — use that value for `DRIVER_CONTROLLER_PORT` in Constants. Controllers can be dragged in the list to change their assigned port (the controller port is usually 0 by default if only one controller is plugged in).
 
 ### Using setDefaultCommand
@@ -419,14 +421,14 @@ The `RobotContainer` class holds all subsystems, controllers, and command bindin
 !!! abstract
     Inside `configureBindings()` in `RobotContainer.java`, add:
 
-    === “SparkMax”
-        ```java title=”RobotContainer.java”
-        --8<-- “docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config”
+    === "SparkMax"
+        ```java title="RobotContainer.java"
+        --8<-- "docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config"
         ```
 
-    === “TalonFX”
-        ```java title=”RobotContainer.java”
-        --8<-- “docs/code_examples/2026KitBotInlineTalonFX/RobotContainer.java:drive-config”
+    === "TalonFX"
+        ```java title="RobotContainer.java"
+        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/RobotContainer.java:drive-config"
         ```
 
     - The Y axis is negated so pushing the stick away from you (a negative joystick value) drives the robot forward (positive motor output).
@@ -496,9 +498,9 @@ What does `setDefaultCommand` do?
 
 <!-- mkdocs-quiz results -->
 
-??? example “Full RobotContainer Example”
-    === “SparkMax”
+??? example "Full RobotContainer Example"
+    === "SparkMax"
         See [RobotContainer.java](../code_examples/2026KitBotInline/RobotContainer.java) for the complete `RobotContainer` implementation.
 
-    === “TalonFX”
+    === "TalonFX"
         See [RobotContainer.java](../code_examples/2026KitBotInlineTalonFX/RobotContainer.java) for the complete `RobotContainer` implementation.
