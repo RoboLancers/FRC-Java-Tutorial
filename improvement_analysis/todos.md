@@ -18,7 +18,7 @@
   - Done — `docs/examples/basic_shooter.md` (236 lines) covers SparkMax and TalonFX with tabs.
 - [x] The encoder reset example code is incorrect and needs to be fixed. 
   - Fixed. `EncoderExamples.java`/`EncoderExamplesTalonFX.java` correctly use `RelativeEncoder.setPosition(0)` and `motor.setPosition(0)`, and `using_sensors.md` explains the SparkMax vs. TalonFX difference.
-- [~] expand sensors.md page.
+- [x] expand sensors.md page.
   - Ambiguous/partial. `docs/basics/sensors.md` itself is still a short 53-line intro, unchanged. The real expansion happened in a separate page, `docs/programming/using_sensors.md` (174 lines, full code examples). Confirm which file was intended.
 - [ ] test out Classroom lessons.
     - [ ] load into Github.
