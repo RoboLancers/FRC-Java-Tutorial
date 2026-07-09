@@ -1,12 +1,9 @@
 {
 	"servers": {
 		"frc-docs": {
-			"type": "stdio",
-			"command": "uvx",
-			"args": [
-				"first_agentic_csa==0.3.12"
-			],
-			"env": {}
+		"command": "uv",
+    	"args": ["run", "first-agentic-csa"],
+    	"cwd": "/opt/agentic-csa"	
 		}
 	},
 	"inputs": []

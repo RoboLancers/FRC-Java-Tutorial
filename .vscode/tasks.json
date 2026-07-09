@@ -17,10 +17,7 @@
 			"label": "Run Locally",
 			"type": "shell",
 			"command": "mkdocs serve",
-			"problemMatcher": [],
-			"runOptions": {
-				"runOn": "folderOpen"
-			}
+			"problemMatcher": []
 		}
 	]
 }

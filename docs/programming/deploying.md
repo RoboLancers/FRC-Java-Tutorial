@@ -61,3 +61,41 @@ To deploy code, first make sure your computer is  connected to the robot in **ON
         Duplicate CAN ID's must be fixed with either the robot powered off, or with the SparkMax controller unplugged, as the SparkMax will not allow you to change its CAN ID while it is powered on and connected to the CAN bus.
     - **"Robot program exited unexpectedly"** — unlike a regular Java application, the robot program does not stop running when an exception is thrown. Unhandled exceptions will be printed to the log but the program will continue running, sometimes in a broken state. Always check the log if the robot acts strangely.
     - **CAN bus errors** — if a SparkMax or other CAN device isn't responding, it will log timeout messages. Make sure the device is powered on and wired correctly.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+Which connection type can be used to deploy code to the robot? (Select all that apply)
+- [x] USB
+- [x] Ethernet
+- [x] Robot's Wireless Network
+- [ ] Bluetooth
+
+USB, Ethernet, and Wireless are all valid deployment connections. Bluetooth is not supported for FRC deployment.
+</quiz>
+
+<quiz>
+What does a "Resource allocation error" in the Driver Station indicate?
+- [ ] The robot code is too large
+- [x] Two devices are configured to use the same port or CAN ID
+- [ ] The battery is low
+- [ ] NetworkTables is disconnected
+
+This error means two devices are trying to use the same CAN ID or DIO port. Check Constants.java and make sure each device has a unique ID.
+</quiz>
+
+<quiz>
+When you see "Robot program exited unexpectedly" in the logs, what should you do?
+- [ ] Ignore it — the program continues running
+- [x] Check the log for unhandled exceptions
+- [ ] Immediately redeploy
+- [ ] Reboot the RoboRIO
+
+The robot program can keep running after an exception but in a broken state. Check the log for the exception details to see what went wrong.
+</quiz>
+
+<!-- mkdocs-quiz results -->

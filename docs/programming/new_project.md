@@ -133,6 +133,15 @@ Newly created subsystems are empty with the exception of the periodic.
     - Useful for adding/updating data to Driverstation dashboard
     - Useful updating variables that need to always up to date
 
+!!! note "Java concepts: Package, Import, and Inheritance"
+    The generated code introduces three Java concepts at once:
+
+    - **`package`** — declares which namespace this file belongs to, matching its folder location (`subsystems/` → `frc.robot.subsystems`).
+    - **`import`** — pulls in a class from another package so you can use it by its short name. VSCode adds these automatically via the 💡 light bulb.
+    - **`extends SubsystemBase`** — your class inherits all the built-in FRC subsystem behavior from `SubsystemBase`; you only add what is specific to your robot.
+
+    See [Java Classes](../basics/java_classes.md) for a full explanation of all three.
+
 ??? Example  
     ```java
     package frc.robot.subsystems;
@@ -227,3 +236,51 @@ Newly created commands have some predefined methods in them specific for a comma
       }
     }
 	```
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+Which file connects your subsystem to the rest of the robot code?
+- [ ] Robot.java
+- [x] RobotContainer.java
+- [ ] Main.java
+- [ ] Constants.java
+
+RobotContainer.java is where subsystems are declared and connected to commands. Without adding your subsystem to RobotContainer.java, Robot.java cannot see it.
+</quiz>
+
+<quiz>
+What is the purpose of the Constants.java file?
+- [ ] Defines all methods used by the robot
+- [x] Maps physical ports and IDs to named constants for easy changes
+- [ ] Creates the robot's default commands
+- [ ] Handles robot networking
+
+Constants.java centralizes all the port numbers and IDs in one place. This makes it easy to change wiring without hunting through multiple files.
+</quiz>
+
+<quiz>
+When you create a new subsystem, you must:
+- [ ] Only create the Java file
+- [x] Create the Java file AND add it to RobotContainer.java
+- [ ] Create the Java file and deploy immediately
+- [ ] Create the Java file and modify Robot.java directly
+
+Creating the file is not enough — RobotContainer.java must also have the subsystem declared for the robot framework to see it.
+</quiz>
+
+<quiz>
+What does `addRequirements(drivetrain)` do in a command constructor?
+- [ ] Adds the drivetrain as a dependency
+- [x] Declares that this command requires the drivetrain and no other command requiring it can run simultaneously
+- [ ] Imports the drivetrain class
+- [ ] Makes the drivetrain public
+
+`addRequirements()` prevents command conflicts by ensuring only one command can use the subsystem at a time.
+</quiz>
+
+<!-- mkdocs-quiz results -->

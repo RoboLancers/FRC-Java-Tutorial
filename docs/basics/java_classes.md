@@ -1,0 +1,234 @@
+# Classes and Objects
+<!-- This page was contributed by: Carl Stanton -->
+
+Classes are the blueprints of a Java program.
+
+## Overview
+
+Java is an **object-oriented** language. Almost everything in Java is an **object** — a bundle of data and behavior — and **classes** are the blueprints that define what an object looks like and what it can do.
+
+In FRC, every subsystem, every command, and every piece of configuration is its own class. Many of these classes are provided for you by the WPILib or other libraries, but you will also write your own to define your robot's unique behavior.
+
+***
+
+## What is a Class?
+
+A class is a template that defines a type of object. Classes contains:
+
+- **Fields** — variables that store the object's state (e.g., motor controllers, sensors)
+- **Methods** — functions that define what the object can do (e.g., `setSpeed`, `stop`)
+- A **constructor** — a special method that sets the object up when it is first created
+
+!!! note
+    Classes are typically defined in their own file, and the file name must match the class name exactly (including capitalization). For example, a class named `Drivetrain` must be in a file named `Drivetrain.java`.
+***
+
+## Declaring a Class
+
+```java title="Drivetrain.java"
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:class_skeleton"
+```
+
+- `package` — declares which folder this file lives in. `frc.robot.subsystems` maps to the directory path `frc/robot/subsystems/` inside your project.
+- `import` — makes a class available in this file by its short name. Without an import you would have to write the full path every time — e.g., `edu.wpi.first.wpilibj2.command.SubsystemBase` instead of just `SubsystemBase`.
+- `public` — this class can be used by other classes in the project. (If you omit this, the class is only visible within its own package.)
+- `class Drivetrain` — the class name, which must match the file name exactly
+- `extends SubsystemBase` — WPILib provides `SubsystemBase` as the foundation for every robot subsystem. Extending it gives your class the scheduling hooks, periodic updates, and other plumbing the robot framework needs to run it. (see [Inheritance](#inheritance))
+
+!!! note "Packages and imports in VSCode"
+    VSCode can add `import` statements automatically. When the editor underlines a class name in red because it is not imported, click the 💡 light bulb (or press ++ctrl+period++) and choose the correct import. See [VSCode Tips](../basics/vscode_tips.md).
+
+***
+
+## Fields
+
+Fields (also called instance variables or member variables) store the object's data. They are declared at the top of the class body, outside any method. Variables should be declared here if they represent something that is part of the object's state, such as motor controllers or configuration values, or if they need to be accessed by multiple methods in the class.
+
+!!! note "What is a SparkMax / TalonFX?"
+    A **SparkMax** (REV Robotics) and a **TalonFX** (CTRE) are motor controllers — small electronic devices that connect to a motor and control how fast it spins. In FRC code, you declare one field per physical motor controller on your robot. Both are among the most common motor controllers used in FRC.
+
+=== "SparkMax"
+    ```java title="Fields example"
+    --8<-- "docs/code_examples/basics/classes/Drivetrain.java:fields"
+    ```
+
+=== "TalonFX"
+    ```java title="Fields example"
+    --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:fields_talon"
+    ```
+
+### Access Modifiers
+
+| Modifier | Meaning |
+|---|---|
+| `public` | Any class can read or modify this |
+| `private` | Only this class can access it |
+| `protected` | This class and any subclasses can access it |
+
+!!! tip
+    Default to `private` for fields. This prevents other classes from accidentally changing values they should not touch. Expose data only through `public` methods when needed. Accessing and setting protected fields is typeically done through "getter" and "setter" methods. This is called **encapsulation** and is a core principle of object-oriented programming.
+
+***
+
+## Constructors
+
+A **constructor** is a special method that runs exactly once — when an object is created with `new`. Its job is to initialize all the fields and any other necessary setup.
+
+- The constructor name must exactly match the class name
+- Constructors have no return type (not even `void`)
+- If the class requires parameters to set up, those must be listed in the constructor definition, inside the parentheses. (see the [this] section (#this))
+- When you create an object with `new`, you must provide arguments that match the constructor's parameters.
+
+=== "SparkMax"
+    ```java title="Constructor example"
+    --8<-- "docs/code_examples/basics/classes/Drivetrain.java:constructor"
+    ```
+
+=== "TalonFX"
+    ```java title="Constructor example"
+    --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:constructor_talon"
+    ```
+
+
+!!! note
+    If you do not write a constructor, Java provides a default no-argument constructor that does nothing.
+
+!!! info
+    More about constructors here: [Java Constructors](https://www.geeksforgeeks.org/java/constructors-in-java/)
+
+### The `new` Keyword
+
+`new` creates an object from a class and calls its constructor:
+
+=== "SparkMax"
+    ```java title="Creating objects with 'new'"
+    --8<-- "docs/code_examples/basics/classes/NewKeywordExamples.java:new_keyword"
+    ```
+
+=== "TalonFX"
+    ```java title="Creating objects with 'new'"
+    --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:new_keyword_talon"
+    ```
+
+The variable on the left holds a **reference** to the object — think of it as a label pointing to the object in memory.
+
+### `this`
+
+Inside a class, `this` refers to the current object. It is most commonly used when a constructor parameter has the same name as a field — without `this`, Java cannot tell which one you mean:
+
+```java title="Example usage of this"
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:this_keyword"
+```
+
+***
+
+## Inheritance
+
+A class can `extend` another class to inherit all of its fields and methods. The class being extended is the **parent** (or superclass); the extending class is the **child** (or subclass).
+
+Think of it like categories in real life: a `Dog` is an `Animal` — it automatically has everything that comes with being an animal (it breathes, it moves), plus its own extras (it barks). In the same way, `Drivetrain extends SubsystemBase` means your drivetrain automatically has everything WPILib built into `SubsystemBase`, plus whatever drive logic you add.
+
+```java title="Inheritance example"
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:inheritance"
+```
+
+In FRC:
+
+- All subsystems extend `SubsystemBase`
+- Commands extend `Command` or are created via command factory methods on subsystems
+
+Inheritance lets you build on top of pre-built FRC plumbing without writing it from scratch.
+
+### `@Override`
+
+When a child class replaces a method from the parent, it marks it with `@Override`:
+
+```java title="Overriding periodic()"
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:override_periodic"
+```
+
+The annotation is optional but recommended — if you misspell the method name, the compiler will tell you there is nothing to override, catching the typo early.
+
+A method that is overridden replaces the parent version completely with your own implementation. If you want to run the parent method as well, you can call it with `super`:
+
+```java title="Example of calling super"
+--8<-- "docs/code_examples/basics/classes/Drivetrain.java:super_periodic"
+```
+
+***
+
+## Putting It Together
+
+
+??? example "A complete minimal subsystem class"
+
+    === "SparkMax"
+        ```java title="Drivetrain.java"
+        --8<-- "docs/code_examples/basics/classes/Drivetrain.java:putting_it_together"
+        ```
+    === "TalonFX"
+        ```java title="Drivetrain.java"
+        --8<-- "docs/code_examples/basics/classes/DrivetrainTalonFX.java:putting_it_together_talon"
+        ```
+    
+
+!!! note
+    `private final` on the fields means each motor controller is assigned once in the constructor and never swapped out. See [Variables and Data Types](java_types_variables.md#constants) for more on `final`.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+What runs automatically the moment you use the `new` keyword to create an object?
+- [ ] The `main` method
+- [x] The constructor
+- [ ] The `@Override` method
+- [ ] The `static` initializer block
+
+The constructor is a special method whose only job is setting up a new object. It runs exactly once — when `new` is called — to initialize fields and perform any required setup.
+</quiz>
+
+<quiz>
+Which access modifier makes a field accessible only within the class it is declared in?
+- [ ] `public`
+- [x] `private`
+- [ ] `protected`
+- [ ] `static`
+
+`private` is the narrowest visibility. In FRC subsystem code, defaulting to `private` for fields keeps other classes from accidentally changing values they shouldn't touch.
+</quiz>
+
+<quiz>
+Inside a class, what does `this` refer to?
+- [ ] The parent (super) class
+- [ ] The constructor parameter that was most recently assigned
+- [x] The current instance of the class
+- [ ] The `class` keyword itself
+
+`this` is a reference to the object the method or constructor is running on. It is most commonly used to distinguish a field from a same-named constructor parameter: `this.topSpeed = topSpeed;`
+</quiz>
+
+<quiz>
+Which keyword is used to inherit fields and methods from another class?
+- [ ] `implements`
+- [ ] `inherits`
+- [ ] `super`
+- [x] `extends`
+
+`extends` sets up the parent-child relationship. In FRC, `public class Drivetrain extends SubsystemBase` gives `Drivetrain` all the built-in WPILib subsystem behavior for free.
+</quiz>
+
+<quiz>
+What is the correct term for the class that is being inherited from?
+- [ ] Subclass
+- [ ] Interface
+- [x] Superclass (parent class)
+- [ ] Override class
+
+The class doing the extending is the **subclass** (child); the class being extended is the **superclass** (parent). A child class inherits everything the parent provides, then can add or override behavior.
+</quiz>
+
+<!-- mkdocs-quiz results -->

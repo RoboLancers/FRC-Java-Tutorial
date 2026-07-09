@@ -15,6 +15,28 @@ This section is designed to help you program a basic driving robot, start to fin
 
 ***
 
+## Quick Select: Motor Controller
+
+Switch all code examples on this page between SparkMax and TalonFX:
+
+<div style="display: flex; gap: 10px; margin-bottom: 20px;">
+  <button onclick="selectTab('SparkMax')" style="padding: 8px 16px; background-color: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">View SparkMax Examples</button>
+  <button onclick="selectTab('TalonFX')" style="padding: 8px 16px; background-color: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">View TalonFX Examples</button>
+</div>
+
+<script>
+function selectTab(tabName) {
+  const tabs = document.querySelectorAll('.tabbed-labels label');
+  tabs.forEach(tab => {
+    if (tab.textContent.trim() === tabName) {
+      tab.click();
+    }
+  });
+}
+</script>
+
+***
+
 ## Creating the Drivetrain Subsystem
 
 Before we begin we must create the class file for the drivetrain subsystem. See [Creating a New Subsystem](new_project.md#creating-a-new-subsystem){target=_blank} for info on how to do this.
@@ -31,13 +53,23 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 !!! note "More Info"
     Be sure to read [Visual Studio Code Tips](../basics/vscode_tips.md){target=_blank} before getting started! It will make your life a lot easier.
 
-### Creating the SparkMax Variables
+### Declaring Motor Variables
 
 
-**1)** Create 4 global variables of data type **SparkMax** and name them: `leftLeader`, `rightLeader`, `leftFollower`, `rightFollower`
+**1)** Create 4 global variables of the appropriate motor controller type and name them: `leftLeader`, `rightLeader`, `leftFollower`, `rightFollower`
 
-- To get started type the word SparkMax followed by the name i.e. `private Final SparkMax leftLeader;`
-- These will eventually hold the object values for SparkMaxes, their port numbers, and their motor type (brushed or brushless).
+=== "SparkMax"
+    Type the word `SparkMax` followed by the name, e.g.: `private final SparkMax leftLeader;`
+    
+    These will eventually hold the object values for SparkMaxes, their port numbers, and their motor type (brushed or brushless).
+
+=== "TalonFX"
+    Type the word `TalonFX` followed by the name, e.g.: `private final TalonFX leftLeader;`
+    
+    These will eventually hold the object values for TalonFX motors. Unlike SparkMax, TalonFX does not require a motor type parameter.
+
+!!! note "Java concept: `private final` fields"
+    `private` means only this class can access this variable — no other subsystem or command can accidentally change your motor objects. `final` means the variable is assigned once (in the constructor) and never reassigned. Together they say "this motor belongs exclusively to this subsystem." See [Variables and Data Types](../basics/java_types_variables.md#constants) for more on `final` and [Classes](../basics/java_classes.md#fields) for more on `private`.
 
 
 **2)** These are declared without values right now.
@@ -48,38 +80,53 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 
 
 ??? example "Example code"
-    **SparkMax Motor Member Variables:**
+    **Motor Member Variables:**
 
-    ```java title="CANDriveSubsystem.java"
-    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:motors"
-    ```
+    === "SparkMax"
+        ```java title="CANDriveSubsystem.java"
+        --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:motors"
+        ```
 
-!!! note "Using a different motor controller?"
-    The steps in this section use `SparkMax`, but the pattern is the same for other controllers. Replace `SparkMax` with your controller type (e.g. `TalonFX`, `VictorSP`) and use the corresponding import. Constructor parameters and configuration APIs differ by vendor — consult your vendor's documentation or WPILib's [hardware API guide](https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/index.html){target=_blank} for the correct syntax.
+    === "TalonFX"
+        ```java title="CANDriveSubsystem.java"
+        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:motors"
+        ```
 
 **If an error occurs (red squiggles)**
 
-1. Mouse Over the word SparkMax: The following menu should appear.
+1. Mouse Over the word : The following menu should appear.
 ![](../assets/images/driving_robot/fix_error_1.PNG)
 
 2. 💡 Click "quick fix" 
-![](../assets/images/driving_robot/quick_fix_click.png)
+![](../assets/images/driving_robot/quick_fix_click.PNG)
 
-3. Select "Import 'SparkMax' (com.revrobotics.spark)"
+3. Select "Import 'SparkMax' (com.revrobotics.spark)" or "Import 'TalonFX' (com.ctre.phoenix6) depending on which motor controller you are using.
 ![](../assets/images/driving_robot/Quick_fix_import.png)
 
 4. Your error should be gone!
 
 ### Creating and filling the constructor
 
-Now that we have created the SparkMaxes  and the Drive Constants we must initialize them and tell them what port on the roboRIO they are on.
+Now that we have created the motor variables and the Drive Constants we must initialize them and tell them what port on the roboRIO they are on.
 
-**1)** Initialize (set value of) `leftLeader` to `new SparkMax(LEFT_LEADER_ID, MotorType.kBrushless)`. 
+**1)** Initialize (set value of) the motor variables with the appropriate motor controller constructor.
 
-- This initializes a new SparkMax, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`. 
-- This should be done within the constructor `Drivetrain()`
-- This calls the constructor `SparkMax(int, MotorType)` in the SparkMax class. 
-    - The constructor `SparkMax(int, MotorType)` takes a variable of type `int` for the CAN ID and `MotorType` for brushless or brushed. In this case the `int` (integer) refers to the CAN ID on the roboRIO. 
+=== "SparkMax"
+    Initialize `leftLeader` to `new SparkMax(LEFT_LEADER_ID, MotorType.kBrushless)`.
+    
+    - This initializes a new SparkMax, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`.
+    - The constructor `SparkMax(int, MotorType)` takes a variable of type `int` for the CAN ID and `MotorType` for brushless or brushed.
+
+=== "TalonFX"
+    Initialize `leftLeader` to `new TalonFX(LEFT_LEADER_ID)`.
+    
+    - This initializes a new TalonFX, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`.
+    - Unlike SparkMax, TalonFX takes only the CAN ID — no motor type parameter is needed (TalonFX is always brushless).
+
+- This should be done within the constructor `CANDriveSubsystem()`
+
+!!! note "Java concept: Constructor"
+    The constructor is a special method that runs once when an object is created with `new`. It is where hardware gets initialized — motors receive their port numbers, controllers get configured. The constructor name always matches the class name exactly. See [Java Classes for more information](../basics/java_classes.md#constructors).
     
  **roboRIO port diagram**
 
@@ -87,17 +134,25 @@ Now that we have created the SparkMaxes  and the Drive Constants we must initial
 
 
 ??? example "Constructor Initialization Example"
-    ```java title="Constructor declaration"
-    public CANDriveSubSystem () {}
+    ```java title="CANDriveSubsystem.java - Constructor Declaration"
+    public CANDriveSubsystem() {}
     ```
 
-    **Full Constructor: **
+    **Full Constructor:**
 
-    ```java title="Full Constructor"
-    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:constructor"
-    ```
+    === "SparkMax"
+        ```java title="Full Constructor"
+        --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:constructor"
+        ```
 
-    See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete constructor implementation.
+        See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete constructor implementation.
+
+    === "TalonFX"
+        ```java title="Full Constructor"
+        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:constructor"
+        ```
+
+        See [CANDriveSubsystem.java](../code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java) for the complete constructor implementation.
 
 ### Using Constants
 
@@ -107,7 +162,7 @@ Now that we have created the SparkMaxes  and the Drive Constants we must initial
 Since each subsystem has its own components with their own ports, it is easy to lose track of which ports are being used and for what. To counter this you can use a class called **Constants** to hold all these values in a single location.
 
 - Names should follow the pattern SUBSYSTEM_NAME_OF_COMPONENT
-- The name is all caps since it is a **constant** ([more info on constants](../basics/java_basics.md#constants){target=_blank}).
+- The name is all caps since it is a **constant** ([more info on constants](../basics/java_types_variables.md#constants){target=_blank}).
 
 
 
@@ -125,7 +180,7 @@ Before we initalize the SparkMax objects we are going to create constants to hol
 !!! note
     To use Constants, instead of putting `0` for the port in the SparkMax type:
 
-    ```java title="constants.java"
+    ```java title="Constants.java - Drive Constants"
     public static final int LEFT_LEADER_ID = 1;
     ```
 
@@ -138,36 +193,65 @@ Before we initalize the SparkMax objects we are going to create constants to hol
 ??? example "DriveConstants Example"
     **Drive Constants Definition:**
 
-    ```java
-    --8<-- "docs/code_examples/2026KitBotInline/Constants.java:constants"
-    ```
+    === "SparkMax"
+        ```java title="Constants.java - Drive Constants Definition"
+        --8<-- "docs/code_examples/2026KitBotInline/Constants.java:constants"
+        ```
+
+    === "TalonFX"
+        ```java title="Constants.java - Drive Constants Definition"
+        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/Constants.java:constants"
+        ```
 
 **Full Constants.java with all Robot Constants:**
 
-See [Constants.java](../code_examples/2026KitBotInline/Constants.java) for the complete constants file including OperatorConstants and other subsystem constants.
+=== "SparkMax"
+    See [Constants.java](../code_examples/2026KitBotInline/Constants.java) for the complete constants file including OperatorConstants and other subsystem constants.
+
+=== "TalonFX"
+    See [Constants.java](../code_examples/2026KitBotInlineTalonFX/Constants.java) for the complete constants file including OperatorConstants.
 
 !!! warning
     Remember to use the values for **YOUR** specific robot or you could risk damaging it!
 
-### Configuring the SparkMaxes
+### Configuring Motor Controllers
 
-**Setting CAN Timeout:**
+**Setting CAN Communication Timeout:**
 
-Each SparkMax motor must be configured with a CANTimeout. (How long to wait for a response from the motor controller)
+=== "SparkMax"
+    Each SparkMax motor must be configured with a CANTimeout (how long to wait for a response from the motor controller).
 
-```java title="CANDriveSubsystem.java"
---8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:can-timeout"
-```
+    ```java title="CANDriveSubsystem.java"
+    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:can-timeout"
+    ```
+
+=== "TalonFX"
+    !!! note "No CAN timeout needed"
+        Phoenix 6 manages CAN communication internally. No explicit `setCANTimeout()` equivalent exists. Configuration is applied via `getConfigurator().apply(config)` — see the section below.
 
 **Voltage Compensation and Current Limiting:**
 
-Create the configuration to apply to motors. Voltage compensation helps the robot perform more similarly on different battery voltages (at the cost of a little bit of top speed on a fully charged battery). The current limit helps prevent tripping breakers.
+Create the configuration to apply to motors. The current limit helps prevent tripping breakers.
 
-```java title="CANDriveSubsystem.java"
---8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:voltage-compensation"
-```
+=== "SparkMax"
+    Voltage compensation helps the robot perform more similarly on different battery voltages (at the cost of a little bit of top speed on a fully charged battery).
 
-See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the full configuration implementation in the constructor.
+    ```java title="CANDriveSubsystem.java"
+    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:voltage-compensation"
+    ```
+
+=== "TalonFX"
+    Phoenix 6 does not include a direct voltage compensation equivalent. Supply current limiting still protects your breakers.
+
+    ```java title="CANDriveSubsystem.java"
+    --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:voltage-compensation"
+    ```
+
+=== "SparkMax"
+    See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the full configuration implementation in the constructor.
+
+=== "TalonFX"
+    See [CANDriveSubsystem.java](../code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java) for the full configuration implementation in the constructor.
 
 ## Creating the arcade drive
 
@@ -182,239 +266,241 @@ See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDri
 
 ### Programing a RobotDrive
 
-<!-- TODO: Add instructions for TalonSRX -->
-
 **1)** Create the DifferentialDrive object.
 
 **Member Variable Declaration:**
-```java
---8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:differential-drive-variable"
-```
+
+=== "SparkMax"
+    ```java title="CANDriveSubsystem.java - Differential Drive Variable"
+    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:differential-drive-variable"
+    ```
+
+=== "TalonFX"
+    ```java title="CANDriveSubsystem.java - Differential Drive Variable"
+    --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:differential-drive-variable"
+    ```
+
 This defines the drive object that we will use to drive the robot.
 
 **Constructor Initialization:**
-```java
-drive = new DifferentialDrive(leftLeader, rightLeader);
-```
-This initializes the differential drive object with the left and right leader motors.
 
-- Since DifferentialDrive takes 2 parameters we pass the left and right leader motors.
-- The follower motors are configured to follow these leaders through the SparkMax configuration.
+=== "SparkMax"
+    ```java title="CANDriveSubsystem.java - Drive Initialization"
+    drive = new DifferentialDrive(leftLeader, rightLeader);
+    ```
+    This initializes the differential drive object with the left and right leader motors.
+
+    - Since DifferentialDrive takes 2 parameters we pass the left and right leader motors.
+    - SparkMax implements the WPILib `MotorController` interface, so it can be passed directly to `DifferentialDrive`.
+    - The follower motors are configured separately (see below) to follow the leaders.
+
+=== "TalonFX"
+    ```java title="CANDriveSubsystem.java - Drive Initialization"
+    drive = new DifferentialDrive(leftLeader::set, rightLeader::set);
+    ```
+    This initializes the differential drive object with the left and right leader motors.
+
+    - TalonFX (Phoenix 6) does **not** implement the WPILib `MotorController` interface, so a `TalonFX` object cannot be passed directly to the `MotorController`-based constructor.
+    - TalonFX does expose a `set(double)` method, so we use `DifferentialDrive`'s other constructor, which takes two `DoubleConsumer` method references (`leftLeader::set`, `rightLeader::set`) instead of `MotorController` objects. See CTRE's [MotorController Integration](https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/wpilib-integration/motorcontroller-integration.html){target=_blank} docs.
+    - The follower motors are configured separately (see below) to follow the leaders.
 
 !!! warning
     You should only group motors that are spinning the same direction physically when positive power is being applied otherwise you could damage your robot.
 
 **2)** In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower.
-In the constructor we are going to set the follower motors and link them to the leader motors. To do this we will need to include a couple more classes from the REV Library:
-```java
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-```
-Then in the constructor, configure the followers to follow the leaders:
+In the constructor we are going to set the follower motors and link them to the leader motors.
 
-**Set follower configuration:**
-```java
---8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:follower-config"
-```
+=== "SparkMax"
+    To do this we will need to include classes from the REV Library:
+    ```java title="CANDriveSubsystem.java - Required Imports"
+    import com.revrobotics.spark.SparkBase.PersistMode;
+    import com.revrobotics.spark.SparkBase.ResetMode;
+    ```
+    
+    Then in the constructor, configure the followers to follow the leaders:
+    
+    **Set follower configuration:**
+    ```java title="CANDriveSubsystem.java - Follower Configuration"
+    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:follower-config"
+    ```
+    
+    **Configure right leader:**
+    ```java title="CANDriveSubsystem.java - Right Leader Configuration"
+    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:right-leader-config"
+    ```
+    
+    **Invert left leader for correct motor direction:**
+    ```java title="CANDriveSubsystem.java - Left Leader Inversion"
+    --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:left-inversion"
+    ```
 
-**Configure right leader:**
-```java
---8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:right-leader-config"
-```
-
-**Invert left leader for correct motor direction:**
-```java
---8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:left-inversion"
-```
+=== "TalonFX"
+    To do this we will need to include classes from the Phoenix 6 Library:
+    ```java title="CANDriveSubsystem.java - Required Imports"
+    import com.ctre.phoenix6.controls.Follower;
+    import com.ctre.phoenix6.signals.InvertedValue;
+    import com.ctre.phoenix6.signals.NeutralModeValue;
+    import com.ctre.phoenix6.signals.MotorAlignmentValue;
+    import com.ctre.phoenix6.configs.TalonFXConfiguration;
+    ```
+    
+    Then in the constructor, configure the followers to follow the leaders:
+    
+    **Set follower configuration:**
+    ```java title="CANDriveSubsystem.java - Follower Configuration"
+    --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:follower-config"
+    ```
+    
+    !!! note
+        Follower control mode only mirrors the leader's output — it does **not** copy the leader's configuration. Each TalonFX has its own independent config, so the current limit and neutral mode must be applied to the followers directly (as shown above) in addition to the leaders. Once `setControl(new Follower(...))` is called, the follower mirrors its leader's output automatically from then on.
+    
+    **Configure right leader:**
+    ```java title="CANDriveSubsystem.java - Right Leader Configuration"
+    --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:right-leader-config"
+    ```
+    
+    **Invert left leader for correct motor direction:**
+    ```java title="CANDriveSubsystem.java - Left Leader Inversion"
+    --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:left-inversion"
+    ```
 
 ??? example "Full Drive Subsystem Example"
-    See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.
+    === "SparkMax"
+        See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.
 
-### Creating the arcadeDrive method
+    === "TalonFX"
+        See [CANDriveSubsystem.java](../code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java) for the complete implementation with all motor configuration and initialization.
 
-Now it’s time to make an arcadeDrive from our differentialDrive!
+### Creating the driveArcade Command Factory
+
+Instead of writing a separate command class, we use the **command factory pattern** — a method on the subsystem that returns a `Command`. This is the modern WPILib approach and keeps drive logic inside `CANDriveSubsystem` where it belongs. See [Command Based Robot](../basics/wpilib.md#command-based-robot){target=_blank} for background on commands.
 
 !!! abstract
-    **1)** Let’s create a public void method called “arcadeDrive” with type “double” parameters moveSpeed and rotateSpeed.
+    Below the `periodic` method, add the `driveArcade` factory method:
 
-    Below the `periodic` method create a new method called `arcadeDrive`. This method will be called from our Drive command to actually move the robot.
-
-    ```java
-    public void arcadeDrive(double moveSpeed, double rotateSpeed) {
-
-    }
-    ```
-
-    !!! tip
-        By putting something in the parentheses it makes the method require a parameter when it is used. When the method gets used and parameters are passed, they will be store in moveSpeed and rotateSpeed (in that order). See [parameters](../basics/java_basics.md#parameters){target=_blank} for more info.
-
-!!! abstract 
-    **2)** Now lets make our method call the differentialDrive’s arcadeDrive method.
-
-    Inside our method type the call to the differential drive:
-
-    ```java
-    --8<-- “docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:drive-arcade-method”
-    ```
-
-    DifferentialDrive’s arcadeDrive method takes parameters moveValue and rotateValue.
-
-!!! note
-    At this point you could instead create a tank drive, however implementation differs slightly.
-    To do so type `differentialDrive.tankDrive(moveSpeed, rotateSpeed);` instead of `differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);` and change the method name reflect this.
-
-    !!! tip
-        If you want to limit the max speed you can multiple the speeds by a decimal (i.e. 0.5*moveSpeed will make the motors only move half of their maximum speed)
-
-        You may want to do this for initial testing to make sure everything is going the right direction.
-
-### Making our robot controllable
-
-## Creating the Drivearcade Command
-
-- Remember that **methods** tell the robot what it can do but in order to make it do these things we must give it a **command**. See [Command Based Robot](../basics/wpilib.md#command-based-robot){target=_blank}
-- Now that we have created the method, we need to create a command to call and use that method.
-- Let’s create a new command called **DriveArcade** that calls arcadeDrive method we just created!
-
-Before we begin we must create the class file for the DriveArcade command. See [Creating a New Command](new_project.md#creating-a-new-command){target=_blank} for info on how to do this and info on what each pre-created method does.
-
-### Define variables
-
-!!! note 
-    **1)** Create `xspeed` and `zrotation` variables. (to be passed to drive subsystem). These will be declared as `DoubleSuppliers`, which is a function that return a type. This is important for later.
-    **2)** Create an emtpy `driveSubsystem` instance of `Drivetrain`
-
-    !!! warning
-        `DoubleSupplier` and `Drivetrain` will have to be imported as follows:
-        ```Java
-        import frc.robot.subsystems.CANDriveSubsystem;
-        import java.util.function.DoubleSupplier;
+    === "SparkMax"
+        ```java title="CANDriveSubsystem.java"
+        --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:drive-arcade-method"
         ```
 
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:class-variables”
-    ```
+    === "TalonFX"
+        ```java title="CANDriveSubsystem.java"
+        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:drive-arcade-method"
+        ```
 
-### In the constructor
-
-!!! note
-    **1)** Inside the parenthesis of the constructor `driveArcade()` add 3 variables:
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:constructor-signature”
-    ```
-    These are values that will be passed into the command in `RobotContainer.java`
+    - `this.run(...)` creates a command that calls the lambda repeatedly while scheduled. The subsystem is automatically added as a requirement.  
+    - The parameters are `DoubleSupplier` (a function that returns a `double`) rather than plain `double` values. This ensures the joystick reading is evaluated every loop cycle instead of being captured once. This is important to ensure the robot continuously responds to joystick movement.
+    - `drive.arcadeDrive(...)` is the WPILib `DifferentialDrive` call that physically moves the motors.
 
 !!! note
-    **2)** Inside constructor implementation type:
-
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:constructor-body”
-    ```
-
-    - The lines starting with `this` set the global variables we defined at the top of our class file to the values being passed into the consturctor.
-    !!! tip
-        `this` is how the class instance `object` refers to itself in code.
-
-!!! note “”
-    - `addRequirements` means this command will end all other commands currently using drivetrain and will run instead when executed.
-    - It also means, other commands that require drivetrain will stop this command and run instead when executed.
-
-    !!! warning
-        If you use the light bulb to import ‘Robot’, be sure to import the one with “frc.robot”
-
-### In the execute method
-
-!!! note
-    **1)** In the execute method we will we want to call the **arcadeDrive** method we created in **Drivetrain** and give it the variables **moveSpeed** `xspeed` and **rotateSpeed** `zrotation` we created as parameters.
-
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:execute-method”
-    ```
-
-### In the isFinished method
-
-Since we will be using this command to control the robot we want it to run indefinitely.
-
-!!! note
-    **1)** To do this we are going to continue having isFinished return false, meaning the command will never finish.
-
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:is-finished-method”
-    ```
+    To use tank drive instead, replace `drive.arcadeDrive(...)` with `drive.tankDrive(...)` and rename the method accordingly.
 
     !!! tip
-        - If we did want a command to finish, we make this return true.
-          - This can be done by replacing false with true to make it finish instantly
-          - Alternatively we can make a condition which can return true
-              - For example `(timePassed > 10)` will return true after 10 seconds but return false anytime before 10 seconds have passed.
+        Multiply the speed values by a decimal to cap the max speed during initial testing (e.g. `xSpeed.getAsDouble() * 0.5`). This makes it easier to verify the robot drives in the correct directions before running at full power/speed.
 
-### In the end method
+## Wiring Up in RobotContainer
 
-!!! note 
-    **1)** We will call the arcadeDrive method and give it 0 and 0 as the parameters. this will stop the robot when the command completes.
+Now we connect the subsystem to the driver’s controller by setting a default command in `RobotContainer.java`.
 
-    ```java title=”DriveArcadeCommand.java”
-    --8<-- “docs/code_examples/2026KitBotInline/commands/DriveArcadeCommand.java:end-method”
-    ```
+### Adding the Driver Controller
 
-    - This make the motors stop running when the command ends by setting the movement speed to zero and rotation speed to zero.
+The `RobotContainer` class holds all subsystems, controllers, and command bindings. A `CommandXboxController` is declared here and reads joystick input.
 
-### Completed Example
+!!! note
+    **1)** Open `Constants.java` and confirm the `DRIVER_CONTROLLER_PORT` constant is present inside `OperatorConstants`.
 
-See [DriveArcadeCommand.java](../code_examples/2026KitBotInline/commands/DriveArcadeCommand.java) for the complete command class implementation.
-
-### Creating the Joystick
-
-In order to drive our robot, it needs to know what will be controlling it. To do so, we will use the joystick in `RobotContainer.java`, as `m_drivecontroller`.
-
-!!! note 
-    **1)** Open Constants.java
-      Check and make sure the `kDriverControllerPort` constant is present.
-    **2)** Open RobotContainer.java
-    - in the imports section, change `ExampleCommand` to `DriveArcade`.
-    - inside the class, find the line ` private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();` and change `ExampleSubsystem` to `Drivetrain` and `m_exampleSubsystem` to `drivetrain`.
+    **2)** Open `RobotContainer.java` and confirm a `CommandXboxController driverController` field is declared at the top of the class that uses that constant.
 
 !!! tip "Finding your joystick port in the Driver Station"
-    If you are not sure which port your controller is on, open the **Driver Station** application, click the **USB** tab (the icon that looks like a USB plug on the left side), and look at the numbered list of connected devices. The number next to your controller is the port you should use for `kDriverControllerPort` in Constants. Devices can be dragged up or down in the list to change their assigned port number.
+    Open the **Driver Station** application and click the **USB** tab (the plug icon on the left). The number next to your controller is its port — use that value for `DRIVER_CONTROLLER_PORT` in Constants. Controllers can be dragged in the list to change their assigned port (the controller port is usually 0 by default if only one controller is plugged in).
 
 ### Using setDefaultCommand
 
-!!! note
-    **1)** Back in **RobotContainer.java** We will need to remove everything inside the `configureBindings` method.
-    **2)** in the `configureBindings`we will call the `setDefaultCommand` of `drivetrain` and create a new `DriveArcade` command with parameters. 
+`setDefaultCommand` tells a subsystem which command to run whenever no other command is using it. Since we always want the driver to be able to move the robot, the drive factory command is set as the default.
+
+!!! abstract
+    Inside `configureBindings()` in `RobotContainer.java`, add:
+
+    === "SparkMax"
+        ```java title="RobotContainer.java"
+        --8<-- "docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config"
+        ```
+
+    === "TalonFX"
+        ```java title="RobotContainer.java"
+        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/RobotContainer.java:drive-config"
+        ```
+
+    - The Y axis is negated so pushing the stick away from you (a negative joystick value) drives the robot forward (positive motor output).
+    - The X axis is negated to match WPILib’s counter-clockwise-positive rotation convention.
+    - Both axes are scaled by constants defined in `OperatorConstants` to make the robot easier to control at full stick deflection.
 
     !!! tip
-        - Commands in this method will run when the robot is enabled.
-          - They also run if no other commands using the subsystem are running.
-          - This is why we write **addRequirements(Robot.subsystemName)** in the commands we create, it ends currently running commands using that subsystem to allow a new command is run.
-    - We will the default command for the drive subsystem to an instance of the `DriveArcade` with the values provided by the joystick axes on the driver controller.
-      - The Y axis of the controller is inverted so that pushing the stick away from you (a negative value) drives the robot forwards (a positive value).
-      - Similarly for the X axis where we need to flip the value so the joystick matches the WPILib convention of counter-clockwise positive
-  
-    ```java title="RobotContainer.java"
-    --8<-- "docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config"
-    ```
-    !!! tip
-        - Notice the `()->` notation above. This notation creates lamdas or anonymous methods. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=_blank}
-        - The lambas are required because we set the parameter types of `xpeed` and 'zrotation' in our `DriveArcade` to be `DoubleSuppliers`, which are methods that return doubles. (Which is what the lambdas above return.)
-        - These are declared as such so that they get and send the updated values from `m_driverController.getLeftY()` and `m_driverController.getRightX()` to the drive motors continuously.
+        The `()->` syntax creates a **lambda** — an anonymous function. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=_blank}
 
-    !!! tip
-        Remember to use the light bulb for importing if needed!
-    !!! tip
-        The `New` keyword creates a new instance of a class (object)
+        Lambdas are required here because `driveArcade` expects `DoubleSupplier` parameters. A lambda `() -> driverController.getLeftY()` is a `DoubleSupplier` — it gets called every loop cycle so the robot continuously responds to joystick movement.
+
+***
+
+## Knowledge Check
+
+<!-- mkdocs-quiz intro -->
+
+<quiz>
+Which motor controller uses CAN and is made by REV Robotics?
+- [ ] TalonFX
+- [x] SparkMax
+- [ ] Victor SP
+- [ ] PWM motor
+
+SparkMax is REV Robotics' CAN motor controller, commonly paired with NEO motors. TalonFX is made by CTRE.
+</quiz>
+
+<quiz>
+What does the `follow()` method do on a follower motor?
+- [ ] Makes the motor follow a joystick
+- [x] Automatically mirrors the leader motor's output
+- [ ] Creates a following command
+- [ ] Tracks the leader motor's position
+
+The follower motor mirrors whatever the leader motor does. This is how you connect two motors to drive the same wheel — one leader, one follower.
+</quiz>
+
+<quiz>
+Which type of drive takes a moveSpeed and rotateSpeed?
+- [ ] Tank drive
+- [ ] Mecanum drive
+- [x] Arcade drive
+- [ ] Holonomic drive
+
+Arcade drive uses two inputs: moveSpeed for forward/back and rotateSpeed for turning. Tank uses left/right speed, mecanum uses three or four inputs.
+</quiz>
+
+<quiz>
+In arcade drive, what does positive rotation typically do?
+- [ ] Move the robot forward
+- [ ] Move the robot backward
+- [ ] Rotate counter-clockwise (left)
+- [x] Rotate clockwise (right)
+
+Positive rotation in WPILib arcade drive usually means clockwise (turning right). This follows standard mathematical convention.
+</quiz>
+
+<quiz>
+What does `setDefaultCommand` do?
+- [x] Sets a command that runs all the time when no other command needs the subsystem
+- [ ] Creates a new command
+- [ ] Runs a command only once
+- [ ] Saves a command to preferences
+
+`setDefaultCommand` makes a command run whenever its subsystem is idle. This is how driver control works — the drive command runs by default.
+</quiz>
+
+<!-- mkdocs-quiz results -->
 
 ??? example "Full RobotContainer Example"
-    See [RobotContainer.java](../code_examples/2026KitBotInline/RobotContainer.java) for the complete RobotContainer implementation.
+    === "SparkMax"
+        See [RobotContainer.java](../code_examples/2026KitBotInline/RobotContainer.java) for the complete `RobotContainer` implementation.
 
-    The key part for drive configuration is in `configureBindings()`:
-
-    ```java title="RobotContainer.java"
-    --8<-- "docs/code_examples/2026KitBotInline/RobotContainer.java:drive-config"
-    ```
-
-    This sets arcade drive as the default command, using:
-
-    - The negative Y-axis of the left joystick (inverted so pushing away drives forward)
-    - The negative X-axis of the right joystick (inverted for WPILib counter-clockwise positive convention)
-    - Both axes scaled for controllability
+    === "TalonFX"
+        See [RobotContainer.java](../code_examples/2026KitBotInlineTalonFX/RobotContainer.java) for the complete `RobotContainer` implementation.
