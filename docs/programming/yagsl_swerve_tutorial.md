@@ -71,19 +71,19 @@ Before configuring YAGSL, gather these details about your robot:
 
 - **IMU Type and ID**: What gyroscope are you using and what is its CAN ID?
 - **Module Configuration**: For each swerve module:
-  - Drive motor type, CAN ID, and gearing (gearing can be found on the swerve module manufacturer's spec sheet)
-  - Angle motor type, CAN ID, and gearing
+  - Drive motor type, CAN ID, and canbus name (if using multiple CAN buses)
+  - Angle motor type, CAN ID, and canbus name.
   - Encoder type, CAN ID.
   - Physical location relative to robot center (X, Y coordinates in inches)
 - **Physical Properties**:
   - Wheel diameter
-  - Drive gear ratio (motor rotations per wheel rotation)
+  - Drive gear ratio (motor rotations per wheel rotation) **this can be found on the swerve module spec sheet for your specific module**
   - Angle gear ratio (motor rotations per 360° module rotation)
-  - Robot track width and wheelbase
-  - Maximum speed (feet per second)
-- **CAN Bus Configuration**: Ensure all devices have unique IDs and proper termination
+  - Robot coefficient of friction (for feedforward calculations) (optional, can be estimated)
+  - Maximum speed (feet per second) (Generally, this is the free speed of your drive motors divided by the drive gear ratio, multiplied by wheel circumference)
+- **CAN Bus Configuration**: Ensure all devices have unique IDs. 
 
-For a complete list, see [Getting to Know Your Robot](https://docs.yagsl.com/configuring-yagsl/getting-to-know-your-robot).
+For a complete list and more detailed explanations, see [Getting to Know Your Robot](https://docs.yagsl.com/configuring-yagsl/getting-to-know-your-robot).
 
 ## 4. Configuration Steps (JSON Files, Module Setup)
 
@@ -104,9 +104,6 @@ deploy/
     └── swervedrive.json
 ```
 
-!!! note "One folder per hardware set"
-    The examples below live in two parallel folders, `swerve/neo/` (REVLib) and `swerve/talonfx/` (TalonFX), each a complete, standalone set of configs for the same physical robot. You only deploy one of them — whichever matches your hardware.
-
 ### Configuration Files Overview
 
 #### swervedrive.json - Global Drive Configuration
@@ -115,7 +112,7 @@ This file defines the overall swerve drive configuration, including the IMU (gyr
 
 !!! abstract "Key Properties"
     - `imu`: Configures the gyroscope/IMU used for heading tracking
-      - `type`: The type of IMU ("pigeon2", "navx", "adxrs450", etc.)
+      - `type`: The type of IMU ("pigeon2", "navx", etc.)
       - `id`: CAN ID of the IMU device
       - `canbus`: CAN bus name (usually "rio" for roboRIO bus, or your CANivore's name)
     - `invertedIMU`: Whether to invert the IMU reading (used for orientation correction)
@@ -160,17 +157,7 @@ This file defines the overall swerve drive configuration, including the IMU (gyr
 !!! tip "IMU choice is independent of motor vendor"
     A Pigeon2 works fine on a SparkMax/NEO robot, and a NavX works fine on a TalonFX robot — the IMU is a separate hardware choice from your drive/angle motor controllers. The complete examples below use a Pigeon2 for both hardware sets to keep the comparison focused on the motor/encoder differences.
 
-**Complete swervedrive.json Example:**
 
-=== "SparkMax"
-    ```json title="swervedrive.json - Complete Example from swerve/neo"
-    --8<-- "docs/code_examples/swerve/neo/swervedrive.json"
-    ```
-
-=== "TalonFX"
-    ```json title="swervedrive.json - Complete Example from swerve/talonfx"
-    --8<-- "docs/code_examples/swerve/talonfx/swervedrive.json"
-    ```
 
 #### Module JSON Files - Individual Swerve Module Configuration
 
@@ -298,6 +285,18 @@ This file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning
     --8<-- "docs/code_examples/swerve/talonfx/modules/pidfproperties.json"
     ```
 
+**Complete swervedrive.json Example:**
+
+=== "SparkMax"
+    ```json title="swervedrive.json - Complete Example from swerve/neo"
+    --8<-- "docs/code_examples/swerve/neo/swervedrive.json"
+    ```
+
+=== "TalonFX"
+    ```json title="swervedrive.json - Complete Example from swerve/talonfx"
+    --8<-- "docs/code_examples/swerve/talonfx/swervedrive.json"
+    ```
+    
 #### controllerproperties.json - Advanced Control Settings
 
 This file configures advanced control parameters for heading correction (usually left at defaults). It has just two fields, and — unlike the module/physical/PIDF files above — it does **not** vary by motor vendor, since it configures the drivetrain-level heading controller rather than any individual motor.

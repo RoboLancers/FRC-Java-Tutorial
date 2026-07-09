@@ -105,55 +105,6 @@ In the Drivetrain class we will tell the subsystem what type of components it wi
 
 4. Your error should be gone!
 
-### Creating and filling the constructor
-
-Now that we have created the motor variables and the Drive Constants we must initialize them and tell them what port on the roboRIO they are on.
-
-**1)** Initialize (set value of) the motor variables with the appropriate motor controller constructor.
-
-=== "SparkMax"
-    Initialize `leftLeader` to `new SparkMax(LEFT_LEADER_ID, MotorType.kBrushless)`.
-    
-    - This initializes a new SparkMax, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`.
-    - The constructor `SparkMax(int, MotorType)` takes a variable of type `int` for the CAN ID and `MotorType` for brushless or brushed.
-
-=== "TalonFX"
-    Initialize `leftLeader` to `new TalonFX(LEFT_LEADER_ID)`.
-    
-    - This initializes a new TalonFX, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`.
-    - Unlike SparkMax, TalonFX takes only the CAN ID — no motor type parameter is needed (TalonFX is always brushless).
-
-- This should be done within the constructor `CANDriveSubsystem()`
-
-!!! note "Java concept: Constructor"
-    The constructor is a special method that runs once when an object is created with `new`. It is where hardware gets initialized — motors receive their port numbers, controllers get configured. The constructor name always matches the class name exactly. See [Java Classes for more information](../basics/java_classes.md#constructors).
-    
- **roboRIO port diagram**
-
-![](../assets/images/driving_robot/roboRIO_port.png)
-
-
-??? example "Constructor Initialization Example"
-    ```java title="CANDriveSubsystem.java - Constructor Declaration"
-    public CANDriveSubsystem() {}
-    ```
-
-    **Full Constructor:**
-
-    === "SparkMax"
-        ```java title="Full Constructor"
-        --8<-- "docs/code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java:constructor"
-        ```
-
-        See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete constructor implementation.
-
-    === "TalonFX"
-        ```java title="Full Constructor"
-        --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:constructor"
-        ```
-
-        See [CANDriveSubsystem.java](../code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java) for the complete constructor implementation.
-
 ### Using Constants
 
 !!! note
@@ -164,13 +115,15 @@ Since each subsystem has its own components with their own ports, it is easy to 
 - Names should follow the pattern SUBSYSTEM_NAME_OF_COMPONENT
 - The name is all caps since it is a **constant** ([more info on constants](../basics/java_types_variables.md#constants){target=_blank}).
 
+Before we initialize the motor objects we are going to create constants to hold the CAN IDs of the motors, plus a current limit shared by all four. This happens in `Constants.java`.
 
+ !!! note
+    The motor current limit is a safety feature that prevents the motors from drawing too much current and tripping breakers or damaging the motors. The limit is set in amperes (A) and should be chosen based on the motor's specifications and your robot's electrical system. This limit should always be the same or lower than the breaker rating for the motor's circuit to avoid nuisance trips.
 
-Before we initalize the SparkMax objects we are going to create constants to hold the CAN ID's of the motors. This will happen in constants.java
-
-- Inside the constants class, create a new class called `public static DriveConstants`.
-- Inside `DriveConstants` class, create for constants called `LEFT_LEADER_ID`, `LEFT_FOLLOWER_ID`, `RIGHT_LEADER_ID`, and `RIGHT_FOLLOWER_ID`.
-- Back in your `DriveTrain` class in `drivetrain.java`, import the `DriveConstants` class as follows: `Import frc.robot.Constants.DriveConstants;`.
+- Inside the `Constants` class, create a new inner class called `public static final class DriveConstants`.
+- Inside `DriveConstants`, create four constants: `LEFT_LEADER_ID`, `LEFT_FOLLOWER_ID`, `RIGHT_LEADER_ID`, and `RIGHT_FOLLOWER_ID`.
+- Add a fifth constant, `DRIVE_MOTOR_CURRENT_LIMIT`, set to a reasonable amperage. This caps how much current each drive motor can draw so you don't trip breakers or damage a motor.
+- Back in `CANDriveSubsystem.java`, add a **static import** for `DriveConstants` so its members can be referenced without the `DriveConstants.` prefix: `import static frc.robot.Constants.DriveConstants.*;`
 
 !!! tip
     Make sure to declare constants with `public static final` so they cannot be changed at runtime.
@@ -178,7 +131,7 @@ Before we initalize the SparkMax objects we are going to create constants to hol
 !!! danger
     If you set this to the wrong value, you could damage your robot when it tries to move!
 !!! note
-    To use Constants, instead of putting `0` for the port in the SparkMax type:
+    To use Constants, instead of putting `0` for the port in the motor constructor:
 
     ```java title="Constants.java - Drive Constants"
     public static final int LEFT_LEADER_ID = 1;
@@ -188,7 +141,7 @@ Before we initalize the SparkMax objects we are going to create constants to hol
     Replace the remaining numbers with constants.
 
 !!! tip
-    Remember to save both **Drivetrain.java** and **Constants.java**
+    Remember to save both **CANDriveSubsystem.java** and **Constants.java**
 
 ??? example "DriveConstants Example"
     **Drive Constants Definition:**
@@ -214,7 +167,34 @@ Before we initalize the SparkMax objects we are going to create constants to hol
 !!! warning
     Remember to use the values for **YOUR** specific robot or you could risk damaging it!
 
-### Configuring Motor Controllers
+### Creating and filling the constructor
+
+Now that we have created the motor variables and the Drive Constants we must initialize them and tell them what port on the roboRIO they are on.
+
+**1)** Initialize (set value of) the motor variables with the appropriate motor controller constructor.
+
+=== "SparkMax"
+    Initialize `leftLeader` to `new SparkMax(LEFT_LEADER_ID, MotorType.kBrushless)`.
+    
+    - This initializes a new SparkMax, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`.
+    - The constructor `SparkMax(int, MotorType)` takes a variable of type `int` for the CAN ID and `MotorType` for brushless or brushed.
+
+=== "TalonFX"
+    Initialize `leftLeader` to `new TalonFX(LEFT_LEADER_ID)`.
+    
+    - This initializes a new TalonFX, `leftLeader`, in a new piece of memory and states it is on the port defined by `LEFT_LEADER_ID`.
+    - Unlike SparkMax, TalonFX takes only the CAN ID — no motor type parameter is needed (TalonFX is always brushless).
+
+- This should be done within the constructor `CANDriveSubsystem()`, for all four motors (`leftLeader`, `leftFollower`, `rightLeader`, `rightFollower`).
+
+!!! note "Java concept: Constructor"
+    The constructor is a special method that runs once when an object is created with `new`. It is where hardware gets initialized — motors receive their port numbers, controllers get configured. The constructor name always matches the class name exactly. See [Java Classes for more information](../basics/java_classes.md#constructors).
+    
+ **roboRIO port diagram**
+
+![](../assets/images/driving_robot/roboRIO_port.png)
+
+**2)** Configure CAN communication and current limits.
 
 **Setting CAN Communication Timeout:**
 
@@ -229,9 +209,9 @@ Before we initalize the SparkMax objects we are going to create constants to hol
     !!! note "No CAN timeout needed"
         Phoenix 6 manages CAN communication internally. No explicit `setCANTimeout()` equivalent exists. Configuration is applied via `getConfigurator().apply(config)` — see the section below.
 
-**Voltage Compensation and Current Limiting:**
+**Voltage Compensation, Current Limiting, and Neutral Mode:**
 
-Create the configuration to apply to motors. The current limit helps prevent tripping breakers.
+Create the configuration to apply to motors. `DRIVE_MOTOR_CURRENT_LIMIT` (from `DriveConstants`) sets the current limit, which helps prevent tripping breakers.
 
 === "SparkMax"
     Voltage compensation helps the robot perform more similarly on different battery voltages (at the cost of a little bit of top speed on a fully charged battery).
@@ -247,26 +227,10 @@ Create the configuration to apply to motors. The current limit helps prevent tri
     --8<-- "docs/code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java:voltage-compensation"
     ```
 
-=== "SparkMax"
-    See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the full configuration implementation in the constructor.
+    !!! note
+        This configuration also sets `NeutralMode` to `Brake`. This tells the motor to actively resist being pushed when no power is commanded — useful for a drivetrain, since you generally don't want the robot to coast or roll after you let go of the joystick. The SparkMax equivalent is `setIdleMode(IdleMode.kBrake)`.
 
-=== "TalonFX"
-    See [CANDriveSubsystem.java](../code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java) for the full configuration implementation in the constructor.
-
-## Creating the arcade drive
-
-### What is the Drive Class
-
-- The FIRST Drive class has many pre-configured methods available to us including DifferentialDrive, and many alterations of MecanumDrive.
-- DifferentialDrive contains subsections such as TankDrive and ArcadeDrive.
-    For more information and details on drive bases see the [WPILib documentation](https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html){target=_blank}.
-- For our tutorial we will be creating an ArcadeDrive
-- Arcade drives run by taking a moveSpeed and rotateSpeed. moveSpeed defines the forward and reverse speed and rotateSpeed defines the turning left and right speed.
-- To create an arcade drive we will be using our already existing Drivetrain class and adding to it.
-
-### Programing a RobotDrive
-
-**1)** Create the DifferentialDrive object.
+**3)** Declare and initialize the `DifferentialDrive` object using the two leader motors.
 
 **Member Variable Declaration:**
 
@@ -292,7 +256,6 @@ This defines the drive object that we will use to drive the robot.
 
     - Since DifferentialDrive takes 2 parameters we pass the left and right leader motors.
     - SparkMax implements the WPILib `MotorController` interface, so it can be passed directly to `DifferentialDrive`.
-    - The follower motors are configured separately (see below) to follow the leaders.
 
 === "TalonFX"
     ```java title="CANDriveSubsystem.java - Drive Initialization"
@@ -302,13 +265,37 @@ This defines the drive object that we will use to drive the robot.
 
     - TalonFX (Phoenix 6) does **not** implement the WPILib `MotorController` interface, so a `TalonFX` object cannot be passed directly to the `MotorController`-based constructor.
     - TalonFX does expose a `set(double)` method, so we use `DifferentialDrive`'s other constructor, which takes two `DoubleConsumer` method references (`leftLeader::set`, `rightLeader::set`) instead of `MotorController` objects. See CTRE's [MotorController Integration](https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/wpilib-integration/motorcontroller-integration.html){target=_blank} docs.
-    - The follower motors are configured separately (see below) to follow the leaders.
+
+!!! note "Why only the leaders?"
+    `DifferentialDrive` only needs to know about the two leader motors. The followers are wired up separately in the next section using each vendor's follower-control feature, so they automatically mirror their leader's output without `DifferentialDrive` needing to touch them directly.
+
+!!! success "Build & Verify"
+    Build your code now (**Ctrl+Shift+P → WPILib: Build Robot Code**) and confirm there are no compile errors before moving on. At this point your constructor creates all four motors, builds the current-limit configuration, and initializes `drive` with the two leaders — the followers aren't wired up yet, so hold off on deploying to a robot until the next section is done.
+
+??? example "Constructor So Far"
+    === "SparkMax"
+        See [CANDriveSubsystem.java](../code_examples/2026KitBotInline/subsystems/CANDriveSubsystem.java) for the complete constructor implementation, including the follower setup covered in the next section.
+
+    === "TalonFX"
+        See [CANDriveSubsystem.java](../code_examples/2026KitBotInlineTalonFX/subsystems/CANDriveSubsystem.java) for the complete constructor implementation, including the follower setup covered in the next section.
+
+## Creating the arcade drive
+
+### What is the Drive Class
+
+- The FIRST Drive class has many pre-configured methods available to us including DifferentialDrive, and many alterations of MecanumDrive.
+- DifferentialDrive contains subsections such as TankDrive and ArcadeDrive.
+    For more information and details on drive bases see the [WPILib documentation](https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/wpi-drive-classes.html){target=_blank}.
+- For our tutorial we will be creating an ArcadeDrive
+- Arcade drives run by taking a moveSpeed and rotateSpeed. moveSpeed defines the forward and reverse speed and rotateSpeed defines the turning left and right speed.
+- We already created and initialized the `drive` object in the constructor — now we'll wire up the follower motors and use `drive` to build a command the driver can control.
+
+### Configuring Followers and Motor Direction
+
+In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower. In the constructor, after building the current-limit configuration, we set the follower motors and link them to the leader motors.
 
 !!! warning
     You should only group motors that are spinning the same direction physically when positive power is being applied otherwise you could damage your robot.
-
-**2)** In order to configure the motors to drive correctly, we need to configure one on each side as the leader and one as the follower.
-In the constructor we are going to set the follower motors and link them to the leader motors.
 
 === "SparkMax"
     To do this we will need to include classes from the REV Library:
@@ -398,6 +385,14 @@ Instead of writing a separate command class, we use the **command factory patter
     !!! tip
         Multiply the speed values by a decimal to cap the max speed during initial testing (e.g. `xSpeed.getAsDouble() * 0.5`). This makes it easier to verify the robot drives in the correct directions before running at full power/speed.
 
+!!! bug "Common Issues"
+    - **Robot drives backward when you push forward** — the left or right side inversion is flipped. Double-check which side you inverted and try the opposite value.
+    - **Followers don't move** — verify the CAN ID passed to the follower setup matches the leader's actual CAN ID constant, not a hardcoded number.
+    - **Cannot find symbol `Follower` / `InvertedValue`** (TalonFX) — make sure the Phoenix 6 imports listed above are present; VSCode's Quick Fix can add them automatically.
+
+!!! success "Build & Verify"
+    Build the project again (**Ctrl+Shift+P → WPILib: Build Robot Code**) and confirm there are no errors. If you have a robot connected, this is a good point to deploy and bench-test: push the left stick forward/back to drive, and the right stick left/right to rotate.
+
 ## Wiring Up in RobotContainer
 
 Now we connect the subsystem to the driver’s controller by setting a default command in `RobotContainer.java`.
@@ -439,6 +434,10 @@ The `RobotContainer` class holds all subsystems, controllers, and command bindin
         The `()->` syntax creates a **lambda** — an anonymous function. [More about Lambdas](https://www.w3schools.com/java/java_lambda.asp){target=_blank}
 
         Lambdas are required here because `driveArcade` expects `DoubleSupplier` parameters. A lambda `() -> driverController.getLeftY()` is a `DoubleSupplier` — it gets called every loop cycle so the robot continuously responds to joystick movement.
+
+!!! bug "Common Issues"
+    - **Robot doesn't respond to joystick** — confirm your Xbox controller shows up in the Driver Station's USB tab at the port number stored in `DRIVER_CONTROLLER_PORT`.
+    - **`setDefaultCommand` never seems to run** — make sure the call is inside `configureBindings()`, and that `configureBindings()` is actually called from the `RobotContainer` constructor.
 
 ***
 
@@ -504,3 +503,14 @@ What does `setDefaultCommand` do?
 
     === "TalonFX"
         See [RobotContainer.java](../code_examples/2026KitBotInlineTalonFX/RobotContainer.java) for the complete `RobotContainer` implementation.
+
+***
+
+## Next Steps
+
+Your drivetrain is now functional! Consider extending it:
+
+- **Add autonomous routines** — see [Autonomous](autonomous.md) for building commands that run without driver input.
+- **Add odometry** — track the robot's position on the field using encoder data.
+- **Add smoothing** — filter joystick input (e.g. with a slew rate limiter) to reduce jitter and jerky driving.
+- **Tune scaling factors** — revisit `DRIVE_SCALING` and `ROTATION_SCALING` in `Constants.java`, and see [PID Control](pid.md) if you want to drive to a specific distance or angle automatically.
