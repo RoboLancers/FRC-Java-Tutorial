@@ -1,12 +1,24 @@
-# Using Sensors and Switches
+# Sensors
 
-Sensors provide real-time feedback about your robot’s state. This guide covers using digital input switches and encoders in the command-based framework.
+How does the robot see? Sensors provide real-time feedback about your robot's state, letting your code react to the physical world instead of guessing.
 
-## What Are Sensors
+![camera](../assets/images/sensors/camera.png)
 
-- **Limit switches** detect contact and are connected to the roboRIO’s Digital Input (DIO) ports
-- **Encoders** measure motor rotation or linear distance and are also connected to DIO ports (WPILib Encoder), or built into motor controllers (SparkMax RelativeEncoder, TalonFX rotor position)
-- Other sensor types include gyroscopes, analog inputs, and vendor-specific devices (CANcoder, Limelight, etc.)
+## Some types of sensors
+
+- **Limit Switches** - detects contact — see [Programming Limit Switches](#programming-limit-switches)
+- **Camera** - provides sight
+- **Encoders** - measures rotational or linear motion — see [Programming Encoders](#programming-encoders)
+- **Ultrasonic** - measures distances
+- **Gyroscope** - measures orientation
+- **Processed Vision** - measures target's distance, angle, and offset from robot
+- For more info on sensors see: [High Tech High Top Hat Technicians](http://tophattechnicians.com){target=_blank} - [Electrical Tutorial](https://drive.google.com/file/d/1ip54fjNDFaq-ZWw9lQrZj6vXamX33QDP/view){target=_blank}
+
+|                        Limit Switch                        |             Grayhill brand Quadrature Encoder             |       Kauai Labs navX Gyro/ Accelerometer        |
+| :--------------------------------------------------------: | :-------------------------------------------------------: | :----------------------------------------------: |
+| ![Limit Switch](../assets/images/sensors/limit_switch.png) | ![Grayhill Encoder](../assets/images/sensors/encoder.png) | ![navX](../assets/images/sensors/navX_micro.png) |
+
+Limit switches and external encoders connect to the roboRIO's Digital Input (DIO) ports. Encoders may also be built into a motor controller (SparkMax `RelativeEncoder`, TalonFX rotor position). Other sensor types include gyroscopes, analog inputs, and vendor-specific devices (CANcoder, Limelight, etc.). The sections below cover how to wire up and program limit switches and encoders in the command-based framework.
 
 ***
 
@@ -15,32 +27,26 @@ Sensors provide real-time feedback about your robot’s state. This guide covers
 Limit switches are simple binary sensors: pressed or not pressed. This section shows how to safely integrate them into a subsystem.
 
 ### Creating the Subsystem with a Limit Switch
-    ```java title="ShooterSubsystem.java"
-    --8<
-    -- "docs/code_examples/basics/sensors/LimitSwitchExamples.java:limit-switch-field"
-    ```
+```java title="ShooterSubsystem.java"
+--8<-- "docs/code_examples/basics/sensors/LimitSwitchExamples.java:limit-switch-field"
+```
 
 Declare the `DigitalInput` as a `private final` field. This represents the physical limit switch wired to a DIO port.
 
 
 ### Initializing the Limit Switch
 
-
-=== "Limit Switch Initialization"
-
-    ```java title="ShooterSubsystem.java"
-    --8<-- "docs/code_examples/basics/sensors/LimitSwitchExamples.java:limit-switch-constructor-talon"
-    ```
+```java title="ShooterSubsystem.java"
+--8<-- "docs/code_examples/basics/sensors/LimitSwitchExamples.java:limit-switch-constructor"
+```
 
 The `DigitalInput` constructor takes one parameter: the DIO port number on the roboRIO (typically 0–9).
 
 ### Reading the Limit Switch
 
-=== "Limit Switch Reading"
-
-    ```java title="ShooterSubsystem.java"
-    --8<-- "docs/code_examples/basics/sensors/LimitSwitchExamples.java:limit-switch-method"
-    ```
+```java title="ShooterSubsystem.java"
+--8<-- "docs/code_examples/basics/sensors/LimitSwitchExamples.java:limit-switch-method"
+```
 
 !!! note "Normally Open vs Normally Closed"
     Switches come in two configurations:
@@ -106,7 +112,7 @@ The `Encoder` constructor takes two DIO port numbers. The `setDistancePerPulse()
     --8<-- "docs/code_examples/basics/sensors/EncoderExamplesTalonFX.java:get-distance-talon"
     ```
 
-    TalonFX uses Phoenix 6’s signal system. `motor.getPosition().getValueAsDouble()` returns rotor position in rotations. `motor.getVelocity().getValueAsDouble()` returns rotations per second.
+    TalonFX uses Phoenix 6's signal system. `motor.getPosition().getValueAsDouble()` returns rotor position in rotations. `motor.getVelocity().getValueAsDouble()` returns rotations per second.
 
 ### Resetting Encoders
 
@@ -123,7 +129,7 @@ The `Encoder` constructor takes two DIO port numbers. The `setDistancePerPulse()
     ```
 
 !!! note "Why `setPosition()` for TalonFX?"
-    TalonFX encoder resets use `motor.setPosition(0)` instead of a dedicated `reset()` method. This sets the rotor position to zero in the motor’s feedback system, which is how Phoenix 6 manages encoder state.
+    TalonFX encoder resets use `motor.setPosition(0)` instead of a dedicated `reset()` method. This sets the rotor position to zero in the motor's feedback system, which is how Phoenix 6 manages encoder state.
 
 ### Using Encoder Commands
 
@@ -150,6 +156,34 @@ The `resetEncodersCommand()` command factory is defined in the subsystem and cal
 ## Knowledge Check
 
 <!-- mkdocs-quiz intro -->
+
+<quiz>
+Which sensor type is used to measure the robot's orientation?
+- [ ] Limit switch
+- [ ] Encoder
+- [ ] Ultrasonic
+- [x] Gyroscope
+
+A gyroscope measures orientation — which direction the robot is facing. This is used for field-relative driving so the robot can move correctly regardless of which way it is pointed.
+</quiz>
+
+<quiz>
+Which type of sensor would you use to measure the distance between the robot and an object?
+- [ ] Camera
+- [ ] Limit switch
+- [x] Ultrasonic
+- [ ] Encoder
+
+Ultrasonic sensors measure distances. Limit switches detect contact, cameras provide sight, and encoders measure rotational or linear motion — not raw distance to an object.
+</quiz>
+
+<quiz>
+A limit switch is used to detect physical contact, such as a mechanism reaching the end of its travel.
+- [x] True
+- [ ] False
+
+As listed on this page, limit switches detect contact. They are one of the simplest sensors available and are commonly used to tell the robot when a mechanism has reached a physical stop.
+</quiz>
 
 <quiz>
 When should you invert a limit switch reading in code?

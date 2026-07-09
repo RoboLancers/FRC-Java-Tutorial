@@ -16,7 +16,6 @@ nav:
   - 'basics/java_control_flow.md'
 - FRC Background:
   - 'basics/roboRIO.md'
-  - 'basics/sensors.md'
   - 'basics/wpilib.md'
   - 'basics/ElectronicsCrashCourse.md'
   - 'basics/vscode_tips.md'
