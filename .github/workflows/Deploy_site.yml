@@ -7,7 +7,7 @@ on:
   #     - robolancer_updates
   push:
    branches:
-    - robolancer_updates
+    - main
 jobs:
   build:
     runs-on: ubuntu-latest
