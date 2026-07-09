@@ -176,7 +176,7 @@ The `absoluteEncoderOffset` tells YAGSL how to interpret the encoder reading. It
 This file defines your robot's physical parameters used in kinematics calculations:
 
 ```json title="physicalproperties.json Example"
---8<-- "docs/code_examples/swerve/neo/physicalproperties.json"
+--8<-- "docs/code_examples/swerve/neo/modules/physicalproperties.json"
 ```
 
 !!! info "Physical Parameters"
@@ -190,7 +190,7 @@ This file defines your robot's physical parameters used in kinematics calculatio
 The `pidfproperties.json` file contains PIDF (Proportional, Integral, Derivative, Feedforward) tuning values for closed-loop motor control:
 
 ```json title="pidfproperties.json Example"
---8<-- "docs/code_examples/swerve/neo/pidfproperties.json"
+--8<-- "docs/code_examples/swerve/neo/modules/pidfproperties.json"
 ```
 
 !!! warning "PIDF Tuning is Important"
