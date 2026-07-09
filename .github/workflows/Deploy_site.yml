@@ -2,12 +2,12 @@ name: Deploy Site
 permissions:
   contents: write
 on:
-  # pull_request: 
-  #   branches:
-  #     - robolancer_updates
+  pull_request: 
+    branches:
+      - main
   push:
-   branches:
-    - main
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
