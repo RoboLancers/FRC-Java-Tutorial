@@ -14,7 +14,7 @@ If your entire swerve drivetrain is CTRE hardware — TalonFX (or TalonFXS) driv
     - **YAGSL** is a community library that reads JSON files at runtime and works with mixed hardware (REV, CTRE, Redux, etc.). It's a good default if your team's hardware varies year to year, or you mix vendors.
     - **CTRE's generator** writes real, compiled Java (`TunerConstants.java` + `CommandSwerveDrivetrain.java`) directly against the Phoenix 6 API. It only supports CTRE devices, but in exchange you get first-party support and direct access to Phoenix 6/Pro features (advanced closed-loop control, CAN FD odometry rates, etc.) that YAGSL's abstraction layer doesn't expose.
 
-    Neither is "better" — pick based on your hardware and how much you want direct control over the Phoenix 6 API versus a simpler JSON config.
+    Neither is "better" — Make your choice based on your robot hardware and how much you want direct control over the motors and the Phoenix 6 API versus a simpler, more abstracted JSON config with YAGSL.
 
 This page assumes you're comfortable with the [swerve drive concepts](SwerveDriveIntro.md) (holonomic motion, field- vs. robot-oriented driving, kinematics) already covered on this site — it focuses on what's specific to CTRE's generator.
 
@@ -34,16 +34,16 @@ This page assumes you're comfortable with the [swerve drive concepts](SwerveDriv
 
 ## Running the Generator
 
-The Swerve Project Generator lives inside Tuner X, under the **Mechanisms** tab. At a high level, it walks you through:
+The Swerve Project Generator lives inside PhoenixTuner X, under the **Mechanisms** tab. At a high level, it walks you through:
 
 !!! abstract "What the generator asks for"
-    - Your **swerve module type** (e.g. a supported WCP/SDS module, or a fully custom configuration) — this fills in gear ratios for you if you pick a known module.
-    - **Per-module CAN IDs** for each drive motor, steer motor, and CANcoder. CTRE's convention is Front-Left (1, 2, 3), Front-Right (4, 5, 6), Back-Left (7, 8, 9), Back-Right (10, 11, 12) for (drive, steer, encoder) — you're free to use your own numbering, but IDs must be unique across the whole CAN bus.
+    - Your **swerve module type** (e.g. a supported WCP/SDS pre-made module, or a fully custom configuration) — gear ratios are filled in for you if you pick a a WCP or SDS module.
+    - **Per-module CAN IDs** for each drive motor, steer/turning motor, and CANcoder. CTRE's convention is Front-Left (1, 2, 3), Front-Right (4, 5, 6), Back-Left (7, 8, 9), Back-Right (10, 11, 12) for (drive, steer/turn, encoder) — This numbering pattern is not required, but IDs must be unique across the whole CAN bus.
     - **CANcoder offsets**, which the generator measures for you via a self-test rather than you guessing them — point every wheel forward, run the self-test, and it reads and stores the offset.
     - **Track width, wheelbase, and Pigeon 2 CAN ID.**
     - Motor/encoder **inverts**, usually determined the same way — verified with the self-test rather than trial and error.
 
-For the exact click-by-click steps and screenshots, follow CTRE's own walkthrough: [Creating your Project](https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/creating-your-project.html){target=_blank}.
+For detailed walkthrough steps and screenshots, follow CTRE's documentation: [Creating your Project](https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/creating-your-project.html){target=_blank}.
 
 !!! tip "TunerConstants only, vs. a full project"
     The generator can output just `TunerConstants.java`, or a full project that also includes `CommandSwerveDrivetrain.java`. Once you've customized `CommandSwerveDrivetrain` (e.g. added vision integration), **re-run the generator in "TunerConstants only" mode** when you re-measure your robot — that updates your constants without overwriting the subsystem code you've since edited.
@@ -57,7 +57,7 @@ The generated `generated/` package (under `src/main/java/frc/robot/generated/`) 
 - **`TunerConstants.java`** — every hardware constant: CAN bus name, per-module CAN IDs/offsets/positions, gear ratios, wheel radius, and default PID/feedforward gains. It also exposes a `createDrivetrain()` factory method.
 - **`CommandSwerveDrivetrain.java`** — a `Subsystem` (via `TunerSwerveDrivetrain`) that wraps Phoenix 6's `SwerveDrivetrain` for command-based use, exposing `applyRequest(...)`, `getState()`, `seedFieldCentric()`, and SysId characterization commands.
 
-Here's a trimmed excerpt of what a generated `TunerConstants.java` looks like, so you recognize the shape when you open the real one — **don't hand-type this**, the generator writes the actual values from your robot:
+Here's an excerpt of what a generated `TunerConstants.java` looks like, so you recognize the shape when you open the real one — **don't hand-type this**, the generator writes the actual values from your robot:
 
 ```java title="TunerConstants.java (illustrative excerpt — generator output, not hand-written)"
 --8<-- "docs/code_examples/ctre_swerve/TunerConstants.java:canbus"
@@ -78,7 +78,7 @@ For the full generated-file reference, see CTRE's [Swerve Builder API](https://v
 
 ## Wiring It Into a Command-Based Robot
 
-This is the part CTRE's own docs gloss over, since the generator assumes a fresh project: dropping the generated code into `RobotContainer` alongside your other subsystems and commands.
+The CTRE generator assumes a freshly created WPILib project. If you need to integrate it into an existing project you can drop the generated code into `RobotContainer` alongside your other subsystems and commands.
 
 1. Copy the generator's `generated/` package (and `CommandSwerveDrivetrain.java`, if you generated the full project) into your existing project's `src/main/java/frc/robot/`.
 2. Instantiate the drivetrain once from `TunerConstants.createDrivetrain()`.
